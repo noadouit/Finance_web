@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | Dashboard</title>
+    <title>Noa Capital | Management</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,16 +15,20 @@
                 extend: {
                     colors: { 
                         dark: '#0f172a', card: '#1e293b', accent: '#3b82f6', 
-                        success: '#22c55e', danger: '#ef4444', warning: '#f59e0b'
+                        success: '#22c55e', danger: '#ef4444'
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
+        /* Transition fluide entre les onglets */
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 
@@ -37,83 +41,196 @@
                     <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-8 h-8 rounded flex items-center justify-center font-bold text-white shadow-lg">N</div>
                     <span class="text-xl font-bold tracking-tight">Noa Capital</span>
                 </div>
-                <div class="flex items-center gap-2 bg-gray-900/50 px-3 py-1 rounded-full border border-gray-700">
-                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                    <span class="text-xs text-green-500 font-bold">Marchés Fermés (Clôture Vendredi)</span>
+                
+                <div class="flex space-x-2 bg-gray-900/50 p-1 rounded-lg border border-gray-700">
+                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition">Dashboard</button>
+                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Convictions</button>
+                    <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Simulation</button>
                 </div>
             </div>
         </div>
     </nav>
 
     <main class="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        
-        <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-                <h1 class="text-3xl font-bold text-white tracking-tight">Portefeuille Global</h1>
-                <p class="text-gray-400 mt-1 text-sm">Données Euronext Paris (Temps Réel Différé).</p>
-            </div>
-            <div class="text-right">
-                <div class="text-sm text-gray-400 font-medium uppercase tracking-wider">Valeur Liquidative</div>
-                <div class="text-4xl font-extrabold text-white tracking-tight tabular-nums" id="totalVal">-- €</div>
-            </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg relative overflow-hidden">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Plus-Value</p>
-                <p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">-- €</p>
-                <span class="text-xs font-bold px-2 py-0.5 rounded bg-gray-800 mt-2 inline-block" id="totalPerf">-- %</span>
-            </div>
-            <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Dividendes (Est.)</p>
-                <p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">-- €</p>
-                <p class="text-xs text-gray-500 mt-1">Projection 2024</p>
-            </div>
-            <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">PER Moyen</p>
-                <p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p>
-                <p class="text-xs text-blue-400 mt-1">Ratio de Valorisation</p>
-            </div>
-             <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Top Performer</p>
-                <p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p>
-                <p class="text-xs text-green-400 font-bold" id="topStockPerf">-- %</p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col">
-                <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30 flex justify-between">
-                    <h3 class="text-sm font-bold text-white uppercase tracking-wide">Positions</h3>
-                    <div class="text-[10px] text-gray-500">Mise à jour : 19/12/2025</div>
+        <div id="dashboard" class="tab-content active">
+            <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-white tracking-tight">Portefeuille Global</h1>
+                    <p class="text-gray-400 mt-1 text-sm">Données Euronext (Clôture Vendredi 19/12).</p>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-gray-400">
-                        <thead class="bg-gray-900/50 uppercase font-semibold text-xs text-gray-500">
-                            <tr>
-                                <th class="px-5 py-3">Société</th>
-                                <th class="px-5 py-3 text-right">Cours</th>
-                                <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
-                                <th class="px-5 py-3 text-right">Perf</th>
-                                <th class="px-5 py-3 text-center text-blue-400" title="PER">PER</th>
-                                <th class="px-5 py-3 text-center text-yellow-400" title="Bêta">Bêta</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-700/50" id="tableBody"></tbody>
-                    </table>
+                <div class="text-right">
+                    <div class="text-sm text-gray-400 uppercase tracking-wider">Valeur Liquidative</div>
+                    <div class="text-4xl font-extrabold text-white tracking-tight tabular-nums" id="totalVal">-- €</div>
                 </div>
             </div>
 
-            <div class="bg-card rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col">
-                <h3 class="text-sm font-bold text-white uppercase mb-4 tracking-wide">Exposition</h3>
-                <div class="flex-1 relative min-h-[250px]"><canvas id="sectorChart"></canvas></div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Plus-Value</p>
+                    <p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">-- €</p>
+                    <span class="text-xs font-bold px-2 py-0.5 rounded bg-gray-800 mt-2 inline-block" id="totalPerf">-- %</span>
+                </div>
+                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Dividendes (Est.)</p>
+                    <p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">-- €</p>
+                </div>
+                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
+                    <p class="text-xs font-bold text-gray-400 uppercase">PER Moyen</p>
+                    <p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p>
+                </div>
+                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Top Perf</p>
+                    <p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p>
+                    <p class="text-xs text-green-400 font-bold" id="topStockPerf">-- %</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col">
+                    <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30">
+                        <h3 class="text-sm font-bold text-white uppercase">Positions</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-400">
+                            <thead class="bg-gray-900/50 uppercase text-xs text-gray-500">
+                                <tr>
+                                    <th class="px-5 py-3">Société</th>
+                                    <th class="px-5 py-3 text-right">Cours</th>
+                                    <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
+                                    <th class="px-5 py-3 text-right">Perf</th>
+                                    <th class="px-5 py-3 text-center text-blue-400">PER</th>
+                                    <th class="px-5 py-3 text-center text-yellow-400">Bêta</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/50" id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-card rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col">
+                    <h3 class="text-sm font-bold text-white uppercase mb-4">Allocation</h3>
+                    <div class="flex-1 relative min-h-[250px]"><canvas id="sectorChart"></canvas></div>
+                </div>
             </div>
         </div>
+
+        <div id="convictions" class="tab-content">
+            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Thèses d'Investissement</h1>
+            <p class="text-gray-400 mb-8">Analyse fondamentale et justification des positions.</p>
+
+            <div class="grid grid-cols-1 gap-6">
+                <div class="bg-gradient-to-br from-blue-900/40 to-card border border-blue-500/30 rounded-xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></span>
+                        <h3 class="text-xl font-bold text-white">Thèse Macro : "Le Retour du Réel"</h3>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed">
+                        L'ère de l'argent gratuit est terminée. Nous privilégions les entreprises disposant d'un <strong>Pricing Power</strong> fort et d'actifs tangibles. 
+                        La transition énergétique et la réindustrialisation de l'Europe sont les deux mégatendances de la décennie.
+                        <br><br>
+                        👉 <span class="text-blue-400 font-bold">Stratégie :</span> Surpondération Industrie & Énergie / Sous-pondération Tech spéculative.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-500 transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="font-bold text-lg">Air Liquide</h4>
+                                <span class="text-xs text-gray-500">AI.PA • Chimie</span>
+                            </div>
+                            <span class="px-2 py-1 bg-green-500/10 text-green-400 text-xs font-bold rounded border border-green-500/20">ACHETER</span>
+                        </div>
+                        <p class="text-sm text-gray-400">Le "Bunker" du portefeuille. Contrats à 15 ans indexés sur l'inflation. Leader mondial incontesté de l'hydrogène vert.</p>
+                    </div>
+
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-500 transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="font-bold text-lg">TotalEnergies</h4>
+                                <span class="text-xs text-gray-500">TTE.PA • Énergie</span>
+                            </div>
+                            <span class="px-2 py-1 bg-green-500/10 text-green-400 text-xs font-bold rounded border border-green-500/20">ACHETER</span>
+                        </div>
+                        <p class="text-sm text-gray-400">La "Cash Machine". PER de 7.4 ridicule pour une société qui finance sa transition (Renouvelables) avec son pétrole. Rendement > 5%.</p>
+                    </div>
+
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-500 transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="font-bold text-lg">Schneider Electric</h4>
+                                <span class="text-xs text-gray-500">SU.PA • Indus.</span>
+                            </div>
+                            <span class="px-2 py-1 bg-green-500/10 text-green-400 text-xs font-bold rounded border border-green-500/20">ACHETER</span>
+                        </div>
+                        <p class="text-sm text-gray-400">Le pic et la pelle de l'IA et de l'électrification. Datacenters + Rénovation = Croissance séculaire.</p>
+                    </div>
+
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-500 transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="font-bold text-lg">Saint-Gobain</h4>
+                                <span class="text-xs text-gray-500">SGO.PA • Construction</span>
+                            </div>
+                            <span class="px-2 py-1 bg-yellow-500/10 text-yellow-400 text-xs font-bold rounded border border-yellow-500/20">CONSERVER</span>
+                        </div>
+                        <p class="text-sm text-gray-400">Transformation réussie. N'est plus un simple vendeur de placo mais un leader de la chimie de construction (Marge record).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="simulation" class="tab-content">
+            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection Patrimoniale</h1>
+            <p class="text-gray-400 mb-8">Puissance des intérêts composés.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-card border border-gray-700 rounded-xl p-6 h-fit">
+                    <h3 class="font-bold text-white mb-6 uppercase text-sm tracking-wide">Paramètres</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Capital de Départ (€)</label>
+                            <input type="number" id="sim-start" value="10000" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white focus:border-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Épargne Mensuelle (€)</label>
+                            <input type="number" id="sim-monthly" value="500" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white focus:border-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Rendement Annuel (%)</label>
+                            <input type="number" id="sim-rate" value="8" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white focus:border-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Durée (Années)</label>
+                            <input type="number" id="sim-years" value="20" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white focus:border-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <button onclick="calculateSim()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition shadow-lg shadow-blue-600/20">
+                        Lancer la Simulation
+                    </button>
+                </div>
+
+                <div class="lg:col-span-2 bg-card border border-gray-700 rounded-xl p-6 flex flex-col">
+                    <div class="text-center mb-6">
+                        <div class="text-sm text-gray-400 uppercase">Patrimoine Final Estimé</div>
+                        <div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mt-2" id="sim-result">
+                            -- €
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">Dont <span id="sim-interest" class="text-green-400 font-bold">-- €</span> d'intérêts générés</div>
+                    </div>
+                    <div class="flex-1 relative min-h-[300px]">
+                        <canvas id="simChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <script>
-        // --- DONNÉES VÉRIFIÉES (Clôture Vendredi 19/12) ---
-        // J'ai mis ici les vrais prix exacts pour que ton affichage soit JUSTE dès l'ouverture.
+        // --- A. DONNÉES DASHBOARD (Vendredi 19/12 Clôture) ---
         const portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 159.50, per: 28.5, beta: 0.8 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 234.15, per: 32.1, beta: 1.1 },
@@ -123,12 +240,35 @@
             { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 106.07, per: 0,    beta: 1.0 },
         ];
 
-        // --- MOTEUR D'AFFICHAGE ---
-        function render() {
+        // --- B. FONCTION NAVIGATION ---
+        function switchTab(tabId) {
+            // Cacher tous les contenus
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            // Afficher le bon
+            document.getElementById(tabId).classList.add('active');
+            
+            // Gérer les boutons du menu (Style actif)
+            const buttons = ['dashboard', 'convictions', 'simulation'];
+            buttons.forEach(btn => {
+                const el = document.getElementById('btn-'+btn);
+                if(btn === tabId) {
+                    el.classList.remove('text-gray-400', 'bg-transparent');
+                    el.classList.add('bg-blue-600', 'text-white');
+                } else {
+                    el.classList.add('text-gray-400', 'bg-transparent');
+                    el.classList.remove('bg-blue-600', 'text-white');
+                }
+            });
+
+            // Si on va sur simulation, on lance le calcul par défaut
+            if(tabId === 'simulation') calculateSim();
+        }
+
+        // --- C. RENDER DASHBOARD ---
+        function renderDashboard() {
             let totalVal = 0, totalInvest = 0, totalDiv = 0;
             let topStock = { name: '-', perf: -999 };
-            let totalPER = 0; let countPER = 0;
-            
+            let totalPER = 0, countPER = 0;
             const tbody = document.getElementById('tableBody');
             const sectors = {};
             tbody.innerHTML = '';
@@ -137,11 +277,8 @@
                 const valo = stock.price * stock.q;
                 const invest = stock.pru * stock.q;
                 const perfPct = ((stock.price - stock.pru) / stock.pru) * 100;
+                totalVal += valo; totalInvest += invest; totalDiv += valo * stock.div;
                 
-                totalVal += valo;
-                totalInvest += invest;
-                totalDiv += valo * stock.div;
-
                 if(stock.per > 0) { totalPER += stock.per; countPER++; }
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
                 sectors[stock.sec] = (sectors[stock.sec] || 0) + valo;
@@ -151,59 +288,98 @@
                 const displayPER = stock.per > 0 ? stock.per.toFixed(1) : '-';
 
                 tbody.innerHTML += `
-                    <tr class="hover:bg-gray-800/50 transition border-b border-gray-700/50 last:border-0 group">
-                        <td class="px-5 py-4">
-                            <div class="font-bold text-gray-200 group-hover:text-white transition">${stock.name}</div>
-                            <div class="text-[10px] text-gray-500 font-mono">${stock.tick}</div>
-                        </td>
-                        <td class="px-5 py-4 text-right">
-                            <div class="font-mono text-gray-300 font-medium">${stock.price.toFixed(2)} €</div>
-                        </td>
+                    <tr class="hover:bg-gray-800/50 transition border-b border-gray-700/50 last:border-0">
+                        <td class="px-5 py-4"><div class="font-bold text-gray-200">${stock.name}</div><div class="text-[10px] text-gray-500 font-mono">${stock.tick}</div></td>
+                        <td class="px-5 py-4 text-right text-gray-300 font-mono">${stock.price.toFixed(2)} €</td>
                         <td class="px-5 py-4 text-right font-bold text-white hidden sm:table-cell">${Math.round(valo).toLocaleString()} €</td>
-                        <td class="px-5 py-4 text-right ${colorClass} font-mono font-bold bg-opacity-10 rounded">${sign}${perfPct.toFixed(2)}%</td>
-                        <td class="px-5 py-4 text-center font-mono text-sm text-blue-300">${displayPER}</td>
-                        <td class="px-5 py-4 text-center font-mono text-sm text-yellow-200 opacity-80">${stock.beta.toFixed(2)}</td>
-                    </tr>
-                `;
+                        <td class="px-5 py-4 text-right ${colorClass} font-mono font-bold">${sign}${perfPct.toFixed(2)}%</td>
+                        <td class="px-5 py-4 text-center text-blue-300 font-mono text-sm">${displayPER}</td>
+                        <td class="px-5 py-4 text-center text-yellow-200 opacity-80 font-mono text-sm">${stock.beta.toFixed(2)}</td>
+                    </tr>`;
             });
 
-            // KPI
+            // KPI Dashboard
             const globalPv = totalVal - totalInvest;
             const globalPerf = (globalPv / totalInvest) * 100;
             const avgPER = countPER > 0 ? (totalPER / countPER).toFixed(1) : "-";
 
             document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
-            
-            const pvEl = document.getElementById('totalPv');
-            pvEl.innerText = (globalPv > 0 ? '+' : '') + Math.round(globalPv).toLocaleString() + " €";
-            pvEl.className = `mt-1 text-2xl font-bold tabular-nums ${globalPv >= 0 ? 'text-success' : 'text-danger'}`;
-            
-            const perfEl = document.getElementById('totalPerf');
-            perfEl.innerText = (globalPerf > 0 ? '+' : '') + globalPerf.toFixed(2) + " %";
-            perfEl.className = `text-xs font-bold px-2 py-0.5 rounded mt-2 inline-block ${globalPerf >= 0 ? 'bg-green-900/30 text-success' : 'bg-red-900/30 text-danger'}`;
-
+            document.getElementById('totalPv').innerText = (globalPv > 0 ? '+' : '') + Math.round(globalPv).toLocaleString() + " €";
+            document.getElementById('totalPv').className = `mt-1 text-2xl font-bold tabular-nums ${globalPv >= 0 ? 'text-success' : 'text-danger'}`;
+            document.getElementById('totalPerf').innerText = (globalPerf > 0 ? '+' : '') + globalPerf.toFixed(2) + " %";
+            document.getElementById('totalPerf').className = `text-xs font-bold px-2 py-0.5 rounded mt-2 inline-block ${globalPerf >= 0 ? 'bg-green-900/30 text-success' : 'bg-red-900/30 text-danger'}`;
             document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
             document.getElementById('avgPER').innerText = avgPER;
             document.getElementById('topStock').innerText = topStock.name;
             document.getElementById('topStockPerf').innerText = "+" + topStock.perf.toFixed(2) + " %";
 
-            // CHART
-            const ctx = document.getElementById('sectorChart').getContext('2d');
-            new Chart(ctx, {
+            // Chart Dashboard
+            new Chart(document.getElementById('sectorChart').getContext('2d'), {
                 type: 'doughnut',
+                data: { labels: Object.keys(sectors), datasets: [{ data: Object.values(sectors), backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, font: {size: 11, family: 'Inter'}, padding: 15, usePointStyle:true } } }, cutout: '70%' }
+            });
+        }
+
+        // --- D. LOGIQUE SIMULATION ---
+        let simChartInstance = null;
+        function calculateSim() {
+            const start = parseFloat(document.getElementById('sim-start').value);
+            const monthly = parseFloat(document.getElementById('sim-monthly').value);
+            const rate = parseFloat(document.getElementById('sim-rate').value) / 100;
+            const years = parseInt(document.getElementById('sim-years').value);
+
+            let capital = start;
+            let totalInvested = start;
+            const labels = [];
+            const dataCapital = [];
+            const dataInvested = [];
+
+            for(let i = 0; i <= years; i++) {
+                labels.push("Année " + i);
+                dataCapital.push(capital);
+                dataInvested.push(totalInvested);
+                
+                // Calcul Intérêts composés annuels avec ajout mensuel
+                if (i < years) {
+                    for(let m=0; m<12; m++) {
+                        capital += monthly;
+                        capital *= (1 + rate/12); // Taux mensuel approximatif
+                        totalInvested += monthly;
+                    }
+                }
+            }
+
+            const finalAmount = dataCapital[dataCapital.length - 1];
+            const interestGained = finalAmount - totalInvested;
+
+            // Mise à jour textes
+            document.getElementById('sim-result').innerText = Math.round(finalAmount).toLocaleString() + " €";
+            document.getElementById('sim-interest').innerText = Math.round(interestGained).toLocaleString() + " €";
+
+            // Mise à jour Graphique Simu
+            const ctx = document.getElementById('simChart').getContext('2d');
+            if(simChartInstance) simChartInstance.destroy();
+            
+            simChartInstance = new Chart(ctx, {
+                type: 'line',
                 data: {
-                    labels: Object.keys(sectors),
-                    datasets: [{ data: Object.values(sectors), backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }]
+                    labels: labels,
+                    datasets: [
+                        { label: 'Patrimoine Total', data: dataCapital, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 },
+                        { label: 'Argent Investi', data: dataInvested, borderColor: '#64748b', borderDash: [5, 5], tension: 0.4, pointRadius: 0 }
+                    ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, font: {size: 11, family: 'Inter'}, padding: 15, usePointStyle:true } } },
-                    cutout: '70%'
+                    scales: { x: { grid: {display:false}, ticks: {color: '#64748b'} }, y: { grid: {color: '#1e293b'}, ticks: {color: '#64748b'} } },
+                    plugins: { legend: { labels: { color: '#94a3b8' } } }
                 }
             });
         }
 
-        render();
+        // INIT
+        renderDashboard();
     </script>
 </body>
 </html>
