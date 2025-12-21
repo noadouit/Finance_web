@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | Terminal</title>
+    <title>Noa Capital | Live Terminal</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -28,15 +28,22 @@
         
         /* Gestion des Onglets */
         .tab-content { display: none; width: 100%; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        #home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; height: calc(100vh - 64px); }
+        /* Centrage Accueil */
+        #home.active { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: calc(100vh - 64px); /* Hauteur écran moins la barre de nav */
+        }
 
-        .search-glow:focus-within { box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
+        .search-glow:focus-within { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); border-color: #3b82f6; }
         .loader { border: 3px solid #333; border-top: 3px solid #3b82f6; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display:none; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .blink { animation: pulse 2s infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
@@ -52,9 +59,9 @@
                 </div>
                 
                 <div class="flex items-center gap-4">
-                     <div id="market-status" class="hidden md:flex items-center gap-2 bg-gray-900/80 px-3 py-1 rounded-full border border-gray-700">
-                        <span class="w-2 h-2 rounded-full bg-blue-500 blink"></span>
-                        <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider">Connexion API...</span>
+                    <div id="api-status" class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full border border-gray-800 bg-gray-900/50">
+                        <span class="w-2 h-2 rounded-full bg-yellow-500 blink"></span>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase">Connecting...</span>
                     </div>
 
                     <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto">
@@ -71,45 +78,65 @@
     <main class="flex-1 w-full">
 
         <div id="home" class="tab-content active">
-            <div class="text-center mb-12 w-full px-4">
-                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">Market Intelligence.</h1>
-                <p class="text-gray-400 text-xl max-w-2xl mx-auto">Accès direct aux marchés financiers.<br><span class="text-sm opacity-70">Données Yahoo Finance™ (Live & Clôture)</span></p>
+            <div class="text-center mb-12 w-full px-4 animate-fade-in-down">
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">
+                    Market Intelligence.
+                </h1>
+                <p class="text-gray-400 text-xl max-w-2xl mx-auto">
+                    Accès direct aux données de marché.<br>
+                    <span class="text-sm opacity-60 font-mono">LIVE FEED : ON</span>
+                </p>
             </div>
+
             <div class="w-full max-w-3xl px-4 relative z-10">
                 <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
-                    <div class="pl-5 text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:ring-0 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: MC.PA, AAPL)..." autocomplete="off" onkeypress="if(event.key === 'Enter') searchTicker()">
-                    <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg shadow-blue-600/30">GO</button>
+                    <div class="pl-5 text-gray-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input type="text" id="mainTickerInput" 
+                        class="w-full bg-transparent border-none text-white text-2xl px-4 py-4 focus:ring-0 focus:outline-none placeholder-gray-600 font-medium" 
+                        placeholder="Rechercher (ex: MC.PA, TSLA)..."
+                        autocomplete="off"
+                        onkeypress="if(event.key === 'Enter') searchTicker()">
+                    <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg shadow-blue-600/30 text-lg">
+                        GO
+                    </button>
                 </div>
+                
                 <div class="mt-8 flex flex-wrap justify-center gap-3 text-sm text-gray-500">
                     <button onclick="fillSearch('AI.PA')" class="hover:text-blue-400 transition bg-gray-800/50 px-3 py-1 rounded-full border border-gray-700">Air Liquide</button>
                     <button onclick="fillSearch('MC.PA')" class="hover:text-blue-400 transition bg-gray-800/50 px-3 py-1 rounded-full border border-gray-700">LVMH</button>
-                    <button onclick="fillSearch('NVDA')" class="hover:text-blue-400 transition bg-gray-800/50 px-3 py-1 rounded-full border border-gray-700">Nvidia</button>
+                    <button onclick="fillSearch('RMS.PA')" class="hover:text-blue-400 transition bg-gray-800/50 px-3 py-1 rounded-full border border-gray-700">Hermès</button>
+                    <button onclick="fillSearch('BTC-EUR')" class="hover:text-blue-400 transition bg-gray-800/50 px-3 py-1 rounded-full border border-gray-700">Bitcoin</button>
                 </div>
             </div>
+
             <div id="searchLoader" class="loader mt-10"></div>
+            
             <div id="resultCard" class="hidden mt-10 w-full max-w-4xl px-4">
                 <div class="bg-card/90 backdrop-blur border border-gray-700 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
                     <div class="absolute -top-5 -right-5 p-8 opacity-5 font-black text-9xl text-white select-none pointer-events-none" id="bg-ticker">AI</div>
+                    
                     <div class="relative z-10">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-700 pb-6 mb-6">
                             <div>
-                                <h2 class="text-3xl font-bold text-white tracking-tight" id="res-name">Nom</h2>
+                                <h2 class="text-4xl font-bold text-white tracking-tight" id="res-name">Nom</h2>
                                 <div class="flex items-center gap-3 mt-2">
                                     <span class="bg-blue-900/30 text-blue-200 px-2 py-0.5 rounded text-sm font-mono border border-blue-500/30" id="res-symbol">TICKER</span>
                                     <span class="text-gray-400 text-sm" id="res-exchange">Market</span>
                                 </div>
                             </div>
                             <div class="text-left md:text-right">
-                                <div class="text-5xl font-black text-white tracking-tighter" id="res-price">--</div>
-                                <div class="text-xl font-bold mt-2 flex items-center md:justify-end gap-2" id="res-perf">-- %</div>
+                                <div class="text-6xl font-black text-white tracking-tighter" id="res-price">--</div>
+                                <div class="text-2xl font-bold mt-2 flex items-center md:justify-end gap-2" id="res-perf">-- %</div>
                             </div>
                         </div>
+
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                             <div><div class="text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Clôture Préc.</div><div class="text-white font-mono text-lg" id="res-prev">--</div></div>
                             <div><div class="text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Ouverture</div><div class="text-white font-mono text-lg" id="res-open">--</div></div>
                             <div><div class="text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Range Jour</div><div class="text-white font-mono text-sm" id="res-range">--</div></div>
-                            <div><div class="text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Volume</div><div class="text-white font-mono text-lg" id="res-vol">--</div></div>
+                            <div><div class="text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Capitalisation</div><div class="text-white font-mono text-lg" id="res-mktcap">--</div></div>
                         </div>
                     </div>
                 </div>
@@ -120,7 +147,10 @@
             <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
                     <h1 class="text-3xl font-bold text-white tracking-tight">Portefeuille Global</h1>
-                    <p class="text-gray-400 mt-1 text-sm font-mono" id="last-update">Mise à jour...</p>
+                    <p class="text-gray-400 mt-1 text-sm font-mono flex items-center gap-2">
+                        <span id="live-indicator" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
+                        <span id="last-update">En attente des données...</span>
+                    </p>
                 </div>
                 <div class="text-right">
                     <div class="text-sm text-gray-400 uppercase tracking-wider">AUM Total</div>
@@ -146,6 +176,7 @@
 
         <div id="convictions" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
             <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Thèse d'Investissement</h1><p class="text-gray-400 mt-2">Philosophie : <b>Croissance Ricardienne</b> & Retour du Réel.</p></div>
+            
             <div class="bg-gradient-to-br from-gray-900 to-card border-l-4 border-blue-500 rounded-r-xl p-8 mb-8 shadow-2xl">
                 <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🏭</span><h2 class="text-2xl font-bold text-white">Thèse Macro : "Le Retour du Réel"</h2></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -153,6 +184,7 @@
                     <div><h3 class="text-gold font-bold uppercase text-sm mb-2 tracking-wide">Critères de Sélection</h3><ul class="space-y-2 text-sm text-gray-300"><li class="flex items-start gap-2">✅ <strong>Moat (Fossé Économique) :</strong> Barrières à l'entrée infranchissables.</li><li class="flex items-start gap-2">✅ <strong>Actifs Tangibles :</strong> Usines, Brevets, Matières Premières.</li><li class="flex items-start gap-2">✅ <strong>Visibilité :</strong> Contrats long terme indexés sur l'inflation.</li></ul></div>
                 </div>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                 <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Le Bunker.</strong> Modèle unique : contrats de 15 ans indexés sur l'énergie. Visibilité parfaite. Leader de l'hydrogène décarboné. C'est l'action "Fond de portefeuille" par excellence.</p></div>
                 <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Mégatendance Électrification.</strong> Vente de pelles et pioches pour l'IA (Data Centers) et la rénovation. Ne vend pas l'énergie, mais l'efficacité. Croissance structurelle.</p></div>
@@ -187,15 +219,14 @@
     </main>
 
     <script>
-        // --- CONFIGURATION PORTEFEUILLE (Quantité & PRU SEULEMENT - Le prix vient de l'API) ---
-        // Les champs 'price', 'per', 'beta' sont ici des placeholders qui seront écrasés par l'API
+        // --- CONFIGURATION SANS PRIX (Tout à 0) ---
         let portfolio = [
-            { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 171.18, per: 0, beta: 1 },
-            { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 236.99, per: 0, beta: 1 },
-            { tick: "TTE.PA", name: "TotalEnergies",      sec: "Energie",    q: 38, pru: 56.97,  div: 0.052, price: 56.97,  per: 0, beta: 1 },
-            { tick: "AIR.PA", name: "Airbus",             sec: "Aéro.",      q: 5,  pru: 212.46, div: 0.012, price: 212.46, per: 0, beta: 1 },
-            { tick: "SGO.PA", name: "Saint-Gobain",       sec: "Construct.", q: 7,  pru: 88.15,  div: 0.026, price: 88.15,  per: 0, beta: 1 },
-            { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 104.84, per: 0, beta: 1 },
+            { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, per: 0, beta: 1 },
+            { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, per: 0, beta: 1 },
+            { tick: "TTE.PA", name: "TotalEnergies",      sec: "Energie",    q: 38, pru: 56.97,  div: 0.052, price: 0, per: 0, beta: 1 },
+            { tick: "AIR.PA", name: "Airbus",             sec: "Aéro.",      q: 5,  pru: 212.46, div: 0.012, price: 0, per: 0, beta: 1 },
+            { tick: "SGO.PA", name: "Saint-Gobain",       sec: "Construct.", q: 7,  pru: 88.15,  div: 0.026, price: 0, per: 0, beta: 1 },
+            { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 0, per: 0, beta: 1 },
         ];
 
         // --- NAVIGATION ---
@@ -207,33 +238,26 @@
                 if(btn === tabId) { el.classList.remove('text-gray-400', 'bg-transparent'); el.classList.add('bg-blue-600', 'text-white'); }
                 else { el.classList.add('text-gray-400', 'bg-transparent'); el.classList.remove('bg-blue-600', 'text-white'); }
             });
+            // Cleanup Accueil
             if(tabId !== 'home') {
-                // Actions quand on quitte l'accueil
+                 document.getElementById('resultCard').classList.add('hidden');
+                 document.getElementById('mainTickerInput').value = '';
             }
             if(tabId === 'simulation') calculateSim();
         }
 
-        // --- MOTEUR CENTRAL (AUTO-PILOT) ---
+        // --- MOTEUR CENTRAL (PURE LIVE) ---
         async function fetchPortfolioData() {
-            // Mise à jour de l'UI pour dire qu'on cherche
-            const statusEl = document.getElementById('market-status');
+            const statusEl = document.getElementById('api-status');
+            const updateText = document.getElementById('last-update');
+            const indicator = document.getElementById('live-indicator');
+
+            // Feedback visuel "Chargement"
+            statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-yellow-500 blink"></span><span class="text-[10px] font-bold text-gray-400 uppercase">Fetching Data...</span>';
             
-            // Détection Horaire pour le Status seulement (La data, elle, est toujours fetchée)
-            const now = new Date();
-            const day = now.getDay(); const hour = now.getHours(); const min = now.getMinutes(); const totalMin = hour * 60 + min;
-            const isWeekday = (day >= 1 && day <= 5);
-            const isOpen = (totalMin >= 540 && totalMin <= 1055); // 09:00 - 17:35
-
-            if(isWeekday && isOpen) {
-                statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-green-500 blink"></span><span class="text-[10px] font-bold text-green-500 uppercase">Live Market</span>';
-            } else {
-                statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span><span class="text-[10px] font-bold text-red-500 uppercase">Marché Fermé (Clôture)</span>';
-            }
-
-            // APPEL API SYSTEMATIQUE (Live ou Clôture)
             const proxy = "https://corsproxy.io/?";
             const symbols = portfolio.map(p => p.tick).join(',');
-            // Astuce : &t=Date.now() force Yahoo à donner la dernière valeur connue sans cache
+            // Anti-Cache
             const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}&t=${Date.now()}`;
 
             try {
@@ -241,43 +265,54 @@
                 const json = await response.json();
                 const results = json.quoteResponse.result;
 
-                let lastUpdateDate = null;
+                let latestTime = 0;
 
-                // Mise à jour du portefeuille avec les vraies données
+                // Mise à jour des prix
                 portfolio.forEach(stock => {
-                    const marketData = results.find(r => r.symbol === stock.tick);
-                    if(marketData && marketData.regularMarketPrice) {
-                        stock.price = marketData.regularMarketPrice;
-                        stock.per = marketData.trailingPE || 0;
-                        stock.beta = marketData.beta || 1;
-                        
-                        // Récupération de la date de la donnée
-                        if(!lastUpdateDate) {
-                            lastUpdateDate = new Date(marketData.regularMarketTime * 1000);
-                        }
+                    const liveData = results.find(r => r.symbol === stock.tick);
+                    if(liveData && liveData.regularMarketPrice) {
+                        stock.price = liveData.regularMarketPrice;
+                        stock.per = liveData.trailingPE || 0;
+                        stock.beta = liveData.beta || 1;
+                        if(liveData.regularMarketTime > latestTime) latestTime = liveData.regularMarketTime;
                     }
                 });
 
-                // Affichage de la date de la donnée
-                const dateStr = lastUpdateDate ? lastUpdateDate.toLocaleDateString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : "Temps Réel";
-                const subTitle = document.getElementById('last-update');
-                subTitle.innerText = "Dernière cotation : " + dateStr;
+                // Succès
+                statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-green-500"></span><span class="text-[10px] font-bold text-green-500 uppercase">API Connected</span>';
                 
-                // Si marché ouvert, on met en vert, sinon gris
-                if(isWeekday && isOpen) subTitle.className = "text-green-400 mt-1 text-sm font-mono animate-pulse";
-                else subTitle.className = "text-gray-500 mt-1 text-sm font-mono";
+                // Formater la date de la donnée
+                const dateObj = new Date(latestTime * 1000);
+                const dateStr = dateObj.toLocaleDateString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+                
+                // Détecter si c'est Live ou Clôture
+                const now = new Date();
+                const diffMins = (now - dateObj) / 60000;
+                
+                if(diffMins < 20) {
+                    // C'est du live (< 20 min)
+                    updateText.innerText = "Données Temps Réel : " + dateStr;
+                    updateText.className = "text-green-400 mt-1 text-sm font-mono animate-pulse";
+                    indicator.classList.remove('bg-red-500'); indicator.classList.add('bg-green-500', 'animate-pulse');
+                } else {
+                    // C'est de la clôture
+                    updateText.innerText = "Dernière Clôture : " + dateStr;
+                    updateText.className = "text-gray-400 mt-1 text-sm font-mono";
+                    indicator.classList.remove('bg-green-500', 'animate-pulse'); indicator.classList.add('bg-gray-500');
+                }
 
                 renderDashboard();
 
             } catch (e) {
                 console.error("Erreur API Yahoo", e);
-                document.getElementById('last-update').innerText = "Erreur Connexion - Données locales";
-                renderDashboard(); // Fallback sur les valeurs par défaut
+                statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span><span class="text-[10px] font-bold text-red-500 uppercase">API Error</span>';
+                updateText.innerText = "Erreur de connexion.";
             }
         }
 
-        // --- RECHERCHE ---
+        // --- RECHERCHE ACCUEIL ---
         function fillSearch(ticker) { document.getElementById('mainTickerInput').value = ticker; searchTicker(); }
+
         async function searchTicker() {
             const input = document.getElementById('mainTickerInput');
             const ticker = input.value.toUpperCase().trim();
@@ -313,10 +348,14 @@
                 document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
                 document.getElementById('res-range').innerText = (meta.regularMarketDayLow||price).toFixed(2) + " - " + (meta.regularMarketDayHigh||price).toFixed(2);
                 
-                let vol = meta.regularMarketVolume;
-                if(vol > 1000000) vol = (vol/1000000).toFixed(2)+" M";
-                else if(vol > 1000) vol = (vol/1000).toFixed(2)+" K";
-                document.getElementById('res-vol').innerText = vol;
+                // Market Cap (Estimation brute si non dispo)
+                let mkt = meta.marketCap; // Yahoo ne renvoie pas toujours marketCap dans chart v8
+                if(!mkt) document.getElementById('res-mktcap').innerText = "-";
+                else if(mkt > 1000000000) document.getElementById('res-mktcap').innerText = (mkt/1000000000).toFixed(2) + " B";
+                else document.getElementById('res-mktcap').innerText = (mkt/1000000).toFixed(2) + " M";
+                
+                // Fallback Volume à la place si pas de MarketCap
+                document.getElementById('res-vol').innerText = meta.regularMarketVolume ? (meta.regularMarketVolume/1000).toFixed(0)+" K" : "-";
 
                 resultCard.classList.remove('hidden');
             } catch (e) { alert("Ticker introuvable."); } 
@@ -334,7 +373,9 @@
             portfolio.forEach(stock => {
                 const valo = stock.price * stock.q;
                 const invest = stock.pru * stock.q;
-                const perfPct = ((stock.price - stock.pru) / stock.pru) * 100;
+                // Si price est 0 (chargement), perf est 0
+                const perfPct = stock.price > 0 ? ((stock.price - stock.pru) / stock.pru) * 100 : 0;
+                
                 totalVal += valo; totalInvest += invest; totalDiv += valo * stock.div;
                 if(stock.per > 0) { totalPER += stock.per; countPER++; }
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
@@ -342,27 +383,38 @@
 
                 const colorClass = perfPct >= 0 ? 'text-success' : 'text-danger';
                 const sign = perfPct > 0 ? '+' : '';
-                tbody.innerHTML += `<tr class="hover:bg-gray-800/50 transition border-b border-gray-700/50 last:border-0"><td class="px-5 py-4"><div class="font-bold text-gray-200">${stock.name}</div><div class="text-[10px] text-gray-500 font-mono">${stock.tick}</div></td><td class="px-5 py-4 text-right text-gray-300 font-mono">${stock.price.toFixed(2)} €</td><td class="px-5 py-4 text-right font-bold text-white hidden sm:table-cell">${Math.round(valo).toLocaleString()} €</td><td class="px-5 py-4 text-right ${colorClass} font-mono font-bold">${sign}${perfPct.toFixed(2)}%</td><td class="px-5 py-4 text-center text-blue-300 font-mono text-sm">${stock.per>0?stock.per.toFixed(1):'-'}</td><td class="px-5 py-4 text-center text-yellow-200 opacity-80 font-mono text-sm">${stock.beta.toFixed(2)}</td></tr>`;
+                
+                // Si prix = 0, on affiche un loading
+                const displayPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '<span class="animate-pulse">...</span>';
+                const displayValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '...';
+
+                tbody.innerHTML += `<tr class="hover:bg-gray-800/50 transition border-b border-gray-700/50 last:border-0"><td class="px-5 py-4"><div class="font-bold text-gray-200">${stock.name}</div><div class="text-[10px] text-gray-500 font-mono">${stock.tick}</div></td><td class="px-5 py-4 text-right text-gray-300 font-mono">${displayPrice}</td><td class="px-5 py-4 text-right font-bold text-white hidden sm:table-cell">${displayValo}</td><td class="px-5 py-4 text-right ${colorClass} font-mono font-bold">${sign}${perfPct.toFixed(2)}%</td><td class="px-5 py-4 text-center text-blue-300 font-mono text-sm">${stock.per>0?stock.per.toFixed(1):'-'}</td><td class="px-5 py-4 text-center text-yellow-200 opacity-80 font-mono text-sm">${stock.beta.toFixed(2)}</td></tr>`;
             });
 
             const globalPv = totalVal - totalInvest;
-            const globalPerf = (globalPv / totalInvest) * 100;
-            document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
-            document.getElementById('totalPv').innerText = (globalPv>0?'+':'') + Math.round(globalPv).toLocaleString() + " €";
-            document.getElementById('totalPv').className = `mt-1 text-2xl font-bold tabular-nums ${globalPv>=0?'text-success':'text-danger'}`;
-            document.getElementById('totalPerf').innerText = (globalPerf>0?'+':'') + globalPerf.toFixed(2) + " %";
-            document.getElementById('totalPerf').className = `text-xs font-bold px-2 py-0.5 rounded mt-2 inline-block ${globalPerf>=0?'bg-green-900/30 text-success':'bg-red-900/30 text-danger'}`;
-            document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
-            document.getElementById('avgPER').innerText = countPER>0 ? (totalPER/countPER).toFixed(1) : "-";
-            document.getElementById('topStock').innerText = topStock.name;
-            document.getElementById('topStockPerf').innerText = "+" + topStock.perf.toFixed(2) + " %";
-
-            if(window.myChart) window.myChart.destroy();
-            window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), {
-                type: 'doughnut',
-                data: { labels: Object.keys(sectors), datasets: [{ data: Object.values(sectors), backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, font: {size: 11, family: 'Inter'}, padding: 15, usePointStyle:true } } }, cutout: '70%' }
-            });
+            const globalPerf = totalInvest > 0 ? (globalPv / totalInvest) * 100 : 0;
+            
+            // Si TotalVal = 0, on affiche des tirets
+            if(totalVal === 0) {
+                 document.getElementById('totalVal').innerText = "Chargement...";
+            } else {
+                document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
+                document.getElementById('totalPv').innerText = (globalPv>0?'+':'') + Math.round(globalPv).toLocaleString() + " €";
+                document.getElementById('totalPv').className = `mt-1 text-2xl font-bold tabular-nums ${globalPv>=0?'text-success':'text-danger'}`;
+                document.getElementById('totalPerf').innerText = (globalPerf>0?'+':'') + globalPerf.toFixed(2) + " %";
+                document.getElementById('totalPerf').className = `text-xs font-bold px-2 py-0.5 rounded mt-2 inline-block ${globalPerf>=0?'bg-green-900/30 text-success':'bg-red-900/30 text-danger'}`;
+                document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
+                document.getElementById('avgPER').innerText = countPER>0 ? (totalPER/countPER).toFixed(1) : "-";
+                document.getElementById('topStock').innerText = topStock.name;
+                document.getElementById('topStockPerf').innerText = "+" + topStock.perf.toFixed(2) + " %";
+                
+                if(window.myChart) window.myChart.destroy();
+                window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), {
+                    type: 'doughnut',
+                    data: { labels: Object.keys(sectors), datasets: [{ data: Object.values(sectors), backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, font: {size: 11, family: 'Inter'}, padding: 15, usePointStyle:true } } }, cutout: '70%' }
+                });
+            }
         }
 
         // --- SIMU ---
@@ -383,9 +435,9 @@
         }
 
         // START
-        fetchPortfolioData();
-        // Update toutes les 60s
-        setInterval(fetchPortfolioData, 60000);
+        renderDashboard(); // Affiche les zéros
+        fetchPortfolioData(); // Lance la requête
+        setInterval(fetchPortfolioData, 60000); // Update toutes les 60s
     </script>
 </body>
 </html>
