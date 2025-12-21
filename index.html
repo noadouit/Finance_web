@@ -1,91 +1,213 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Mon Portefeuille - Noa Capital</title>
-    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.31.0/build/stlite.js"></script>
-  </head>
-  <body>
-    <div id="root" style="height: 100vh"></div>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noa Capital | Live Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { dark: '#0f172a', card: '#1e293b', accent: '#3b82f6', success: '#22c55e', danger: '#ef4444' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style> 
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; } 
+        .blink { animation: blinker 1.5s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <nav class="border-b border-gray-800 bg-card/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-8 h-8 rounded flex items-center justify-center font-bold text-white">N</div>
+                    <span class="text-xl font-bold tracking-tight">Noa Capital</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="status-dot" class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                    <span id="status-text" class="text-xs text-gray-400">Connexion Yahoo...</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-1 py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-white">Portefeuille Réel</h1>
+                <p class="text-gray-400 mt-1 text-sm">Données Yahoo Finance ™ en direct.</p>
+            </div>
+            <div class="text-right">
+                <div class="text-sm text-gray-400">Valeur Totale</div>
+                <div class="text-4xl font-extrabold text-white tracking-tight" id="totalVal">-- €</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-card rounded-xl p-6 border border-gray-700 shadow-lg">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Plus-Value Latente</p>
+                <p class="mt-2 text-3xl font-bold" id="totalPv">-- €</p>
+                <p class="text-sm mt-1" id="totalPerf">-- %</p>
+            </div>
+            <div class="bg-card rounded-xl p-6 border border-gray-700 shadow-lg">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Dividendes (Est.)</p>
+                <p class="mt-2 text-3xl font-bold text-indigo-400" id="totalDiv">-- €</p>
+            </div>
+            <div class="bg-card rounded-xl p-6 border border-gray-700 shadow-lg">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Top Performance</p>
+                <p class="mt-2 text-xl font-bold text-white truncate" id="topStock">--</p>
+                <p class="text-sm text-green-400" id="topStockPerf">-- %</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-700"><h3 class="text-sm font-semibold text-white uppercase">Positions Actives</h3></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-400">
+                        <thead class="bg-gray-800/50 uppercase font-semibold text-xs text-gray-500">
+                            <tr><th class="px-6 py-3">Titre</th><th class="px-6 py-3 text-right">Prix</th><th class="px-6 py-3 text-right">Valo</th><th class="px-6 py-3 text-right">Perf</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700" id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bg-card rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col">
+                <h3 class="text-sm font-semibold text-white uppercase mb-4">Répartition</h3>
+                <div class="flex-1 relative min-h-[200px]"><canvas id="sectorChart"></canvas></div>
+            </div>
+        </div>
+    </main>
 
     <script>
-      stlite.mount({
-        requirements: ["plotly", "pandas"], // On charge les librairies Python ici
-        entrypoint: "streamlit_app.py",
-        files: {
-          "streamlit_app.py": `
-import streamlit as st
-import pandas as pd
-import plotly.express as px
+        // 1. TA LISTE D'ACTIONS
+        const portfolio = [
+            { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019 },
+            { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015 },
+            { tick: "TTE.PA", name: "TotalEnergies",      sec: "Energie",    q: 38, pru: 56.97,  div: 0.052 },
+            { tick: "AIR.PA", name: "Airbus",             sec: "Aéro.",      q: 5,  pru: 212.46, div: 0.012 },
+            { tick: "SGO.PA", name: "Saint-Gobain",       sec: "Construct.", q: 7,  pru: 88.15,  div: 0.026 },
+            { tick: "BRES.PA", name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0 },
+        ];
 
-# --- CONFIGURATION STREAMLIT ---
-st.set_page_config(page_title="Mon Portefeuille", page_icon="🏆", layout="wide")
-st.title("🏆 Mon Portefeuille Réel")
+        // 2. FONCTION MAGIQUE : RECUPERATION VIA PROXY
+        async function fetchYahooData() {
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            statusDot.classList.add('blink');
+            
+            // On utilise un proxy CORS pour contourner la sécurité Yahoo depuis le navigateur
+            const proxy = "https://corsproxy.io/?"; 
+            
+            let promises = portfolio.map(async (stock) => {
+                try {
+                    // URL non-officielle de Yahoo (très rapide)
+                    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${stock.tick}?interval=1d`;
+                    const response = await fetch(proxy + encodeURIComponent(url));
+                    const data = await response.json();
+                    
+                    // Extraction du prix
+                    const price = data.chart.result[0].meta.regularMarketPrice;
+                    return { ...stock, price: price };
+                } catch (e) {
+                    console.error("Erreur sur " + stock.tick, e);
+                    return { ...stock, price: stock.pru }; // Fallback sur PRU si erreur
+                }
+            });
 
-# --- DONNÉES SNAPSHOT (Pour vitesse MAX sans serveur) ---
-# On simule les données pour que l'affichage soit INSTANTANÉ
-data = [
-    {"Ticker": "AI.PA",  "Société": "Air Liquide",        "Secteur": "Chimie",     "Qté": 20, "PRU": 171.18, "Cours": 166.40, "Avis": "ACHETER"},
-    {"Ticker": "SU.PA",  "Société": "Schneider Electric", "Secteur": "Tech/Indus", "Qté": 10, "PRU": 236.99, "Cours": 242.80, "Avis": "ACHETER"},
-    {"Ticker": "TTE.PA", "Société": "TotalEnergies",      "Secteur": "Energie",    "Qté": 38, "PRU": 56.97,  "Cours": 58.95,  "Avis": "ACHETER"},
-    {"Ticker": "AIR.PA", "Société": "Airbus",             "Secteur": "Aéro.",      "Qté": 5,  "PRU": 212.46, "Cours": 145.20, "Avis": "CONSERVER"},
-    {"Ticker": "SGO.PA", "Société": "Saint-Gobain",       "Secteur": "Construct.", "Qté": 7,  "PRU": 88.15,  "Cours": 83.50,  "Avis": "CONSERVER"},
-    {"Ticker": "BRES.PA","Société": "ETF Basic Res.",     "Secteur": "Matériaux",  "Qté": 6,  "PRU": 104.84, "Cours": 108.10, "Avis": "-"},
-]
-
-df = pd.DataFrame(data)
-
-# Calculs
-df["Valo"] = df["Cours"] * df["Qté"]
-df["+/- Value"] = (df["Cours"] - df["PRU"]) * df["Qté"]
-df["Perf %"] = ((df["Cours"] - df["PRU"]) / df["PRU"]) * 100
-
-# --- KPI ---
-total_invest = df["Valo"].sum()
-total_pv = df["+/- Value"].sum()
-
-st.divider()
-c1, c2, c3 = st.columns(3)
-c1.metric("💰 Valeur Totale", f"{total_invest:,.2f} €")
-c2.metric("Plus-Value Latente", f"{total_pv:+,.2f} €")
-c3.metric("Performance Globale", f"{(total_pv/(total_invest-total_pv))*100:.2f} %")
-st.divider()
-
-# --- TABLEAU ---
-st.subheader("📊 Tableau de Bord")
-st.dataframe(
-    df,
-    column_config={
-        "Ticker": st.column_config.TextColumn("Ticker", width="small"),
-        "Société": st.column_config.TextColumn("Société", width="medium"),
-        "Cours": st.column_config.NumberColumn("Cours", format="%.2f €"),
-        "Valo": st.column_config.NumberColumn("Valo", format="%.0f €"),
-        "Perf %": st.column_config.NumberColumn("Perf", format="%.2f %%"),
-        "+/- Value": st.column_config.NumberColumn("+/-", format="%+.2f €"),
-    },
-    hide_index=True,
-    use_container_width=True
-)
-
-# --- GRAPHIQUES ---
-col1, col2 = st.columns(2)
-with col1:
-    fig = px.pie(df, values='Valo', names='Secteur', title='Par Secteur', hole=0.4)
-    st.plotly_chart(fig, use_container_width=True)
-with col2:
-    df_s = df.sort_values("Perf %", ascending=False)
-    fig = px.bar(df_s, x="Ticker", y="Perf %", title='Performance', color="Perf %", 
-                 color_continuous_scale=["#FF4B4B", "#21C354"])
-    st.plotly_chart(fig, use_container_width=True)
-
-st.caption("Propulsé par Stlite (Python in Browser) - Noa Capital")
-`
+            // Attendre toutes les données
+            const updatedPortfolio = await Promise.all(promises);
+            updateDashboard(updatedPortfolio);
+            
+            statusDot.classList.remove('blink');
+            statusDot.classList.replace('bg-yellow-500', 'bg-green-500');
+            statusText.innerText = "Données Live";
+            statusText.classList.add('text-green-500');
         }
-      },
-      document.getElementById("root")
-      );
+
+        // 3. AFFICHAGE
+        function updateDashboard(data) {
+            let totalVal = 0, totalInvest = 0, totalDiv = 0;
+            let topStock = { name: '-', perf: -999 };
+            const tbody = document.getElementById('tableBody');
+            const sectors = {};
+            
+            tbody.innerHTML = ''; // Reset tableau
+
+            data.forEach(stock => {
+                const valo = stock.price * stock.q;
+                const invest = stock.pru * stock.q;
+                const perfPct = ((stock.price - stock.pru) / stock.pru) * 100;
+                
+                totalVal += valo;
+                totalInvest += invest;
+                totalDiv += valo * stock.div;
+                
+                // Top Stock Calcul
+                if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
+
+                // Secteurs
+                sectors[stock.sec] = (sectors[stock.sec] || 0) + valo;
+
+                // Style
+                const color = perfPct >= 0 ? 'text-green-400' : 'text-red-400';
+                const sign = perfPct > 0 ? '+' : '';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-700/50 transition border-b border-gray-700/50 last:border-0">
+                        <td class="px-6 py-4"><div class="font-bold text-white">${stock.name}</div><div class="text-xs text-gray-500">${stock.tick}</div></td>
+                        <td class="px-6 py-4 text-right font-mono text-white">${stock.price.toFixed(2)} €</td>
+                        <td class="px-6 py-4 text-right font-bold text-gray-300">${Math.round(valo).toLocaleString()} €</td>
+                        <td class="px-6 py-4 text-right ${color} font-mono font-bold">${sign}${perfPct.toFixed(2)}%</td>
+                    </tr>
+                `;
+            });
+
+            // Update KPI Globaux
+            const globalPv = totalVal - totalInvest;
+            const globalPerf = (globalPv / totalInvest) * 100;
+
+            document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
+            
+            const pvEl = document.getElementById('totalPv');
+            pvEl.innerText = (globalPv > 0 ? '+' : '') + Math.round(globalPv).toLocaleString() + " €";
+            pvEl.className = `mt-2 text-3xl font-bold ${globalPv >= 0 ? 'text-green-400' : 'text-red-400'}`;
+            
+            document.getElementById('totalPerf').innerText = (globalPerf > 0 ? '+' : '') + globalPerf.toFixed(2) + " %";
+            document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
+            
+            document.getElementById('topStock').innerText = topStock.name;
+            document.getElementById('topStockPerf').innerText = "+" + topStock.perf.toFixed(2) + " %";
+
+            // Chart
+            if(window.myChart) window.myChart.destroy();
+            window.myChart = new Chart(document.getElementById('sectorChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(sectors),
+                    datasets: [{
+                        data: Object.values(sectors),
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'right', labels: { color: '#9ca3af', boxWidth: 10 } } }, cutout: '75%' }
+            });
+        }
+
+        // Lancement immédiat
+        fetchYahooData();
     </script>
-  </body>
+</body>
 </html>
