@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | Live Dashboard</title>
+    <title>Noa Capital | Pro Dashboard</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -18,18 +18,24 @@
                         card: '#1e293b', 
                         accent: '#3b82f6', 
                         success: '#22c55e', 
-                        danger: '#ef4444' 
+                        danger: '#ef4444',
+                        warning: '#f59e0b'
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
         .blink { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        /* Scrollbar fine */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
 
@@ -39,78 +45,94 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-3">
-                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-8 h-8 rounded flex items-center justify-center font-bold text-white">N</div>
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-8 h-8 rounded flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/20">N</div>
                     <span class="text-xl font-bold tracking-tight">Noa Capital</span>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 bg-gray-900/50 px-3 py-1 rounded-full border border-gray-700">
                     <span id="status-dot" class="w-2 h-2 rounded-full bg-yellow-500 blink"></span>
-                    <span id="status-text" class="text-xs text-gray-400">Connexion Marchés...</span>
+                    <span id="status-text" class="text-xs text-gray-400 font-medium">Flux Yahoo...</span>
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="flex-1 py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    <main class="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         
         <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-white">Portefeuille Réel</h1>
-                <p class="text-gray-400 mt-1 text-sm">Données Yahoo Finance™ en direct (Différé 15min).</p>
+                <h1 class="text-3xl font-bold text-white tracking-tight">Portefeuille Global</h1>
+                <p class="text-gray-400 mt-1 text-sm flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Données Fondamentales & Techniques Live
+                </p>
             </div>
             <div class="text-right">
-                <div class="text-sm text-gray-400">Valeur Totale</div>
-                <div class="text-4xl font-extrabold text-white tracking-tight" id="totalVal">-- €</div>
+                <div class="text-sm text-gray-400 font-medium uppercase tracking-wider">Valeur Liquidative</div>
+                <div class="text-4xl font-extrabold text-white tracking-tight tabular-nums" id="totalVal">-- €</div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-card rounded-xl p-6 border border-gray-700 shadow-lg relative overflow-hidden">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Plus-Value Latente</p>
-                <p class="mt-2 text-3xl font-bold" id="totalPv">-- €</p>
-                <div class="flex items-center mt-1">
-                    <span class="text-sm font-bold" id="totalPerf">-- %</span>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                 </div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Plus-Value</p>
+                <p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">-- €</p>
+                <span class="text-xs font-bold px-2 py-0.5 rounded bg-gray-800 text-gray-300 mt-2 inline-block" id="totalPerf">-- %</span>
             </div>
 
-            <div class="bg-card rounded-xl p-6 border border-gray-700 shadow-lg">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Dividendes (Est. Annuel)</p>
-                <p class="mt-2 text-3xl font-bold text-indigo-400" id="totalDiv">-- €</p>
-                <p class="text-xs text-gray-500 mt-1">Basé sur le dernier exercice</p>
+            <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Dividendes (Est.)</p>
+                <p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">-- €</p>
+                <p class="text-xs text-gray-500 mt-1">Projection annuelle</p>
             </div>
 
-            <div class="bg-card rounded-xl p-6 border border-gray-700 shadow-lg">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Top Performance</p>
-                <p class="mt-2 text-xl font-bold text-white truncate" id="topStock">--</p>
-                <p class="text-sm text-green-400 font-bold" id="topStockPerf">-- %</p>
+            <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">PER Moyen</p>
+                <p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p>
+                <p class="text-xs text-blue-400 mt-1">Valorisation Portefeuille</p>
+            </div>
+
+             <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Top Performer</p>
+                <p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p>
+                <p class="text-xs text-green-400 font-bold" id="topStockPerf">-- %</p>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center">
-                    <h3 class="text-sm font-semibold text-white uppercase">Positions Actives</h3>
+            <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col">
+                <div class="px-6 py-4 border-b border-gray-700 flex justify-between items-center bg-gray-800/30">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wide">Analyse Fondamentale</h3>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto flex-1">
                     <table class="w-full text-left text-sm text-gray-400">
-                        <thead class="bg-gray-800/50 uppercase font-semibold text-xs text-gray-500">
+                        <thead class="bg-gray-900/50 uppercase font-semibold text-xs text-gray-500 sticky top-0">
                             <tr>
-                                <th class="px-6 py-3">Société</th>
-                                <th class="px-6 py-3 text-right">Prix</th>
-                                <th class="px-6 py-3 text-right">Valo</th>
-                                <th class="px-6 py-3 text-right">Perf</th>
+                                <th class="px-5 py-3">Société</th>
+                                <th class="px-5 py-3 text-right">Cours</th>
+                                <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
+                                <th class="px-5 py-3 text-right">Perf</th>
+                                <th class="px-5 py-3 text-center text-blue-400" title="Price Earning Ratio">PER</th>
+                                <th class="px-5 py-3 text-center text-purple-400" title="Price to Sales">PSR</th>
+                                <th class="px-5 py-3 text-center text-yellow-400" title="Volatilité">Bêta</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-700" id="tableBody">
+                        <tbody class="divide-y divide-gray-700/50" id="tableBody">
                             </tbody>
                     </table>
                 </div>
             </div>
 
             <div class="bg-card rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col">
-                <h3 class="text-sm font-semibold text-white uppercase mb-4">Allocation</h3>
-                <div class="flex-1 relative min-h-[200px]">
+                <h3 class="text-sm font-bold text-white uppercase mb-4 tracking-wide">Exposition Sectorielle</h3>
+                <div class="flex-1 relative min-h-[250px]">
                     <canvas id="sectorChart"></canvas>
+                </div>
+                <div class="mt-4 text-center">
+                    <span class="text-xs text-gray-500">Diversification pondérée par valorisation</span>
                 </div>
             </div>
 
@@ -118,7 +140,7 @@
     </main>
 
     <script>
-        // --- A. TES ACTIONS ---
+        // --- 1. CONFIGURATION ---
         const portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015 },
@@ -128,48 +150,55 @@
             { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0 },
         ];
 
-        // --- B. RECUPERATION DONNEES (PROXY) ---
+        // --- 2. RECUPERATION DONNÉES (BATCH REQUEST) ---
         async function fetchYahooData() {
-            // Le proxy permet de contourner la sécurité qui bloque Yahoo en HTML pur
             const proxy = "https://corsproxy.io/?"; 
-            
-            // On lance toutes les demandes en même temps
-            let promises = portfolio.map(async (stock) => {
-                try {
-                    // URL Yahoo Finance JSON
-                    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${stock.tick}?interval=1d`;
-                    const response = await fetch(proxy + encodeURIComponent(url));
-                    const data = await response.json();
-                    
-                    // On chope le prix courant
-                    const price = data.chart.result[0].meta.regularMarketPrice;
-                    return { ...stock, price: price };
-                } catch (e) {
-                    console.error("Erreur sur " + stock.tick, e);
-                    // Si erreur, on garde le PRU pour pas casser le site
-                    return { ...stock, price: stock.pru }; 
-                }
-            });
+            // On demande toutes les actions d'un coup pour être plus rapide
+            const symbols = portfolio.map(p => p.tick).join(',');
+            const url = `https://query2.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`;
 
-            // On attend que tout soit chargé
-            const updatedPortfolio = await Promise.all(promises);
-            updateUI(updatedPortfolio);
-            
-            // Mise à jour du statut (point vert)
-            document.getElementById('status-dot').classList.remove('blink', 'bg-yellow-500');
-            document.getElementById('status-dot').classList.add('bg-green-500');
-            const txt = document.getElementById('status-text');
-            txt.innerText = "Données Live";
-            txt.classList.add('text-green-500');
+            try {
+                const response = await fetch(proxy + encodeURIComponent(url));
+                const json = await response.json();
+                const results = json.quoteResponse.result;
+
+                // On fusionne les données reçues avec notre portefeuille local
+                const updatedData = portfolio.map(stock => {
+                    const marketData = results.find(r => r.symbol === stock.tick);
+                    return {
+                        ...stock,
+                        price: marketData ? (marketData.regularMarketPrice || stock.pru) : stock.pru,
+                        // Récupération des INDICATEURS
+                        per: marketData ? (marketData.trailingPE || 0) : 0,
+                        psr: marketData ? (marketData.priceToSalesTrailing12Months || 0) : 0,
+                        beta: marketData ? (marketData.beta || 1) : 1
+                    };
+                });
+
+                updateUI(updatedData);
+                
+                // Status Vert
+                document.getElementById('status-dot').classList.remove('blink', 'bg-yellow-500');
+                document.getElementById('status-dot').classList.add('bg-success');
+                const txt = document.getElementById('status-text');
+                txt.innerText = "Connecté Yahoo™";
+                txt.className = "text-xs text-success font-bold";
+
+            } catch (e) {
+                console.error("Erreur Fetch:", e);
+                // Si erreur, on affiche quand même le tableau avec les PRU
+                updateUI(portfolio.map(s => ({...s, price: s.pru, per:0, psr:0, beta:1})));
+            }
         }
 
-        // --- C. MISE A JOUR DE L'ECRAN ---
+        // --- 3. AFFICHAGE ---
         function updateUI(data) {
             let totalVal = 0, totalInvest = 0, totalDiv = 0;
             let topStock = { name: '-', perf: -999 };
+            let totalPER = 0; let countPER = 0;
+            
             const tbody = document.getElementById('tableBody');
             const sectors = {};
-            
             tbody.innerHTML = '';
 
             data.forEach(stock => {
@@ -181,43 +210,58 @@
                 totalInvest += invest;
                 totalDiv += valo * stock.div;
 
+                if(stock.per > 0) { totalPER += stock.per; countPER++; }
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
                 sectors[stock.sec] = (sectors[stock.sec] || 0) + valo;
 
-                // Couleurs dynamiques
-                const colorClass = perfPct >= 0 ? 'text-green-400' : 'text-red-400';
+                // Couleurs
+                const colorClass = perfPct >= 0 ? 'text-success' : 'text-danger';
                 const sign = perfPct > 0 ? '+' : '';
 
+                // Formatage des indicateurs (si 0 ou null, on met "-")
+                const displayPER = stock.per > 0 ? stock.per.toFixed(1) : '<span class="text-gray-600">-</span>';
+                const displayPSR = stock.psr > 0 ? stock.psr.toFixed(2) : '<span class="text-gray-600">-</span>';
+                const displayBeta = stock.beta !== 1 ? stock.beta.toFixed(2) : '1.00';
+
                 tbody.innerHTML += `
-                    <tr class="hover:bg-gray-700/50 transition border-b border-gray-700/50 last:border-0">
-                        <td class="px-6 py-4">
-                            <div class="font-bold text-white">${stock.name}</div>
-                            <div class="text-xs text-gray-500">${stock.tick}</div>
+                    <tr class="hover:bg-gray-800/50 transition border-b border-gray-700/50 last:border-0 group">
+                        <td class="px-5 py-4">
+                            <div class="font-bold text-gray-200 group-hover:text-white transition">${stock.name}</div>
+                            <div class="text-[10px] text-gray-500 font-mono">${stock.tick}</div>
                         </td>
-                        <td class="px-6 py-4 text-right font-mono text-white">${stock.price.toFixed(2)} €</td>
-                        <td class="px-6 py-4 text-right font-bold text-gray-300">${Math.round(valo).toLocaleString()} €</td>
-                        <td class="px-6 py-4 text-right ${colorClass} font-mono font-bold">${sign}${perfPct.toFixed(2)}%</td>
+                        <td class="px-5 py-4 text-right font-mono text-gray-300 font-medium">${stock.price.toFixed(2)} €</td>
+                        <td class="px-5 py-4 text-right font-bold text-white hidden sm:table-cell">${Math.round(valo).toLocaleString()} €</td>
+                        <td class="px-5 py-4 text-right ${colorClass} font-mono font-bold bg-opacity-10 rounded">${sign}${perfPct.toFixed(2)}%</td>
+                        
+                        <td class="px-5 py-4 text-center font-mono text-sm text-blue-300">${displayPER}</td>
+                        <td class="px-5 py-4 text-center font-mono text-sm text-purple-300">${displayPSR}</td>
+                        <td class="px-5 py-4 text-center font-mono text-sm text-yellow-200 opacity-80">${displayBeta}</td>
                     </tr>
                 `;
             });
 
-            // KPI GLOBALES
+            // KPI UPDATE
             const globalPv = totalVal - totalInvest;
             const globalPerf = (globalPv / totalInvest) * 100;
+            const avgPER = countPER > 0 ? (totalPER / countPER).toFixed(1) : "-";
 
             document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
             
             const pvEl = document.getElementById('totalPv');
             pvEl.innerText = (globalPv > 0 ? '+' : '') + Math.round(globalPv).toLocaleString() + " €";
-            pvEl.className = `mt-2 text-3xl font-bold ${globalPv >= 0 ? 'text-green-400' : 'text-red-400'}`;
+            pvEl.className = `mt-1 text-2xl font-bold tabular-nums ${globalPv >= 0 ? 'text-success' : 'text-danger'}`;
             
-            document.getElementById('totalPerf').innerText = (globalPerf > 0 ? '+' : '') + globalPerf.toFixed(2) + " %";
+            const perfEl = document.getElementById('totalPerf');
+            perfEl.innerText = (globalPerf > 0 ? '+' : '') + globalPerf.toFixed(2) + " %";
+            perfEl.className = `text-xs font-bold px-2 py-0.5 rounded mt-2 inline-block ${globalPerf >= 0 ? 'bg-green-900/30 text-success' : 'bg-red-900/30 text-danger'}`;
+
             document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
+            document.getElementById('avgPER').innerText = avgPER;
             
             document.getElementById('topStock').innerText = topStock.name;
             document.getElementById('topStockPerf').innerText = "+" + topStock.perf.toFixed(2) + " %";
 
-            // GRAPHIQUE CAMEMBERT
+            // CHART UPDATE
             if(window.myChart) window.myChart.destroy();
             const ctx = document.getElementById('sectorChart').getContext('2d');
             window.myChart = new Chart(ctx, {
@@ -227,21 +271,23 @@
                     datasets: [{
                         data: Object.values(sectors),
                         backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'],
-                        borderWidth: 0
+                        borderWidth: 0,
+                        hoverOffset: 10
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'right', labels: { color: '#9ca3af', boxWidth: 10, font: {size: 11} } }
+                        legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, font: {size: 11, family: 'Inter'}, padding: 15, usePointStyle:true } }
                     },
-                    cutout: '75%'
+                    cutout: '70%',
+                    animation: { animateScale: true, animateRotate: true }
                 }
             });
         }
 
-        // Lancement immédiat
+        // START
         fetchYahooData();
     </script>
 </body>
