@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | Masterpiece V33</title>
+    <title>Noa Capital | V34 Final</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -35,6 +35,7 @@
         .blink { animation: pulse 1s infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        
         .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
         @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
         .scanning-row { border-left: 3px solid #3b82f6; background-color: rgba(59,130,246,0.05); }
@@ -69,7 +70,7 @@
         <div id="home" class="tab-content active">
             <div class="text-center mb-12 w-full px-4">
                 <h1 class="text-5xl md:text-7xl font-black text-white mb-6">Market Intelligence.</h1>
-                <p class="text-gray-400 text-xl">Moteur Live + Analyse Fondamentale.</p>
+                <p class="text-gray-400 text-xl">Analyse Live & Fondamentaux.</p>
             </div>
             <div class="w-full max-w-3xl px-4 relative z-10">
                 <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
@@ -89,10 +90,10 @@
                         <div class="text-right"><div class="text-5xl font-black text-white" id="res-price">--</div><div class="text-xl font-bold mt-2" id="res-perf">--</div></div>
                     </div>
                     <div class="grid grid-cols-4 gap-4 text-center border-t border-gray-700 pt-4">
-                        <div><div class="text-xs text-gray-500 uppercase">Clôture</div><div id="res-prev" class="font-mono">--</div></div>
+                        <div><div class="text-xs text-gray-500 uppercase">Clôture Préc.</div><div id="res-prev" class="font-mono">--</div></div>
                         <div><div class="text-xs text-gray-500 uppercase">Ouverture</div><div id="res-open" class="font-mono">--</div></div>
-                        <div><div class="text-xs text-gray-500 uppercase">Haut</div><div id="res-high" class="font-mono">--</div></div>
-                        <div><div class="text-xs text-gray-500 uppercase">Bas</div><div id="res-low" class="font-mono">--</div></div>
+                        <div><div class="text-xs text-gray-500 uppercase">Range</div><div id="res-range" class="font-mono">--</div></div>
+                        <div><div class="text-xs text-gray-500 uppercase">Volume</div><div id="res-vol" class="font-mono">--</div></div>
                     </div>
                 </div>
             </div>
@@ -145,18 +146,25 @@
 
         <div id="convictions" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
             <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Thèse d'Investissement</h1><p class="text-gray-400 mt-2">Philosophie : <b>Croissance Ricardienne</b> & Retour du Réel.</p></div>
+            <div class="bg-gradient-to-br from-gray-900 to-card border-l-4 border-blue-500 rounded-r-xl p-8 mb-8 shadow-2xl">
+                <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🏭</span><h2 class="text-2xl font-bold text-white">Thèse Macro : "Le Retour du Réel"</h2></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div><h3 class="text-blue-400 font-bold uppercase text-sm mb-2 tracking-wide">Le Constat Contrarien</h3><p class="text-gray-300 leading-relaxed text-sm text-justify">Nous sommes à la fin d'un cycle de "Free Money". L'ère de la spéculation Tech pure laisse place à l'ère des actifs tangibles. Nous privilégions la <strong>"Old Economy"</strong> indispensable : Industrie, Énergie, Matériaux. C'est le retour aux fondamentaux et au <strong>Pricing Power</strong> réel.</p></div>
+                    <div><h3 class="text-gold font-bold uppercase text-sm mb-2 tracking-wide">Critères de Sélection</h3><ul class="space-y-2 text-sm text-gray-300"><li class="flex items-start gap-2">✅ <strong>Moat (Fossé Économique) :</strong> Barrières à l'entrée infranchissables.</li><li class="flex items-start gap-2">✅ <strong>Actifs Tangibles :</strong> Usines, Brevets, Matières Premières.</li><li class="flex items-start gap-2">✅ <strong>Visibilité :</strong> Contrats long terme indexés sur l'inflation.</li></ul></div>
+                </div>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3></div></div></div><p class="text-sm text-gray-300">Le Bunker. Modèle unique : contrats indexés sur l'énergie.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3></div></div></div><p class="text-sm text-gray-300">Mégatendance Électrification & Data Centers.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3></div></div></div><p class="text-sm text-gray-300">Cash Machine. Rendement > 5%. Transition financée par le pétrole.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3></div></div></div><p class="text-sm text-gray-300">Duopole Mondial. Carnet de commandes plein pour 10 ans.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3></div></div></div><p class="text-sm text-gray-300">Rénovation Thermique. Leader mondial construction durable.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3></div></div></div><p class="text-sm text-gray-300">Protection Inflation. Cuivre & Métaux indispensables.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Le Bunker.</strong> Modèle unique : contrats de 15 ans indexés sur l'énergie. Visibilité parfaite. Leader de l'hydrogène décarboné. C'est l'action "Fond de portefeuille" par excellence.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Mégatendance Électrification.</strong> Vente de pelles et pioches pour l'IA (Data Centers) et la rénovation. Ne vend pas l'énergie, mais l'efficacité. Croissance structurelle.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Cash Machine.</strong> Valorisation ridicule (PER < 8). Finance sa transition verte avec son pétrole low-cost. Le dividende (>5%) sécurise la performance globale.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-sky-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Duopole Mondial.</strong> Boeing est en crise, Airbus rafle tout. Carnet de commandes plein pour 10 ans. Barrières à l'entrée technologiques immenses.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-400/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3><div class="text-xs text-gray-500">Construction</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Transformation Réussie.</strong> Leader mondial de la construction durable. Marges records. Joue la thématique de la rénovation thermique obligatoire en Europe.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Protection Inflation.</strong> Exposition aux mines (Cuivre, Fer) indispensables à la transition. Actifs réels qui s'apprécient quand la monnaie perd de sa valeur.</p></div>
             </div>
         </div>
 
         <div id="simulation" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection Patrimoniale</h1>
+            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection</h1>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="bg-card border border-gray-700 rounded-xl p-6 h-fit"><h3 class="font-bold text-white mb-6 uppercase text-sm">Paramètres</h3><div class="space-y-4"><div><label class="block text-xs font-medium text-gray-400 mb-1">Capital Initial</label><input type="number" id="sim-start" value="10000" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Mensuel</label><input type="number" id="sim-monthly" value="500" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Rendement %</label><input type="number" id="sim-rate" value="8" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Années</label><input type="number" id="sim-years" value="20" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div></div><button onclick="calculateSim()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition">Calculer</button></div>
                 <div class="lg:col-span-2 bg-card border border-gray-700 rounded-xl p-6 flex flex-col"><div class="text-center mb-6"><div class="text-sm text-gray-400 uppercase">Capital Final</div><div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mt-2" id="sim-result">-- €</div></div><div class="flex-1 relative min-h-[300px]"><canvas id="simChart"></canvas></div></div>
@@ -311,10 +319,11 @@
                 document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
                 document.getElementById('totalPv').innerText = (globalPv > 0 ? '+' : '') + Math.round(globalPv).toLocaleString() + " €";
                 document.getElementById('totalPv').className = `mt-1 text-2xl font-bold tabular-nums ${globalPv >= 0 ? 'text-success' : 'text-danger'}`;
+                document.getElementById('totalPerf').innerText = (globalPerf > 0 ? '+' : '') + globalPerf.toFixed(2) + " %";
+                document.getElementById('totalPerf').className = `text-xs font-bold px-2 py-0.5 rounded mt-2 inline-block ${globalPerf >= 0 ? 'bg-green-900/30 text-success' : 'bg-red-900/30 text-danger'}`;
                 document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
                 document.getElementById('avgPER').innerText = avgPER;
                 
-                // --- UPDATE TOP PERF ---
                 document.getElementById('topStock').innerText = topStock.name;
                 const topPerfEl = document.getElementById('topStockPerf');
                 if(topStock.perf > -999) {
@@ -332,7 +341,7 @@
             }
         }
 
-        // --- 6. SEARCH ---
+        // --- 6. SEARCH (MOTEUR DÉDIÉ ET RÉPARÉ) ---
         function fillSearch(t) { document.getElementById('mainTickerInput').value = t; searchTicker(); }
         async function searchTicker() {
             const t = document.getElementById('mainTickerInput').value.toUpperCase();
@@ -341,6 +350,7 @@
             card.classList.add('hidden');
             document.getElementById('searchLoader').style.display = 'block';
             
+            // On utilise la même API que pour le moteur, mais on récupère tout le JSON
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=1d&t=${Date.now()}`;
             
@@ -364,15 +374,19 @@
                     document.getElementById('res-prev').innerText = prev.toFixed(2);
                     document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
                     document.getElementById('res-range').innerText = (meta.regularMarketDayLow || "-") + " - " + (meta.regularMarketDayHigh || "-");
-                    document.getElementById('res-vol').innerText = meta.regularMarketVolume ? (meta.regularMarketVolume/1000).toFixed(0)+" K" : "-";
+                    
+                    let vol = meta.regularMarketVolume || 0;
+                    if(vol > 1000000) vol = (vol/1000000).toFixed(1) + "M";
+                    else if(vol > 1000) vol = (vol/1000).toFixed(1) + "K";
+                    document.getElementById('res-vol').innerText = vol;
 
                     card.classList.remove('hidden');
                 } else { alert("Ticker introuvable"); }
-            } catch(e) { alert("Ticker introuvable"); }
+            } catch(e) { alert("Erreur Recherche (Ticker invalide ou Proxy)"); }
             finally { document.getElementById('searchLoader').style.display = 'none'; }
         }
 
-        // --- 7. SIMU ---
+        // --- 7. SIMU (FIX GRAPH INIT) ---
         let simChartInstance = null;
         function calculateSim() { 
             const start=parseFloat(document.getElementById('sim-start').value);
@@ -403,7 +417,7 @@
         }
 
         // START
-        calculateSim(); // Init Graph Simu au démarrage
+        calculateSim(); // Init Graph Simu au démarrage (Important!)
         renderDashboard(); // Structure vide
         setTimeout(startLiveFeed, 1000); // Lance le live
         setInterval(startLiveFeed, 120000); // Relance 2min
