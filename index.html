@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | V44 PSR Added</title>
+    <title>Noa Capital | V45 Clean</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,8 +14,12 @@
             theme: {
                 extend: {
                     colors: { 
-                        dark: '#0f172a', card: '#1e293b', accent: '#3b82f6', 
-                        success: '#22c55e', danger: '#ef4444', gold: '#fbbf24'
+                        dark: '#0f172a', 
+                        card: '#1e293b', 
+                        accent: '#3b82f6', 
+                        success: '#22c55e', 
+                        danger: '#ef4444', 
+                        gold: '#fbbf24'
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
@@ -24,18 +28,65 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; overflow-x: hidden; }
-        .tab-content { display: none; width: 100%; animation: fadeIn 0.4s ease-out; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f172a; 
+            color: white; 
+            overflow-x: hidden; 
+        }
+        .tab-content { 
+            display: none; 
+            width: 100%; 
+            animation: fadeIn 0.4s ease-out; 
+        }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        #home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: calc(100vh - 64px); }
-        .search-glow:focus-within { box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
-        .loader { border: 3px solid #333; border-top: 3px solid #3b82f6; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display:none; margin: 0 auto; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
         
-        .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
-        @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
-        .scanning-row { border-left: 3px solid #3b82f6; background-color: rgba(59,130,246,0.05); }
+        #home.active { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: calc(100vh - 64px); 
+        }
+        
+        .search-glow:focus-within { 
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); 
+            border-color: #3b82f6; 
+        }
+        
+        .loader { 
+            border: 3px solid #333; 
+            border-top: 3px solid #3b82f6; 
+            border-radius: 50%; 
+            width: 24px; 
+            height: 24px; 
+            animation: spin 1s linear infinite; 
+            display:none; 
+            margin: 0 auto; 
+        }
+        
+        .flash-update { 
+            animation: highlight 0.5s ease-out; 
+            background-color: rgba(34, 197, 94, 0.1); 
+        }
+        
+        @keyframes highlight { 
+            0% { background-color: rgba(34, 197, 94, 0.3); } 
+            100% { background-color: transparent; } 
+        }
+        
+        .scanning-row { 
+            border-left: 3px solid #3b82f6; 
+            background-color: rgba(59,130,246,0.05); 
+        }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
     </style>
 </head>
 
@@ -87,6 +138,7 @@
             
             <div id="resultCard" class="hidden w-full max-w-5xl px-4 pb-20">
                 <div class="bg-card/90 backdrop-blur border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+                    
                     <div class="p-6 border-b border-gray-700/50 flex justify-between items-center bg-gray-800/20">
                         <div>
                             <div class="flex items-center gap-3">
@@ -124,6 +176,7 @@
 
         <div id="convictions" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
             <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Thèse d'Investissement</h1><p class="text-gray-400 mt-2">Philosophie : <b>Croissance Ricardienne</b> & Retour du Réel.</p></div>
+            
             <div class="bg-gradient-to-br from-gray-900 to-card border-l-4 border-blue-500 rounded-r-xl p-8 mb-8 shadow-2xl">
                 <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🌍</span><h2 class="text-2xl font-bold text-white">Allocation Tactique</h2></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -141,13 +194,14 @@
                     </div>
                 </div>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300">Conviction N°1. Exposition aux mines (Cuivre, Fer).</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300">Le Bunker. Visibilité parfaite et contrats long terme.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300">Mégatendance Électrification. Data Centers & IA.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300">Cash Machine. Rendement > 5%.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-sky-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300">Duopole Mondial. Carnet de commandes plein.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-400/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3><div class="text-xs text-gray-500">Construction</div></div></div></div><p class="text-sm text-gray-300">Transformation Réussie. Rénovation thermique.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-gold/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300">Conviction N°1. Exposition aux mines (Cuivre, Fer).</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-blue-500/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300">Le Bunker. Visibilité parfaite et contrats long terme.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-green-500/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300">Mégatendance Électrification. Data Centers & IA.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-red-500/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300">Cash Machine. Rendement > 5%.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-sky-500/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300">Duopole Mondial. Carnet de commandes plein.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-gray-400/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3><div class="text-xs text-gray-500">Construction</div></div></div></div><p class="text-sm text-gray-300">Transformation Réussie. Rénovation thermique.</p></div>
             </div>
         </div>
 
@@ -216,7 +270,7 @@
     </main>
 
     <script>
-        // CONFIG (Avec SPS pour le PSR)
+        // CONFIGURATION (Avec SPS pour le PSR)
         let portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, prev: 0, eps: 5.90, sps: 53.5, beta: 0.8 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, prev: 0, eps: 7.50, sps: 63.0, beta: 1.1 },
@@ -232,52 +286,70 @@
             { tick: "EURJPY=X", name: "Forex EUR/JPY", thesis: "Surveillance volatilité", price: 0, prev: 0 }
         ];
 
-        // NAV
+        // FONCTIONS DE NAVIGATION
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             ['home','dashboard','watchlist','convictions','simulation'].forEach(b=>{
                 const el=document.getElementById('btn-'+b);
-                if(b===id){el.classList.add('bg-blue-600','text-white');el.classList.remove('text-gray-400','bg-transparent')}
-                else{el.classList.remove('bg-blue-600','text-white');el.classList.add('text-gray-400','bg-transparent')}
+                if(b===id){
+                    el.classList.add('bg-blue-600','text-white');
+                    el.classList.remove('text-gray-400','bg-transparent');
+                } else {
+                    el.classList.remove('bg-blue-600','text-white');
+                    el.classList.add('text-gray-400','bg-transparent');
+                }
             });
+            
             if(id!=='home') document.getElementById('resultCard').classList.add('hidden');
             if(id==='simulation') calculateSim();
             if(id==='watchlist') setTimeout(startWatchlistFeed, 500); 
         }
 
-        // FETCH ENGINE
-        async function fetchPriceRobust(ticker) {
+        // MOTEUR RECHERCHE (COMPLET AVEC CHART)
+        async function fetchFullDetails(ticker) {
             const proxy = "https://corsproxy.io/?";
-            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3500); 
+            const now = Date.now();
+            const urlChart = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=5m&range=1d&t=${now}`;
+            const urlQuote = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${now}`;
+
+            let result = { price:0, prev:0, meta:{}, timestamps:[], quotes:[], fundamentals:{} };
+
             try {
-                const response = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
-                clearTimeout(timeoutId);
-                if (!response.ok) throw new Error("HTTP Error");
-                const json = await response.json();
-                return {
-                    price: json.chart.result[0].meta.regularMarketPrice,
-                    prev: json.chart.result[0].meta.chartPreviousClose,
-                    meta: json.chart.result[0].meta,
-                    timestamps: json.chart.result[0].timestamp,
-                    quotes: json.chart.result[0].indicators.quote[0].close
-                };
-            } catch (e) { return null; }
+                const res = await fetch(proxy + encodeURIComponent(urlChart));
+                const json = await res.json();
+                const d = json.chart.result[0];
+                result.meta = d.meta;
+                result.price = d.meta.regularMarketPrice;
+                result.prev = d.meta.chartPreviousClose;
+                result.timestamps = d.timestamp;
+                result.quotes = d.indicators.quote[0].close;
+            } catch(e) { return null; }
+
+            try {
+                const res = await fetch(proxy + encodeURIComponent(urlQuote));
+                const json = await res.json();
+                result.fundamentals = json.quoteResponse.result[0] || {};
+            } catch(e) { console.log("Quote blocked"); }
+
+            return result;
         }
 
-        async function fetchFundamentalsQuote(ticker) {
+        // MOTEUR SIMPLE (PORTEFEUILLE)
+        async function fetchPriceSimple(ticker) {
             const proxy = "https://corsproxy.io/?";
-            const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${Date.now()}`;
+            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
             try {
-                const response = await fetch(proxy + encodeURIComponent(url));
-                const json = await response.json();
-                return json.quoteResponse.result[0];
+                const r = await fetch(proxy + encodeURIComponent(url));
+                const j = await r.json();
+                return {
+                    price: j.chart.result[0].meta.regularMarketPrice,
+                    prev: j.chart.result[0].meta.chartPreviousClose
+                };
             } catch(e) { return null; }
         }
 
-        // LIVE FEED PORTFOLIO
+        // FEED PORTEFEUILLE
         async function startLiveFeed() {
             const dot = document.getElementById('status-dot');
             const label = document.getElementById('scan-progress');
@@ -285,7 +357,7 @@
 
             dot.classList.add('bg-blue-500', 'blink');
             label.classList.remove('hidden');
-            updateTxt.innerText = "Démarrage...";
+            updateTxt.innerText = "Scan...";
 
             for (let i = 0; i < portfolio.length; i++) {
                 const stock = portfolio[i];
@@ -293,7 +365,7 @@
                 const row = document.getElementById(`row-${i}`);
                 if(row) row.classList.add('scanning-row');
 
-                const data = await fetchPriceRobust(stock.tick);
+                const data = await fetchPriceSimple(stock.tick);
                 if (data && data.price) {
                     stock.price = data.price;
                     stock.prev = data.prev;
@@ -303,22 +375,19 @@
                 await new Promise(r => setTimeout(r, 1000));
             }
 
-            dot.classList.remove('bg-blue-500', 'blink'); dot.classList.add('bg-green-500');
-            updateTxt.innerText = "Mise à jour OK."; updateTxt.className = "text-green-400 mt-1 text-sm font-mono";
+            dot.classList.remove('bg-blue-500', 'blink'); 
+            dot.classList.add('bg-green-500');
+            updateTxt.innerText = "OK";
             label.classList.add('hidden');
             renderDashboard(); 
         }
 
-        // LIVE FEED WATCHLIST
+        // FEED WATCHLIST
         async function startWatchlistFeed() {
-            const status = document.getElementById('wl-scan-status');
-            status.classList.remove('hidden');
             renderWatchlist(); 
-
             for (let i = 0; i < watchlist.length; i++) {
                 const item = watchlist[i];
-                status.innerText = `Scan: ${item.tick}...`;
-                const data = await fetchPriceRobust(item.tick);
+                const data = await fetchPriceSimple(item.tick);
                 if (data && data.price) {
                     item.price = data.price;
                     item.prev = data.prev;
@@ -326,11 +395,9 @@
                 }
                 await new Promise(r => setTimeout(r, 800));
             }
-            status.innerText = "Scan terminé";
-            setTimeout(() => status.classList.add('hidden'), 2000);
         }
 
-        // RENDER DASHBOARD
+        // AFFICHAGE PORTEFEUILLE
         function renderDashboard(highlightIndex = -1) {
             let totalVal = 0, totalInvest = 0, totalDiv = 0, totalPER = 0, countPER = 0;
             let topStock = { name: '-', perf: -999 };
@@ -340,11 +407,9 @@
             portfolio.forEach((stock, index) => {
                 const valo = stock.price * stock.q;
                 const invest = stock.pru * stock.q;
-                
                 let perfPct = stock.pru > 0 && stock.price > 0 ? ((stock.price - stock.pru) / stock.pru) * 100 : 0;
                 let dayVarPct = stock.price > 0 && stock.prev > 0 ? ((stock.price - stock.prev) / stock.prev) * 100 : 0;
                 
-                // CALCULS LIVE (MATHS)
                 let calculatedPER = (stock.price > 0 && stock.eps > 0) ? stock.price / stock.eps : 0;
                 let calculatedPSR = (stock.price > 0 && stock.sps > 0) ? stock.price / stock.sps : 0;
 
@@ -352,7 +417,7 @@
                 if(calculatedPER > 0) { totalPER += calculatedPER; countPER++; }
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
                 
-                const dPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '<span class="text-gray-500 animate-pulse">...</span>';
+                const dPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '...';
                 const dValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
                 const dPerf = stock.price > 0 ? (perfPct > 0 ? '+' : '') + perfPct.toFixed(2) + "%" : '-';
                 const cPerf = perfPct >= 0 ? 'text-success' : 'text-danger';
@@ -364,7 +429,7 @@
 
                 if (highlightIndex === -1) {
                     const row = `
-                        <tr id="row-${index}" class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0 transition-colors duration-500">
+                        <tr id="row-${index}" class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0">
                             <td class="px-5 py-4"><div class="font-bold text-white">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td>
                             <td class="px-5 py-4 text-right text-white font-mono" id="price-${index}">${dPrice}</td>
                             <td class="px-5 py-4 text-center font-mono font-bold ${cDay}" id="day-${index}">${dDay}</td>
@@ -376,27 +441,37 @@
                     tbody.innerHTML += row;
                 } else if (index === highlightIndex) {
                     const row = document.getElementById(`row-${index}`);
-                    row.classList.add('flash-update'); setTimeout(() => row.classList.remove('flash-update'), 500);
+                    row.classList.add('flash-update'); 
+                    setTimeout(() => row.classList.remove('flash-update'), 500);
+                    
                     document.getElementById(`price-${index}`).innerHTML = dPrice;
-                    document.getElementById(`day-${index}`).innerHTML = dDay; document.getElementById(`day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
+                    document.getElementById(`day-${index}`).innerHTML = dDay; 
+                    document.getElementById(`day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
                     document.getElementById(`valo-${index}`).innerHTML = dValo;
-                    document.getElementById(`perf-${index}`).innerHTML = dPerf; document.getElementById(`perf-${index}`).className = `px-5 py-4 text-right font-mono font-bold ${cPerf}`;
+                    
+                    const pEl = document.getElementById(`perf-${index}`);
+                    pEl.innerHTML = dPerf; 
+                    pEl.className = `px-5 py-4 text-right font-mono font-bold ${cPerf}`;
+                    
                     document.getElementById(`per-${index}`).innerHTML = dPER;
                     document.getElementById(`psr-${index}`).innerHTML = dPSR;
                 }
             });
 
             if(totalVal > 0) {
-                const globalPv = totalVal - totalInvest;
-                const globalPerf = totalInvest > 0 ? (globalPv / totalInvest) * 100 : 0;
+                const gpv = totalVal - totalInvest;
                 document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
-                document.getElementById('totalPv').innerText = (globalPv > 0 ? '+' : '') + Math.round(globalPv).toLocaleString() + " €";
-                document.getElementById('totalPv').className = `mt-1 text-2xl font-bold tabular-nums ${globalPv >= 0 ? 'text-success' : 'text-danger'}`;
+                document.getElementById('totalPv').innerText = (gpv > 0 ? '+' : '') + Math.round(gpv).toLocaleString() + " €";
+                document.getElementById('totalPv').className = `mt-1 text-2xl font-bold tabular-nums ${gpv >= 0 ? 'text-success' : 'text-danger'}`;
                 document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
                 document.getElementById('avgPER').innerText = countPER > 0 ? (totalPER/countPER).toFixed(1) : "-";
                 document.getElementById('topStock').innerText = topStock.name;
+                
                 const topPerfEl = document.getElementById('topStockPerf');
-                if(topStock.perf > -999) { topPerfEl.innerText = "+" + topStock.perf.toFixed(2) + " %"; topPerfEl.className = "text-xs font-bold text-green-400 mt-1"; }
+                if(topStock.perf > -999) {
+                    topPerfEl.innerText = "+" + topStock.perf.toFixed(2) + " %";
+                    topPerfEl.className = "text-xs font-bold text-green-400 mt-1";
+                }
             } else {
                 document.getElementById('totalVal').innerText = "Chargement...";
             }
@@ -404,18 +479,34 @@
             if (highlightIndex === -1 && document.getElementById('sectorChart')) {
                 if(window.myChart) window.myChart.destroy();
                 const initialData = [20, 15, 30, 10, 10, 15]; 
-                window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { type: 'doughnut', data: { labels: portfolio.map(s => s.sec), datasets: [{ data: initialData, backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, font: {size: 11}, padding: 15, usePointStyle:true } } }, cutout: '70%' } });
+                window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { 
+                    type: 'doughnut', 
+                    data: { 
+                        labels: portfolio.map(s => s.sec), 
+                        datasets: [{ 
+                            data: initialData, 
+                            backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], 
+                            borderWidth: 0 
+                        }] 
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        cutout: '70%', 
+                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, usePointStyle: true } } } 
+                    } 
+                });
             }
         }
 
-        // RENDER WATCHLIST
+        // AFFICHAGE WATCHLIST
         function renderWatchlist(highlightIndex = -1) {
             const tbody = document.getElementById('watchlistBody');
             if (highlightIndex === -1) tbody.innerHTML = '';
 
             watchlist.forEach((item, index) => {
                 let dayVarPct = item.price > 0 && item.prev > 0 ? ((item.price - item.prev) / item.prev) * 100 : 0;
-                const dPrice = item.price > 0 ? item.price.toFixed(2) : '<span class="animate-pulse">...</span>';
+                const dPrice = item.price > 0 ? item.price.toFixed(2) : '...';
                 const dDay = item.price > 0 ? (dayVarPct > 0 ? '+' : '') + dayVarPct.toFixed(2) + "%" : '-';
                 const cDay = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
 
@@ -431,7 +522,8 @@
                     tbody.innerHTML += row;
                 } else if (index === highlightIndex) {
                     const row = document.getElementById(`wl-row-${index}`);
-                    row.classList.add('flash-update'); setTimeout(() => row.classList.remove('flash-update'), 500);
+                    row.classList.add('flash-update'); 
+                    setTimeout(() => row.classList.remove('flash-update'), 500);
                     document.getElementById(`wl-price-${index}`).innerText = dPrice;
                     document.getElementById(`wl-day-${index}`).innerText = dDay;
                     document.getElementById(`wl-day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
@@ -439,7 +531,7 @@
             });
         }
 
-        // --- SEARCH CHART LOGIC ---
+        // LOGIQUE RECHERCHE
         let searchChartInstance = null;
         function fillSearch(t) { document.getElementById('mainTickerInput').value = t; searchTicker(); }
         
@@ -450,65 +542,51 @@
             card.classList.add('hidden');
             document.getElementById('searchLoader').style.display = 'block';
             
-            const dataChart = await fetchPriceRobust(t);
-            // Parallel Fetch for Fundamentals (Best Effort)
-            const dataQuote = await fetchFundamentalsQuote(t);
-
+            const data = await fetchFullDetails(t);
             document.getElementById('searchLoader').style.display = 'none';
             
-            if(dataChart && dataChart.price) {
-                const meta = dataChart.meta;
-                const price = dataChart.price;
-                const prev = dataChart.prev;
-                
+            if(data && data.price) {
+                // Header
                 document.getElementById('res-name').innerText = t; 
-                document.getElementById('res-symbol').innerText = meta.symbol;
-                document.getElementById('res-type').innerText = meta.instrumentType || "EQUITY";
-                document.getElementById('res-exchange').innerText = meta.exchangeName || "Exchange";
-                document.getElementById('res-price').innerText = price.toFixed(2);
+                document.getElementById('res-symbol').innerText = data.meta.symbol;
+                document.getElementById('res-type').innerText = data.meta.instrumentType || "EQUITY";
+                document.getElementById('res-exchange').innerText = data.meta.exchangeName;
+                document.getElementById('res-price').innerText = data.price.toFixed(2);
                 
-                const perf = ((price - prev) / prev) * 100;
+                const perf = ((data.price - data.prev) / data.prev) * 100;
                 const pEl = document.getElementById('res-perf'); 
-                pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %"; 
-                pEl.className = perf>=0 ? "text-xl font-bold mt-1 flex items-center justify-end gap-2 text-green-400" : "text-xl font-bold mt-1 flex items-center justify-end gap-2 text-red-400";
+                pEl.innerText = (perf > 0 ? '+' : '') + perf.toFixed(2) + " %"; 
+                pEl.className = perf >= 0 ? "text-xl font-bold flex items-center justify-end gap-2 text-green-400" : "text-xl font-bold flex items-center justify-end gap-2 text-red-400";
 
-                document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
-                document.getElementById('res-range').innerText = (meta.regularMarketDayLow || "-") + " - " + (meta.regularMarketDayHigh || "-");
-                let vol = meta.regularMarketVolume || 0; 
+                // Grille
+                document.getElementById('res-open').innerText = (data.meta.regularMarketOpen || data.prev).toFixed(2);
+                document.getElementById('res-range').innerText = (data.meta.regularMarketDayLow || data.price).toFixed(2) + " - " + (data.meta.regularMarketDayHigh || data.price).toFixed(2);
+                let vol = data.meta.regularMarketVolume || 0; 
                 document.getElementById('res-vol').innerText = vol > 1000000 ? (vol/1000000).toFixed(1) + "M" : (vol/1000).toFixed(1) + "K";
+                
+                const f = data.fundamentals;
+                const cap = f.marketCap || 0;
+                document.getElementById('res-cap').innerText = cap > 1000000000 ? (cap/1000000000).toFixed(2)+"B" : (cap > 0 ? cap : "-");
+                document.getElementById('res-pe').innerText = f.trailingPE ? f.trailingPE.toFixed(2) : "-";
+                document.getElementById('res-eps').innerText = f.epsTrailingTwelveMonths ? f.epsTrailingTwelveMonths.toFixed(2) : "-";
+                document.getElementById('res-beta').innerText = f.beta ? f.beta.toFixed(2) : "-";
+                const rating = f.averageAnalystRating || "-";
+                document.getElementById('res-rating').innerText = rating.replace("-", " ").toUpperCase();
 
-                // FUNDAMENTALS MAPPING (If available via Quote API)
-                if(dataQuote) {
-                    const cap = dataQuote.marketCap || 0;
-                    document.getElementById('res-cap').innerText = cap > 1000000000 ? (cap/1000000000).toFixed(2)+"B" : (cap/1000000).toFixed(2)+"M";
-                    document.getElementById('res-pe').innerText = dataQuote.trailingPE ? dataQuote.trailingPE.toFixed(2) : "-";
-                    document.getElementById('res-eps').innerText = dataQuote.epsTrailingTwelveMonths ? dataQuote.epsTrailingTwelveMonths.toFixed(2) : "-";
-                    document.getElementById('res-beta').innerText = dataQuote.beta ? dataQuote.beta.toFixed(2) : "-";
-                    
-                    const rating = dataQuote.averageAnalystRating || "-";
-                    const rEl = document.getElementById('res-rating');
-                    rEl.innerText = rating.replace("-", " ").toUpperCase();
-                    rEl.className = "text-sm font-bold mt-1 " + (rating.toLowerCase().includes("buy")?"text-green-400": (rating.toLowerCase().includes("sell")?"text-red-400":"text-gray-300"));
-                } else {
-                    // Reset if fail
-                    ['res-cap','res-pe','res-eps','res-beta','res-rating'].forEach(id => document.getElementById(id).innerText = "-");
-                }
-
-                // CHART
-                if(dataChart.timestamps && dataChart.quotes) {
+                // Graphique
+                if(data.timestamps && data.quotes) {
                     const ctx = document.getElementById('searchChart').getContext('2d');
                     if(searchChartInstance) searchChartInstance.destroy();
                     
-                    const isGreen = price >= prev;
+                    const isGreen = data.price >= data.prev;
                     const lineColor = isGreen ? '#22c55e' : '#ef4444';
                     const fillColor = isGreen ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)';
-                    // Filter nulls
-                    const clean = dataChart.quotes.map((q,i)=>({t:dataChart.timestamps[i],y:q})).filter(p=>p.y!==null);
+                    const clean = data.quotes.map((q,i) => ({ t: data.timestamps[i], y: q })).filter(p => p.y !== null);
 
                     searchChartInstance = new Chart(ctx, {
                         type: 'line',
                         data: {
-                            labels: clean.map(p => new Date(p.t * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})),
+                            labels: clean.map(p => new Date(p.t * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
                             datasets: [{
                                 data: clean.map(p => p.y),
                                 borderColor: lineColor,
@@ -530,36 +608,76 @@
                         }
                     });
                 }
-
                 card.classList.remove('hidden');
             } else { alert("Ticker introuvable"); }
         }
 
-        // --- SIMU ---
+        // SIMULATION
         let simChartInstance = null;
         function calculateSim() { 
-            const start=parseFloat(document.getElementById('sim-start').value), monthly=parseFloat(document.getElementById('sim-monthly').value), rate=parseFloat(document.getElementById('sim-rate').value)/100, years=parseInt(document.getElementById('sim-years').value);
-            let capital=start, totalInvested=start, labels=[], dataCapital=[], dataInvested=[];
+            const start = parseFloat(document.getElementById('sim-start').value);
+            const monthly = parseFloat(document.getElementById('sim-monthly').value);
+            const rate = parseFloat(document.getElementById('sim-rate').value) / 100;
+            const years = parseInt(document.getElementById('sim-years').value);
             
-            for(let i=0;i<=years;i++){
-                labels.push("An "+i);
+            let capital = start;
+            let totalInvested = start;
+            let labels = [];
+            let dataCapital = [];
+            let dataInvested = [];
+            
+            for (let i = 0; i <= years; i++) {
+                labels.push("An " + i);
                 dataCapital.push(capital);
                 dataInvested.push(totalInvested);
-                if(i<years){
-                    for(let m=0;m<12;m++){
-                        capital+=monthly;
-                        capital*=(1+rate/12);
-                        totalInvested+=monthly;
+                
+                if (i < years) {
+                    for (let m = 0; m < 12; m++) {
+                        capital += monthly;
+                        capital *= (1 + rate / 12);
+                        totalInvested += monthly;
                     }
                 }
             }
             
-            const final=dataCapital[dataCapital.length-1];
-            document.getElementById('sim-result').innerText=Math.round(final).toLocaleString()+" €";
+            document.getElementById('sim-result').innerText = Math.round(dataCapital[dataCapital.length - 1]).toLocaleString() + " €";
             
-            const ctx=document.getElementById('simChart').getContext('2d');
-            if(simChartInstance) simChartInstance.destroy();
-            simChartInstance = new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Patrimoine',data:dataCapital,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true,tension:0.4},{label:'Investi',data:dataInvested,borderColor:'#64748b',borderDash:[5,5],tension:0.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{grid:{color:'#1e293b'}}},plugins:{legend:{labels:{color:'#94a3b8'}}}}});
+            const ctx = document.getElementById('simChart').getContext('2d');
+            if (simChartInstance) simChartInstance.destroy();
+            
+            simChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Patrimoine',
+                            data: dataCapital,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59,130,246,0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Investi',
+                            data: dataInvested,
+                            borderColor: '#64748b',
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { grid: { color: '#1e293b' } }
+                    },
+                    plugins: { legend: { labels: { color: '#94a3b8' } } }
+                }
+            });
         }
 
         // START
