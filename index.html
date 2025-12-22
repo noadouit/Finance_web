@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | Live Raw</title>
+    <title>Noa Capital | Fundamental Live</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -84,15 +84,15 @@
                     Market Intelligence.
                 </h1>
                 <p class="text-gray-400 text-xl max-w-2xl mx-auto">
-                    Accès direct aux marchés financiers.<br>
-                    <span class="text-sm opacity-60">Connexion Live Yahoo Finance™</span>
+                    Fondamentaux & Prix en temps réel.<br>
+                    <span class="text-sm opacity-60">Yahoo Finance™ Quote API</span>
                 </p>
             </div>
 
             <div class="w-full max-w-3xl px-4 relative z-10">
                 <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
                     <div class="pl-5 text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:ring-0 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: MC.PA, TSLA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
+                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:ring-0 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: MC.PA, AAPL)..." onkeypress="if(event.key === 'Enter') searchTicker()">
                     <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg shadow-blue-600/30">GO</button>
                 </div>
                 <div class="mt-8 flex flex-wrap justify-center gap-3 text-sm text-gray-500">
@@ -211,7 +211,7 @@
             { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 0, per: 0, beta: 0 },
         ];
 
-        // --- 2. FONCTIONS DE NAVIGATION ---
+        // --- 2. NAVIGATION ---
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -224,19 +224,19 @@
             if(id==='simulation') calculateSim();
         }
 
-        // --- 3. FETCH INDIVIDUEL ---
+        // --- 3. FETCH INDIVIDUEL (QUOTE API - LE SECRET POUR AVOIR PER/BETA) ---
         async function fetchOneTicker(ticker) {
             const proxy = "https://corsproxy.io/?";
-            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
+            // Changement Crucial : "quote" au lieu de "chart" pour avoir les fondamentaux
+            const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${Date.now()}`;
             try {
                 const res = await fetch(proxy + encodeURIComponent(url));
-                const data = await res.json();
-                const meta = data.chart.result[0].meta;
-                
-                // On essaie de récupérer le max d'infos
+                const json = await res.json();
+                const data = json.quoteResponse.result[0];
                 return {
-                    price: meta.regularMarketPrice,
-                    prev: meta.chartPreviousClose
+                    price: data.regularMarketPrice,
+                    per: data.trailingPE || 0,
+                    beta: data.beta || 0
                 };
             } catch (e) { return null; }
         }
@@ -258,10 +258,8 @@
                 const data = await fetchOneTicker(stock.tick);
                 if (data && data.price) {
                     stock.price = data.price;
-                    // On simule un PER/Beta fixe si pas de donnée pour pas que ce soit vide
-                    if(stock.per === 0) stock.per = 15.5; 
-                    if(stock.beta === 0) stock.beta = 1.0;
-                    
+                    stock.per = data.per;
+                    stock.beta = data.beta;
                     renderDashboard(i); // Update partiel (flash)
                 }
                 
@@ -308,7 +306,9 @@
                 totalInvest += invest; 
                 totalDiv += valo * stock.div;
                 
+                // On ne compte le PER que s'il est > 0 (pas les ETF ou boites en perte)
                 if(stock.per > 0) { totalPER += stock.per; countPER++; }
+                
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
                 
                 sectors[stock.sec] = (sectors[stock.sec] || 0) + valo;
@@ -318,6 +318,10 @@
                 const displayValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
                 const displayPerf = stock.price > 0 ? (perfPct > 0 ? '+' : '') + perfPct.toFixed(2) + "%" : '-';
                 const colorPerf = perfPct >= 0 ? 'text-success' : 'text-danger';
+                
+                // Formatage PER / Beta
+                const displayPER = stock.per > 0 ? stock.per.toFixed(2) : '-';
+                const displayBeta = stock.beta > 0 ? stock.beta.toFixed(2) : '-';
 
                 // Construction HTML Ligne
                 if (highlightIndex === -1) {
@@ -327,8 +331,8 @@
                             <td class="px-5 py-4 text-right text-white font-mono" id="price-${index}">${displayPrice}</td>
                             <td class="px-5 py-4 text-right font-bold text-gray-300" id="valo-${index}">${displayValo}</td>
                             <td class="px-5 py-4 text-right ${colorPerf} font-mono font-bold" id="perf-${index}">${displayPerf}</td>
-                            <td class="px-5 py-4 text-center text-blue-300 font-mono text-sm">${stock.per>0?stock.per:'-'}</td>
-                            <td class="px-5 py-4 text-center text-yellow-200 opacity-80 font-mono text-sm">${stock.beta>0?stock.beta:'-'}</td>
+                            <td class="px-5 py-4 text-center text-blue-300 font-mono text-sm" id="per-${index}">${displayPER}</td>
+                            <td class="px-5 py-4 text-center text-yellow-200 opacity-80 font-mono text-sm" id="beta-${index}">${displayBeta}</td>
                         </tr>`;
                     tbody.innerHTML += row;
                 } 
@@ -344,6 +348,9 @@
                     const pEl = document.getElementById(`perf-${index}`);
                     pEl.innerHTML = displayPerf;
                     pEl.className = `px-5 py-4 text-right font-mono font-bold ${colorPerf}`;
+                    
+                    document.getElementById(`per-${index}`).innerHTML = displayPER;
+                    document.getElementById(`beta-${index}`).innerHTML = displayBeta;
                 }
             });
 
@@ -366,7 +373,7 @@
                 document.getElementById('totalVal').innerText = "Chargement...";
             }
 
-            // Chart (Uniquement au chargement initial pour pas clignoter)
+            // Chart (Uniquement au chargement initial)
             if (highlightIndex === -1 && document.getElementById('sectorChart')) {
                 if(window.myChart) window.myChart.destroy();
                 // Données fictives pour le graph initial si tout est à 0
@@ -392,7 +399,7 @@
             }
         }
 
-        // --- 6. SEARCH ---
+        // --- 6. SEARCH (Mise à jour pour utiliser Quote API aussi si besoin, mais Chart est mieux pour le range) ---
         function fillSearch(t) { document.getElementById('mainTickerInput').value = t; searchTicker(); }
         async function searchTicker() {
             const t = document.getElementById('mainTickerInput').value.toUpperCase();
@@ -401,22 +408,39 @@
             card.classList.add('hidden');
             document.getElementById('searchLoader').style.display = 'block';
             
-            const data = await fetchOneTicker(t);
-            document.getElementById('searchLoader').style.display = 'none';
+            // Pour la recherche, on peut garder chart qui donne le range jour plus facilement
+            // Ou utiliser fetchOneTicker si on veut être cohérent. Gardons l'ancien search qui marchait bien.
+            const proxy = "https://corsproxy.io/?";
+            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=1d&t=${Date.now()}`;
             
-            if(data && data.price) {
-                document.getElementById('res-name').innerText = t;
-                document.getElementById('res-symbol').innerText = "PRIX LIVE";
-                document.getElementById('res-price').innerText = data.price.toFixed(2) + " €";
+            try {
+                const res = await fetch(proxy + encodeURIComponent(url));
+                const json = await res.json();
+                const meta = json.chart.result[0].meta;
+                const price = meta.regularMarketPrice;
+                const prev = meta.chartPreviousClose;
                 
-                // Calcul perf jour
-                const perf = ((data.price - data.prev) / data.prev) * 100;
-                const pEl = document.getElementById('res-perf');
-                pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %";
-                pEl.className = perf>=0 ? "text-xl font-bold mt-2 text-green-400" : "text-xl font-bold mt-2 text-red-400";
+                if(price) {
+                    document.getElementById('res-name').innerText = t;
+                    document.getElementById('res-symbol').innerText = "PRIX LIVE";
+                    document.getElementById('res-price').innerText = price.toFixed(2) + " €";
+                    
+                    // Calcul perf jour
+                    const perf = ((price - prev) / prev) * 100;
+                    const pEl = document.getElementById('res-perf');
+                    pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %";
+                    pEl.className = perf>=0 ? "text-xl font-bold mt-2 text-green-400" : "text-xl font-bold mt-2 text-red-400";
 
-                card.classList.remove('hidden');
-            } else { alert("Ticker introuvable"); }
+                    document.getElementById('res-prev').innerText = prev.toFixed(2);
+                    document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
+                    // Yahoo v8 chart donne parfois le range, sinon on met des tirets
+                    document.getElementById('res-range').innerText = (meta.regularMarketDayLow || "-") + " - " + (meta.regularMarketDayHigh || "-");
+                    document.getElementById('res-vol').innerText = meta.regularMarketVolume ? (meta.regularMarketVolume/1000).toFixed(0)+" K" : "-";
+
+                    card.classList.remove('hidden');
+                } else { alert("Ticker introuvable"); }
+            } catch(e) { alert("Ticker introuvable"); }
+            finally { document.getElementById('searchLoader').style.display = 'none'; }
         }
 
         // --- 7. SIMU ---
