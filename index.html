@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | V42 Analyst</title>
+    <title>Noa Capital | V43 Final Stable</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -32,9 +32,7 @@
         #home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: calc(100vh - 64px); }
         .search-glow:focus-within { box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
         .loader { border: 3px solid #333; border-top: 3px solid #3b82f6; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display:none; margin: 0 auto; }
-        .blink { animation: pulse 1s infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        
         .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
         @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
         .scanning-row { border-left: 3px solid #3b82f6; background-color: rgba(59,130,246,0.05); }
@@ -54,12 +52,12 @@
                     <span class="w-2 h-2 rounded-full bg-blue-500" id="status-dot"></span>
                     <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider" id="status-text">Prêt</span>
                 </div>
-                <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700">
-                    <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition">Recherche</button>
-                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Stratégie</button>
-                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Portefeuille</button>
-                    <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Surveillance</button>
-                    <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Simulateur</button>
+                <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto">
+                    <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition whitespace-nowrap">🔎 Recherche</button>
+                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Stratégie</button>
+                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Portefeuille</button>
+                    <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Surveillance</button>
+                    <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Simulateur</button>
                 </div>
             </div>
         </div>
@@ -70,7 +68,7 @@
         <div id="home" class="tab-content active">
             <div class="text-center mb-8 w-full px-4 pt-8">
                 <h1 class="text-5xl font-black text-white mb-4">Market Intelligence.</h1>
-                <p class="text-gray-400">Analyse Technique & Fondamentale Avancée.</p>
+                <p class="text-gray-400">Analyse Technique & Fondamentale.</p>
             </div>
             
             <div class="w-full max-w-3xl px-4 relative z-10 mb-8">
@@ -111,91 +109,108 @@
                     </div>
                     
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-700/50">
-                        <div class="bg-card p-4">
-                            <div class="text-[10px] text-gray-500 uppercase font-bold">Ouverture</div>
-                            <div class="text-lg font-mono text-white" id="res-open">--</div>
-                        </div>
-                        <div class="bg-card p-4">
-                            <div class="text-[10px] text-gray-500 uppercase font-bold">Haut / Bas Jour</div>
-                            <div class="text-sm font-mono text-white" id="res-range">--</div>
-                        </div>
-                        <div class="bg-card p-4">
-                            <div class="text-[10px] text-gray-500 uppercase font-bold">Volume</div>
-                            <div class="text-lg font-mono text-blue-300" id="res-vol">--</div>
-                        </div>
-                        <div class="bg-card p-4">
-                            <div class="text-[10px] text-gray-500 uppercase font-bold">Cap. Boursière</div>
-                            <div class="text-lg font-mono text-white" id="res-cap">--</div>
-                        </div>
+                        <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Ouverture</div><div class="text-lg font-mono text-white" id="res-open">--</div></div>
+                        <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Range Jour</div><div class="text-sm font-mono text-white" id="res-range">--</div></div>
+                        <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Volume</div><div class="text-lg font-mono text-blue-300" id="res-vol">--</div></div>
+                        <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Cap. Boursière</div><div class="text-lg font-mono text-white" id="res-cap">--</div></div>
 
-                        <div class="bg-card p-4 border-t border-gray-700/30">
-                            <div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">PER (P/E)</div>
-                            <div class="text-xl font-bold text-white" id="res-pe">--</div>
-                        </div>
-                        <div class="bg-card p-4 border-t border-gray-700/30">
-                            <div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">BPA (EPS)</div>
-                            <div class="text-xl font-bold text-white" id="res-eps">--</div>
-                        </div>
-                        <div class="bg-card p-4 border-t border-gray-700/30">
-                            <div class="text-[10px] text-gray-500 uppercase font-bold text-yellow-400">Analystes</div>
-                            <div class="text-sm font-bold text-white mt-1" id="res-rating">--</div>
-                        </div>
-                        <div class="bg-card p-4 border-t border-gray-700/30">
-                            <div class="text-[10px] text-gray-500 uppercase font-bold text-purple-400">Bêta</div>
-                            <div class="text-xl font-bold text-white" id="res-beta">--</div>
-                        </div>
+                        <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">PER (P/E)</div><div class="text-xl font-bold text-white" id="res-pe">--</div></div>
+                        <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">BPA (EPS)</div><div class="text-xl font-bold text-white" id="res-eps">--</div></div>
+                        <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-yellow-400">Analystes</div><div class="text-sm font-bold text-white mt-1" id="res-rating">--</div></div>
+                        <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-purple-400">Bêta</div><div class="text-xl font-bold text-white" id="res-beta">--</div></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="convictions" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mb-8"><h1 class="text-3xl font-bold text-white">Thèse d'Investissement</h1></div>
-            <div class="bg-gradient-to-r from-gray-900 to-card border-l-4 border-blue-500 rounded-r-xl p-8 mb-8 shadow-xl">
+            <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Thèse d'Investissement</h1><p class="text-gray-400 mt-2">Philosophie : <b>Croissance Ricardienne</b> & Retour du Réel.</p></div>
+            
+            <div class="bg-gradient-to-br from-gray-900 to-card border-l-4 border-blue-500 rounded-r-xl p-8 mb-8 shadow-2xl">
+                <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🌍</span><h2 class="text-2xl font-bold text-white">Allocation Tactique</h2></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div><h3 class="text-gold font-bold uppercase text-sm mb-2">Conviction Principale</h3><p class="text-gray-300 text-sm">Super-cycle des <strong>Matières Premières</strong>. Protection contre l'inflation structurelle.</p></div>
-                    <div><h3 class="text-blue-400 font-bold uppercase text-sm mb-2">Watchlist</h3><p class="text-gray-300 text-sm">Surveillance du <strong>Japon</strong> et des <strong>Émergents</strong> (Attente signal devise).</p></div>
+                    <div>
+                        <h3 class="text-gold font-bold uppercase text-sm mb-2 tracking-wide">Conviction Principale</h3>
+                        <p class="text-gray-300 leading-relaxed text-sm text-justify">
+                            Notre thèse centrale repose sur les <strong>Matières Premières</strong> (Super-cycle). C'est le pilier du portefeuille : seul actif offrant une protection réelle contre l'inflation structurelle et bénéficiant des pénuries d'offre à venir.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-blue-400 font-bold uppercase text-sm mb-2 tracking-wide">Watchlist (En Observation)</h3>
+                        <p class="text-gray-300 leading-relaxed text-sm text-justify">
+                            Nous surveillons activement le <strong>Japon et les Marchés Émergents</strong>. Nous restons patients et attendons une <strong>reprise technique de leur monnaie</strong> (stabilisation du Yen et du Forex) avant de déployer du capital sur ces zones.
+                        </p>
+                    </div>
                 </div>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-gold/50 transition"><div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 bg-gray-800 rounded flex items-center justify-center text-xs font-bold">ETF</div><h3 class="font-bold text-white">Basic Resources</h3></div><p class="text-xs text-gray-400">Conviction N°1. Mines & Métaux.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-blue-500/50 transition"><div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 bg-gray-800 rounded flex items-center justify-center text-xs font-bold">AI</div><h3 class="font-bold text-white">Air Liquide</h3></div><p class="text-xs text-gray-400">Le Bunker. Contrats long terme.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-green-500/50 transition"><div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 bg-gray-800 rounded flex items-center justify-center text-xs font-bold">SU</div><h3 class="font-bold text-white">Schneider</h3></div><p class="text-xs text-gray-400">Électrification & Data Centers.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-red-500/50 transition"><div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 bg-gray-800 rounded flex items-center justify-center text-xs font-bold">TTE</div><h3 class="font-bold text-white">TotalEnergies</h3></div><p class="text-xs text-gray-400">Cash Machine. Rendement > 5%.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-sky-500/50 transition"><div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 bg-gray-800 rounded flex items-center justify-center text-xs font-bold">AIR</div><h3 class="font-bold text-white">Airbus</h3></div><p class="text-xs text-gray-400">Duopole Mondial.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-gray-400/50 transition"><div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 bg-gray-800 rounded flex items-center justify-center text-xs font-bold">SGO</div><h3 class="font-bold text-white">Saint-Gobain</h3></div><p class="text-xs text-gray-400">Rénovation Thermique.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Conviction N°1.</strong> Exposition aux mines (Cuivre, Fer) indispensables. Le seul actif "vert" du portefeuille actuellement.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Le Bunker.</strong> Modèle unique : contrats de 15 ans indexés sur l'énergie. Visibilité parfaite. Leader de l'hydrogène décarboné.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Mégatendance Électrification.</strong> Vente de pelles et pioches pour l'IA (Data Centers) et la rénovation. Ne vend pas l'énergie, mais l'efficacité.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Cash Machine.</strong> Valorisation ridicule (PER < 8). Finance sa transition verte avec son pétrole low-cost. Le dividende (>5%) sécurise la performance globale.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-sky-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Duopole Mondial.</strong> Boeing est en crise, Airbus rafle tout. Carnet de commandes plein pour 10 ans. Barrières à l'entrée technologiques immenses.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-400/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3><div class="text-xs text-gray-500">Construction</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Transformation Réussie.</strong> Leader mondial de la construction durable. Marges records. Joue la thématique de la rénovation thermique obligatoire en Europe.</p></div>
             </div>
         </div>
 
         <div id="dashboard" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
             <div class="mb-8 flex justify-between items-end">
-                <div><h1 class="text-3xl font-bold text-white">Portefeuille</h1><p class="text-gray-400 mt-1 text-sm font-mono"><span id="scan-progress" class="hidden text-blue-400 font-bold">...</span> <span id="last-update">En attente...</span></p></div>
+                <div>
+                    <h1 class="text-3xl font-bold text-white">Portefeuille Global</h1>
+                    <p class="text-gray-400 mt-1 text-sm font-mono flex items-center gap-2">
+                        <span id="scan-progress" class="hidden text-blue-400 font-bold">...</span>
+                        <span id="last-update">En attente de connexion...</span>
+                    </p>
+                </div>
                 <div class="text-right"><div class="text-sm text-gray-400 uppercase">AUM Total</div><div class="text-4xl font-extrabold text-white tabular-nums" id="totalVal">-- €</div></div>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <div class="bg-card rounded-xl p-5 border border-gray-700"><p class="text-xs font-bold text-gray-400 uppercase">Plus-Value</p><p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">--</p></div>
-                <div class="bg-card rounded-xl p-5 border border-gray-700"><p class="text-xs font-bold text-gray-400 uppercase">Dividendes</p><p class="mt-1 text-2xl font-bold text-indigo-400" id="totalDiv">--</p></div>
-                <div class="bg-card rounded-xl p-5 border border-gray-700"><p class="text-xs font-bold text-gray-400 uppercase">PER Moyen</p><p class="mt-1 text-2xl font-bold text-white" id="avgPER">--</p></div>
-                <div class="bg-card rounded-xl p-5 border border-gray-700"><p class="text-xs font-bold text-gray-400 uppercase">Top Perf</p><p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p><p class="text-xs font-bold text-green-400 mt-1" id="topStockPerf">--</p></div>
+                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Plus-Value</p><p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">--</p></div>
+                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Dividendes</p><p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">--</p></div>
+                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">PER Moyen</p><p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p></div>
+                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Top Perf</p><p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p><p class="text-xs font-bold text-green-400 mt-1" id="topStockPerf">--</p></div>
             </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700"><div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30"><h3 class="text-sm font-bold text-white uppercase">Positions</h3></div><div class="overflow-x-auto"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-gray-900/50 uppercase text-xs text-gray-500"><tr><th class="px-5 py-3">Société</th><th class="px-5 py-3 text-right">Cours</th><th class="px-5 py-3 text-center">Var. J</th><th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th><th class="px-5 py-3 text-right">Perf</th><th class="px-5 py-3 text-center text-blue-400">PER</th></tr></thead><tbody class="divide-y divide-gray-700/50" id="tableBody"></tbody></table></div></div>
-                <div class="bg-card rounded-xl border border-gray-700 p-6 flex flex-col"><h3 class="text-sm font-bold text-white uppercase mb-4">Allocation</h3><div class="flex-1 relative min-h-[250px]"><canvas id="sectorChart"></canvas></div></div>
+                <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col">
+                    <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30"><h3 class="text-sm font-bold text-white uppercase">Positions Actives</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-400">
+                            <thead class="bg-gray-900/50 uppercase text-xs text-gray-500">
+                                <tr>
+                                    <th class="px-5 py-3">Société</th>
+                                    <th class="px-5 py-3 text-right">Cours</th>
+                                    <th class="px-5 py-3 text-center">Var. J</th>
+                                    <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
+                                    <th class="px-5 py-3 text-right">Perf</th>
+                                    <th class="px-5 py-3 text-center text-blue-400">PER</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/50" id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-card rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col">
+                    <h3 class="text-sm font-bold text-white uppercase mb-4">Allocation</h3>
+                    <div class="flex-1 relative min-h-[250px]"><canvas id="sectorChart"></canvas></div>
+                </div>
             </div>
         </div>
 
         <div id="watchlist" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mb-8"><h1 class="text-3xl font-bold text-white">Surveillance</h1></div>
-            <div class="bg-card rounded-xl border border-gray-700 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30"><h3 class="text-sm font-bold text-white uppercase">Watchlist</h3></div>
-                <table class="w-full text-left text-sm text-gray-400"><thead class="bg-gray-900/50 uppercase text-xs text-gray-500"><tr><th class="px-5 py-3">Actif</th><th class="px-5 py-3">Thèse</th><th class="px-5 py-3 text-right">Cours</th><th class="px-5 py-3 text-center">Var. J</th></tr></thead><tbody class="divide-y divide-gray-700/50" id="watchlistBody"></tbody></table>
+            <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Liste de Surveillance</h1><p class="text-gray-400 mt-2">Cibles potentielles : Japon & Marchés Émergents.</p></div>
+            <div class="bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30 flex justify-between items-center"><h3 class="text-sm font-bold text-white uppercase">Watchlist</h3><span id="wl-scan-status" class="text-xs text-blue-400 font-mono hidden">Scan...</span></div>
+                <div class="overflow-x-auto"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-gray-900/50 uppercase text-xs text-gray-500"><tr><th class="px-5 py-3">Actif</th><th class="px-5 py-3">Thèse / Objectif</th><th class="px-5 py-3 text-right">Cours Live</th><th class="px-5 py-3 text-center">Var. J</th><th class="px-5 py-3 text-right text-yellow-400">Statut</th></tr></thead><tbody class="divide-y divide-gray-700/50" id="watchlistBody"></tbody></table></div>
             </div>
         </div>
 
         <div id="simulation" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <h1 class="text-3xl font-bold text-white mb-2">Projection</h1>
+            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection</h1>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 h-fit"><h3 class="font-bold text-white mb-6 uppercase text-sm">Paramètres</h3><div class="space-y-4"><div><label class="block text-xs font-medium text-gray-400 mb-1">Capital</label><input type="number" id="sim-start" value="10000" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Mensuel</label><input type="number" id="sim-monthly" value="500" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Rendement %</label><input type="number" id="sim-rate" value="8" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Années</label><input type="number" id="sim-years" value="20" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div></div><button onclick="calculateSim()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition">Calculer</button></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 h-fit"><h3 class="font-bold text-white mb-6 uppercase text-sm">Paramètres</h3><div class="space-y-4"><div><label class="block text-xs font-medium text-gray-400 mb-1">Capital Initial</label><input type="number" id="sim-start" value="10000" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Mensuel</label><input type="number" id="sim-monthly" value="500" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Rendement %</label><input type="number" id="sim-rate" value="8" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Années</label><input type="number" id="sim-years" value="20" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div></div><button onclick="calculateSim()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition">Calculer</button></div>
                 <div class="lg:col-span-2 bg-card border border-gray-700 rounded-xl p-6 flex flex-col"><div class="text-center mb-6"><div class="text-sm text-gray-400 uppercase">Capital Final</div><div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mt-2" id="sim-result">-- €</div></div><div class="flex-1 relative min-h-[300px]"><canvas id="simChart"></canvas></div></div>
             </div>
         </div>
@@ -220,48 +235,43 @@
             if(id==='watchlist') setTimeout(startWatchlistFeed,500);
         }
 
-        // FETCH ENGINE (DOUBLE : CHART V8 + QUOTE V7 for Search)
+        // FETCH ENGINE
         async function fetchFullDetails(ticker) {
-            const proxy="https://corsproxy.io/?";
-            const now = Date.now();
-            // 1. Chart API (Prix & Graph)
-            const urlChart = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=2m&range=1d&t=${now}`;
-            // 2. Quote API (Fundamentals) - Peut échouer via proxy
-            const urlQuote = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${now}`;
+            const proxy="https://corsproxy.io/?"; const now = Date.now();
+            const urlChart = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=5m&range=1d&t=${now}`; // Chart V8 (Robust)
+            const urlQuote = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${now}`; // Quote V7 (Fundamentals - Risk of Proxy Block)
 
             let result = { price:0, prev:0, meta:{}, timestamps:[], quotes:[], fundamentals:{} };
 
-            try {
-                const resChart = await fetch(proxy+encodeURIComponent(urlChart));
-                const jsonChart = await resChart.json();
-                const chartRes = jsonChart.chart.result[0];
-                result.meta = chartRes.meta;
-                result.price = chartRes.meta.regularMarketPrice;
-                result.prev = chartRes.meta.chartPreviousClose;
-                result.timestamps = chartRes.timestamp;
-                result.quotes = chartRes.indicators.quote[0].close;
+            try { // Priority 1: Chart Data
+                const res = await fetch(proxy+encodeURIComponent(urlChart));
+                const json = await res.json();
+                const d = json.chart.result[0];
+                result.meta = d.meta;
+                result.price = d.meta.regularMarketPrice;
+                result.prev = d.meta.chartPreviousClose;
+                result.timestamps = d.timestamp;
+                result.quotes = d.indicators.quote[0].close;
             } catch(e) { return null; }
 
-            try {
-                const resQuote = await fetch(proxy+encodeURIComponent(urlQuote));
-                const jsonQuote = await resQuote.json();
-                result.fundamentals = jsonQuote.quoteResponse.result[0] || {};
-            } catch(e) { console.log("Quote API failed (expected via proxy)"); }
+            try { // Priority 2: Fundamentals (Try but don't crash if fail)
+                const res = await fetch(proxy+encodeURIComponent(urlQuote));
+                const json = await res.json();
+                result.fundamentals = json.quoteResponse.result[0] || {};
+            } catch(e) { console.log("Quote API Blocked (Expected)"); }
 
             return result;
         }
 
-        // FETCH SIMPLE (PORTFOLIO)
         async function fetchPriceSimple(ticker) {
-            const proxy="https://corsproxy.io/?";
-            const url=`https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
+            const proxy="https://corsproxy.io/?"; const url=`https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
             try{ const r=await fetch(proxy+encodeURIComponent(url)); const j=await r.json(); return {price:j.chart.result[0].meta.regularMarketPrice, prev:j.chart.result[0].meta.chartPreviousClose}; }catch(e){return null;}
         }
 
-        // LIVE PORTFOLIO
+        // LIVE FEEDS
         async function startLiveFeed(){
             const dot=document.getElementById('status-dot'); const label=document.getElementById('scan-progress'); const up=document.getElementById('last-update');
-            dot.classList.add('bg-blue-500','blink'); label.classList.remove('hidden'); up.innerText="Scan...";
+            dot.classList.add('bg-blue-500','blink'); label.classList.remove('hidden');
             for(let i=0;i<portfolio.length;i++){
                 const s=portfolio[i]; up.innerText="Scan: "+s.tick;
                 const r=document.getElementById('row-'+i); if(r)r.classList.add('scanning-row');
@@ -273,7 +283,6 @@
             dot.classList.remove('bg-blue-500','blink'); dot.classList.add('bg-green-500'); up.innerText="À jour."; label.classList.add('hidden'); renderDashboard();
         }
 
-        // LIVE WATCHLIST
         async function startWatchlistFeed(){
             renderWatchlist();
             for(let i=0;i<watchlist.length;i++){
@@ -297,7 +306,7 @@
             document.getElementById('searchLoader').style.display='none';
 
             if(data && data.price){
-                // Fill Header
+                // Header
                 document.getElementById('res-name').innerText = t;
                 document.getElementById('res-symbol').innerText = data.meta.symbol;
                 document.getElementById('res-type').innerText = data.meta.instrumentType || "EQUITY";
@@ -309,61 +318,41 @@
                 pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %";
                 pEl.className = perf>=0 ? "text-xl font-bold flex items-center justify-end gap-2 text-green-400" : "text-xl font-bold flex items-center justify-end gap-2 text-red-400";
 
-                // Fill Grid
+                // Grid Data
                 document.getElementById('res-open').innerText = (data.meta.regularMarketOpen||data.prev).toFixed(2);
                 document.getElementById('res-range').innerText = (data.meta.regularMarketDayLow||data.price).toFixed(2) + " - " + (data.meta.regularMarketDayHigh||data.price).toFixed(2);
                 let vol = data.meta.regularMarketVolume || 0;
                 document.getElementById('res-vol').innerText = vol>1000000?(vol/1000000).toFixed(1)+"M":(vol/1000).toFixed(1)+"K";
                 
-                // Fundamentals (From Quote or fallback)
+                // Fundamentals (Try Quote API, fallback to '-')
                 const f = data.fundamentals;
-                const marketCap = f.marketCap || 0;
-                document.getElementById('res-cap').innerText = marketCap>1000000000?(marketCap/1000000000).toFixed(2)+"B": (marketCap>0?marketCap:"-");
-                
+                const cap = f.marketCap || 0;
+                document.getElementById('res-cap').innerText = cap>1000000000?(cap/1000000000).toFixed(2)+"B":(cap>0?cap:"-");
                 document.getElementById('res-pe').innerText = f.trailingPE ? f.trailingPE.toFixed(2) : "-";
                 document.getElementById('res-eps').innerText = f.epsTrailingTwelveMonths ? f.epsTrailingTwelveMonths.toFixed(2) : "-";
                 document.getElementById('res-beta').innerText = f.beta ? f.beta.toFixed(2) : "-";
-                
-                // Analyst Recommendation
                 const rating = f.averageAnalystRating || "-";
-                const ratingEl = document.getElementById('res-rating');
-                ratingEl.innerText = rating.replace("-", " ").toUpperCase();
-                ratingEl.className = "text-sm font-bold mt-1 " + (rating.includes("Buy")?"text-green-400": (rating.includes("Sell")?"text-red-400":"text-gray-300"));
+                document.getElementById('res-rating').innerText = rating.replace("-", " ").toUpperCase();
 
-                // Chart Logic
+                // Chart
                 if(data.timestamps && data.quotes){
                     const ctx = document.getElementById('searchChart').getContext('2d');
                     if(searchChartInstance) searchChartInstance.destroy();
                     const color = perf>=0 ? '#22c55e' : '#ef4444';
                     const grad = ctx.createLinearGradient(0,0,0,300); grad.addColorStop(0, color+'33'); grad.addColorStop(1, 'transparent');
-                    
-                    // Filter nulls
-                    const cleanData = data.quotes.map((q,i) => ({t:data.timestamps[i], y:q})).filter(p => p.y !== null);
-                    
+                    // Clean nulls
+                    const clean = data.quotes.map((q,i)=>({t:data.timestamps[i],y:q})).filter(p=>p.y!==null);
                     searchChartInstance = new Chart(ctx, {
                         type:'line',
                         data:{
-                            labels: cleanData.map(p => new Date(p.t*1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})),
-                            datasets:[{
-                                data: cleanData.map(p => p.y),
-                                borderColor: color,
-                                backgroundColor: grad,
-                                borderWidth: 2,
-                                fill: true,
-                                pointRadius: 0,
-                                tension: 0.1
-                            }]
+                            labels: clean.map(p=>new Date(p.t*1000).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})),
+                            datasets:[{ data:clean.map(p=>p.y), borderColor:color, backgroundColor:grad, borderWidth:2, fill:true, pointRadius:0, tension:0.1 }]
                         },
-                        options:{
-                            responsive:true, maintainAspectRatio:false,
-                            plugins:{legend:{display:false}},
-                            scales:{x:{display:false}, y:{display:true, position:'right', grid:{color:'#334155'}}}
-                        }
+                        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{display:true, position:'right', grid:{color:'#334155'}}} }
                     });
                 }
-
                 document.getElementById('resultCard').classList.remove('hidden');
-            } else { alert("Données indisponibles (Proxy/Ticker)"); }
+            } else { alert("Données indisponibles (Proxy)"); }
         }
 
         // RENDER DASHBOARD
@@ -376,13 +365,11 @@
                 let cpe=(s.price>0&&s.eps>0)?s.price/s.eps:0;
                 tv+=v; ti+=inv; td+=v*s.div; if(cpe>0){tp+=cpe;cp++;}
                 if(pp>top.p) top={n:s.name,p:pp};
-                
                 const dP=s.price>0?s.price.toFixed(2)+' €':'<span class="animate-pulse">...</span>';
                 const dV=s.price>0?Math.round(v).toLocaleString()+' €':'-';
                 const dPe=s.price>0?(pp>0?'+':'')+pp.toFixed(2)+'%':'-'; const cPe=pp>=0?'text-success':'text-danger';
                 const dD=s.price>0?(dp>0?'+':'')+dp.toFixed(2)+'%':'-'; const cD=dp>=0?'text-green-400':'text-red-400';
                 const dE=cpe>0?cpe.toFixed(2):'-';
-
                 if(hl===-1){
                     tb.innerHTML+=`<tr id="row-${i}" class="hover:bg-gray-800/50 border-b border-gray-700/50"><td class="px-5 py-4"><div class="font-bold text-white">${s.name}</div><div class="text-[10px] text-gray-500">${s.tick}</div></td><td class="px-5 py-4 text-right font-mono text-white" id="p-${i}">${dP}</td><td class="px-5 py-4 text-center font-mono font-bold ${cD}" id="d-${i}">${dD}</td><td class="px-5 py-4 text-right font-bold text-gray-300 hidden sm:table-cell" id="v-${i}">${dV}</td><td class="px-5 py-4 text-right font-mono font-bold ${cPe}" id="pf-${i}">${dPe}</td><td class="px-5 py-4 text-center text-blue-300 font-mono text-sm" id="e-${i}">${dE}</td></tr>`;
                 } else if(i===hl){
@@ -407,7 +394,7 @@
                 const dP=w.price>0?w.price.toFixed(2):'<span class="animate-pulse">...</span>';
                 const dD=w.price>0?(dp>0?'+':'')+dp.toFixed(2)+'%':'-'; const cD=dp>=0?'text-green-400':'text-red-400';
                 if(hl===-1){
-                    tb.innerHTML+=`<tr id="wl-${i}" class="hover:bg-gray-800/50 border-b border-gray-700/50"><td class="px-5 py-4"><div class="font-bold text-white">${w.name}</div><div class="text-[10px] text-gray-500">${w.tick}</div></td><td class="px-5 py-4 text-xs text-blue-300">${w.thesis}</td><td class="px-5 py-4 text-right text-white font-mono" id="wlp-${i}">${dP}</td><td class="px-5 py-4 text-center font-mono font-bold ${cD}" id="wld-${i}">${dD}</td></tr>`;
+                    tb.innerHTML+=`<tr id="wl-${i}" class="hover:bg-gray-800/50 border-b border-gray-700/50"><td class="px-5 py-4"><div class="font-bold text-white">${w.name}</div><div class="text-[10px] text-gray-500">${w.tick}</div></td><td class="px-5 py-4 text-xs text-blue-300">${w.thesis}</td><td class="px-5 py-4 text-right text-white font-mono" id="wlp-${i}">${dP}</td><td class="px-5 py-4 text-center font-mono font-bold ${cD}" id="wld-${i}">${dD}</td><td class="px-5 py-4 text-right"><span class="bg-yellow-900/30 text-yellow-400 px-2 py-1 rounded text-[10px] uppercase font-bold border border-yellow-700/50">En Attente</span></td></tr>`;
                 } else if(i===hl){
                     const r=document.getElementById('wl-'+i); r.classList.add('flash-update'); setTimeout(()=>r.classList.remove('flash-update'),500);
                     document.getElementById('wlp-'+i).innerText=dP; document.getElementById('wld-'+i).innerText=dD; document.getElementById('wld-'+i).className=`px-5 py-4 text-center font-mono font-bold ${cD}`;
@@ -424,7 +411,7 @@
             document.getElementById('sim-result').innerText=Math.round(dc[dc.length-1]).toLocaleString()+" €";
             const ctx=document.getElementById('simChart').getContext('2d');
             if(simChartInstance)simChartInstance.destroy();
-            simChartInstance=new Chart(ctx,{type:'line',data:{labels:l,datasets:[{label:'Patrimoine',data:dc,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true},{label:'Investi',data:di,borderColor:'#64748b',borderDash:[5,5]}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{grid:{color:'#1e293b'}}}}});
+            simChartInstance=new Chart(ctx,{type:'line',data:{labels:l,datasets:[{label:'Patrimoine',data:dc,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true,tension:0.4},{label:'Investi',data:di,borderColor:'#64748b',borderDash:[5,5],tension:0.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{grid:{color:'#1e293b'}}},plugins:{legend:{labels:{color:'#94a3b8'}}}}});
         }
 
         calculateSim(); renderDashboard(); setTimeout(startLiveFeed,1000); setInterval(startLiveFeed,120000);
