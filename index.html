@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | V40 Market Data</title>
+    <title>Noa Capital | V41 Chartist</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -55,12 +55,12 @@
                     <span class="w-2 h-2 rounded-full bg-blue-500" id="status-dot"></span>
                     <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider" id="status-text">Prêt</span>
                 </div>
-                <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700">
-                    <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition">Recherche</button>
-                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Stratégie</button>
-                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Portefeuille</button>
-                    <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Surveillance</button>
-                    <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Simulateur</button>
+                <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto">
+                    <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition whitespace-nowrap">🔎 Recherche</button>
+                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Stratégie</button>
+                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Portefeuille</button>
+                    <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Surveillance</button>
+                    <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Simulateur</button>
                 </div>
             </div>
         </div>
@@ -71,11 +71,11 @@
         <div id="home" class="tab-content active">
             <div class="text-center mb-12 w-full px-4">
                 <h1 class="text-5xl md:text-7xl font-black text-white mb-6">Market Intelligence.</h1>
-                <p class="text-gray-400 text-xl">Fiches Valeurs Détaillées & Live.</p>
+                <p class="text-gray-400 text-xl">Analyse Technique & Fondamentale.</p>
             </div>
             <div class="w-full max-w-3xl px-4 relative z-10">
                 <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
-                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA, AAPL)..." onkeypress="if(event.key === 'Enter') searchTicker()">
+                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
                     <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">GO</button>
                 </div>
                 <div class="mt-8 flex justify-center gap-3 text-sm text-gray-500">
@@ -87,7 +87,7 @@
             
             <div id="searchLoader" class="loader mt-10"></div>
             
-            <div id="resultCard" class="hidden mt-10 w-full max-w-4xl px-4">
+            <div id="resultCard" class="hidden mt-10 w-full max-w-5xl px-4 pb-20">
                 <div class="bg-card/90 backdrop-blur border border-gray-700 rounded-2xl shadow-2xl relative overflow-hidden">
                     <div class="p-8 border-b border-gray-700/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
@@ -105,14 +105,15 @@
                         </div>
                     </div>
                     
-                    <div class="p-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-8 gap-x-4">
+                    <div class="h-[300px] w-full p-4 bg-gray-900/30">
+                        <canvas id="searchChart"></canvas>
+                    </div>
+                    
+                    <div class="p-8 grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-4 border-t border-gray-700/50">
                         <div><div class="text-xs text-gray-500 uppercase font-bold mb-1">Clôture Veille</div><div id="res-prev" class="font-mono text-lg">--</div></div>
                         <div><div class="text-xs text-gray-500 uppercase font-bold mb-1">Ouverture</div><div id="res-open" class="font-mono text-lg">--</div></div>
                         <div><div class="text-xs text-gray-500 uppercase font-bold mb-1">Range Jour</div><div id="res-range" class="font-mono text-sm text-gray-300">--</div></div>
                         <div><div class="text-xs text-gray-500 uppercase font-bold mb-1">Volume</div><div id="res-vol" class="font-mono text-lg text-blue-400">--</div></div>
-                        
-                        <div class="col-span-2 md:col-span-1"><div class="text-xs text-gray-500 uppercase font-bold mb-1">Plus Haut 52 Sem.</div><div id="res-high52" class="font-mono text-lg text-green-400/80">--</div></div>
-                        <div class="col-span-2 md:col-span-1"><div class="text-xs text-gray-500 uppercase font-bold mb-1">Plus Bas 52 Sem.</div><div id="res-low52" class="font-mono text-lg text-red-400/80">--</div></div>
                     </div>
                 </div>
             </div>
@@ -133,22 +134,19 @@
                     <div>
                         <h3 class="text-blue-400 font-bold uppercase text-sm mb-2 tracking-wide">Watchlist (En Observation)</h3>
                         <p class="text-gray-300 leading-relaxed text-sm text-justify mb-2">
-                            Nous surveillons le <strong>Japon</strong> (valorisations attractives) et attendons un signal de stabilisation du Yen.
-                        </p>
-                        <p class="text-gray-300 leading-relaxed text-sm text-justify border-t border-gray-700 pt-2">
-                            <strong class="text-white">Le Relais Émergent :</strong> La croissance mondiale future viendra de l'Asie du Sud et de l'Amérique Latine. Ces pays possèdent les ressources et la démographie. Nous attendons la fin du cycle de hausse du Dollar pour nous exposer à leur potentiel de rattrapage économique.
+                            Nous surveillons activement le <strong>Japon et les Marchés Émergents</strong>. Nous restons patients et attendons une <strong>reprise technique de leur monnaie</strong> avant de déployer du capital.
                         </p>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300">Conviction N°1. Exposition aux mines (Cuivre, Fer).</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300">Le Bunker. Visibilité parfaite et contrats long terme.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300">Mégatendance Électrification. Vente de pelles et pioches pour l'IA.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300">Cash Machine. Rendement > 5%. Finance la transition.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-sky-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300">Duopole Mondial. Carnet de commandes plein pour 10 ans.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-400/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3><div class="text-xs text-gray-500">Construction</div></div></div></div><p class="text-sm text-gray-300">Transformation Réussie. Leader de la rénovation thermique.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300">Conviction N°1. Exposition aux mines (Cuivre, Fer).</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300">Le Bunker. Visibilité parfaite et contrats long terme.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300">Mégatendance Électrification. Vente de pelles et pioches pour l'IA.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300">Cash Machine. Rendement > 5%. Finance la transition.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300">Duopole Mondial. Carnet de commandes plein pour 10 ans.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3><div class="text-xs text-gray-500">Construction</div></div></div></div><p class="text-sm text-gray-300">Transformation Réussie. Leader de la rénovation thermique.</p></div>
             </div>
         </div>
 
@@ -266,7 +264,7 @@
             if(id==='watchlist') setTimeout(startWatchlistFeed, 500); 
         }
 
-        // --- FETCH ENGINE (GET MORE META FOR SEARCH) ---
+        // --- FETCH ENGINE (ROBUST + CHART DATA) ---
         async function fetchPriceRobust(ticker) {
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
@@ -280,8 +278,10 @@
                 return {
                     price: json.chart.result[0].meta.regularMarketPrice,
                     prev: json.chart.result[0].meta.chartPreviousClose,
-                    // Extra data for Search
-                    meta: json.chart.result[0].meta 
+                    meta: json.chart.result[0].meta,
+                    // NEW: Retrieve chart data for plotting
+                    timestamps: json.chart.result[0].timestamp,
+                    quotes: json.chart.result[0].indicators.quote[0].close
                 };
             } catch (e) { return null; }
         }
@@ -293,10 +293,9 @@
             const label = document.getElementById('scan-progress');
             const updateTxt = document.getElementById('last-update');
 
-            txt.innerText = "CONNEXION...";
+            txt.innerText = "SCAN...";
             dot.classList.add('bg-blue-500', 'blink');
             label.classList.remove('hidden');
-            updateTxt.innerText = "Démarrage du scan...";
 
             for (let i = 0; i < portfolio.length; i++) {
                 const stock = portfolio[i];
@@ -441,8 +440,10 @@
             });
         }
 
-        // --- SEARCH V40 (ENHANCED) ---
+        // --- SEARCH CHART LOGIC ---
+        let searchChartInstance = null;
         function fillSearch(t) { document.getElementById('mainTickerInput').value = t; searchTicker(); }
+        
         async function searchTicker() {
             const t = document.getElementById('mainTickerInput').value.toUpperCase();
             if(!t) return;
@@ -458,36 +459,58 @@
                 const price = data.price;
                 const prev = data.prev;
                 
-                // --- MAPPING DES DONNEES ETENDUES ---
-                document.getElementById('res-name').innerText = t; // Yahoo Chart API V8 doesn't always return longName easily in chart result, relying on ticker
+                document.getElementById('res-name').innerText = t; 
                 document.getElementById('res-symbol').innerText = meta.symbol;
                 document.getElementById('res-type').innerText = meta.instrumentType || "EQUITY";
                 document.getElementById('res-exchange').innerText = meta.exchangeName || "Exchange";
                 document.getElementById('res-currency').innerText = meta.currency || "EUR";
-                
                 document.getElementById('res-price').innerText = price.toFixed(2);
                 
                 const perf = ((price - prev) / prev) * 100;
-                const pEl = document.getElementById('res-perf');
-                pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %";
+                const pEl = document.getElementById('res-perf'); 
+                pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %"; 
                 pEl.className = perf>=0 ? "text-xl font-bold mt-1 flex items-center justify-end gap-2 text-green-400" : "text-xl font-bold mt-1 flex items-center justify-end gap-2 text-red-400";
 
                 document.getElementById('res-prev').innerText = prev.toFixed(2);
                 document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
-                
-                const dayLow = meta.regularMarketDayLow || price;
-                const dayHigh = meta.regularMarketDayHigh || price;
-                document.getElementById('res-range').innerText = dayLow.toFixed(2) + " - " + dayHigh.toFixed(2);
-                
-                let vol = meta.regularMarketVolume || 0;
-                let volStr = vol > 1000000 ? (vol/1000000).toFixed(1) + "M" : (vol/1000).toFixed(1) + "K";
-                document.getElementById('res-vol').innerText = volStr;
-                
-                // 52 Week Logic (Fallback if missing in V8 chart meta)
-                const yHigh = meta.fiftyTwoWeekHigh || dayHigh;
-                const yLow = meta.fiftyTwoWeekLow || dayLow;
-                document.getElementById('res-high52').innerText = yHigh.toFixed(2);
-                document.getElementById('res-low52').innerText = yLow.toFixed(2);
+                document.getElementById('res-range').innerText = (meta.regularMarketDayLow || "-") + " - " + (meta.regularMarketDayHigh || "-");
+                let vol = meta.regularMarketVolume || 0; 
+                document.getElementById('res-vol').innerText = vol > 1000000 ? (vol/1000000).toFixed(1) + "M" : (vol/1000).toFixed(1) + "K";
+
+                // --- CHART DRAWING ---
+                if(data.timestamps && data.quotes) {
+                    const ctx = document.getElementById('searchChart').getContext('2d');
+                    if(searchChartInstance) searchChartInstance.destroy();
+                    
+                    const isGreen = price >= prev;
+                    const lineColor = isGreen ? '#22c55e' : '#ef4444';
+                    const fillColor = isGreen ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+
+                    searchChartInstance = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.timestamps.map(ts => new Date(ts * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})),
+                            datasets: [{
+                                data: data.quotes,
+                                borderColor: lineColor,
+                                backgroundColor: fillColor,
+                                borderWidth: 2,
+                                fill: true,
+                                pointRadius: 0,
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { display: false },
+                                y: { display: true, position: 'right', grid: { color: '#334155' } }
+                            }
+                        }
+                    });
+                }
 
                 card.classList.remove('hidden');
             } else { alert("Ticker introuvable"); }
