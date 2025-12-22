@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT Capital | V38 Watchtower</title>
+    <title>Noa Capital | V39 Strategy Focus</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -57,9 +57,9 @@
                 </div>
                 <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto">
                     <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition whitespace-nowrap">🔎 Recherche</button>
+                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Stratégie</button>
                     <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Portefeuille</button>
                     <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Surveillance</button>
-                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Stratégie</button>
                     <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Simulateur</button>
                 </div>
             </div>
@@ -96,6 +96,92 @@
                         <div><div class="text-xs text-gray-500 uppercase">Range</div><div id="res-range" class="font-mono">--</div></div>
                         <div><div class="text-xs text-gray-500 uppercase">Volume</div><div id="res-vol" class="font-mono">--</div></div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="convictions" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="mb-10 text-center md:text-left">
+                <h1 class="text-4xl font-black text-white tracking-tight mb-4">Thèse Macro-Économique</h1>
+                <div class="p-6 bg-gradient-to-r from-gray-900 to-card border-l-4 border-blue-600 rounded-r-xl shadow-xl">
+                    <h2 class="text-xl font-bold text-blue-400 mb-3">La Fin de l'Abondance Monétaire</h2>
+                    <p class="text-gray-300 leading-relaxed text-justify mb-4">
+                        Nous entrons dans une nouvelle ère économique caractérisée par une <strong>inflation structurelle</strong> plus élevée et la fin de l'argent gratuit ("Free Money"). Dans ce contexte, les actifs purement spéculatifs ou basés sur des multiples de valorisation infinis (Tech non-rentable) sont à risque.
+                    </p>
+                    <p class="text-gray-300 leading-relaxed text-justify">
+                        Notre stratégie, baptisée <strong>"Le Retour du Réel"</strong>, privilégie les entreprises disposant d'actifs tangibles, d'un <em>Pricing Power</em> avéré et capables de générer des flux de trésorerie (Free Cash Flow) immédiats. Nous cherchons la <strong>Croissance Ricardienne</strong> : celle qui vient de la rareté des ressources et de l'excellence industrielle.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mb-8"><h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-2">Allocation Tactique</h2></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <div class="bg-card border border-gold/30 rounded-xl p-8 shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-gold/10 px-4 py-1 rounded-bl-xl text-gold text-xs font-bold uppercase tracking-wider">Conviction #1</div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-yellow-900/30 rounded-full text-2xl">🧱</div>
+                        <h3 class="text-xl font-bold text-white">Matières Premières & Ressources</h3>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-7 text-justify">
+                        L'économie mondiale fait face à une pénurie structurelle de métaux critiques (Cuivre, Lithium, Nickel) indispensables à la transition énergétique et à l'IA. Ouvrir une mine prend 10 ans. La demande explose maintenant.
+                        <br><br>
+                        <strong>L'arbitrage :</strong> Nous surpondérons l'<strong>ETF Basic Resources</strong>. C'est notre "Hedge" (protection) contre l'inflation et notre moteur de performance alpha. C'est l'actif le plus décorrélé du reste du marché.
+                    </p>
+                </div>
+
+                <div class="bg-card border border-blue-500/30 rounded-xl p-8 shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-900/30 px-4 py-1 rounded-bl-xl text-blue-400 text-xs font-bold uppercase tracking-wider">Sous Surveillance</div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="p-3 bg-blue-900/30 rounded-full text-2xl">👀</div>
+                        <h3 class="text-xl font-bold text-white">Japon & Pays Émergents</h3>
+                    </div>
+                    <p class="text-gray-300 text-sm leading-7 text-justify">
+                        Ces marchés offrent des valorisations attractives mais comportent un risque de change majeur. Le Yen est historiquement bas et les devises émergentes sont volatiles face au Dollar fort.
+                        <br><br>
+                        <strong>La tactique :</strong> Nous restons en <em>"Wait & See"</em>. Nous n'investirons que lorsque nous aurons un signal technique clair de stabilisation du Forex (remontée des taux de la BOJ ou baisse du Dollar). Le cash est prêt, mais la gâchette n'est pas encore pressée.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mb-8"><h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-2">Analyse des Positions (Stock Picking)</h2></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white text-sm">AI</div><h3 class="font-bold text-white">Air Liquide</h3></div>
+                    <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                        <strong>Le modèle "Infrastructure".</strong> Air Liquide ne vend pas seulement du gaz, elle vend de la fiabilité industrielle. Ses contrats de 15 ans incluent des clauses de "Pass-through" qui répercutent automatiquement la hausse des coûts de l'énergie aux clients. C'est une protection parfaite contre l'inflation.
+                    </p>
+                </div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white text-sm">SU</div><h3 class="font-bold text-white">Schneider Electric</h3></div>
+                    <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                        <strong>L'IA dans le monde physique.</strong> L'Intelligence Artificielle ne vit pas dans le nuage, elle vit dans des Data Centers qui consomment autant qu'une ville. Schneider fournit l'équipement électrique critique pour ces infrastructures. C'est un pari sur l'IA, mais sur la partie "Pelles et Pioches", beaucoup moins risquée que le logiciel.
+                    </p>
+                </div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500/50 transition duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white text-sm">TTE</div><h3 class="font-bold text-white">TotalEnergies</h3></div>
+                    <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                        <strong>Le pragmatisme énergétique.</strong> Alors que ses concurrents ont tout misé sur le vert trop tôt, Total a gardé ses actifs pétroliers rentables. Résultat : un bilan financier en béton et un dividende > 5% qui sécurise notre rendement global. C'est notre "Vache à Lait" pour réinvestir ailleurs.
+                    </p>
+                </div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-sky-500/50 transition duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white text-sm">AIR</div><h3 class="font-bold text-white">Airbus</h3></div>
+                    <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                        <strong>Le Monopole de fait.</strong> Avec les déboires structurels de Boeing, Airbus se retrouve en situation de quasi-monopole sur les long-courriers. Son carnet de commandes est plein pour la décennie. Le seul risque est l'exécution industrielle, pas la demande.
+                    </p>
+                </div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-400/50 transition duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white text-sm">SGO</div><h3 class="font-bold text-white">Saint-Gobain</h3></div>
+                    <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                        <strong>La Rénovation forcée.</strong> L'Union Européenne impose la rénovation thermique des bâtiments. Saint-Gobain est le leader mondial des matériaux durables. L'entreprise a réussi sa transformation : ses marges sont à des niveaux records. C'est une valeur cyclique devenue une valeur de croissance verte.
+                    </p>
+                </div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-yellow-600/50 transition duration-300 flex flex-col">
+                    <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white text-sm">ETF</div><h3 class="font-bold text-white">Basic Resources</h3></div>
+                    <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                        <strong>L'Assurance Vie du portefeuille.</strong> C'est la ligne la plus volatile, mais aussi celle avec le plus gros potentiel asymétrique. Si l'inflation repart, c'est cette ligne qui explosera à la hausse et compensera la baisse potentielle des valeurs industrielles.
+                    </p>
                 </div>
             </div>
         </div>
@@ -148,9 +234,8 @@
         <div id="watchlist" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-white tracking-tight">Liste de Surveillance</h1>
-                <p class="text-gray-400 mt-2">Cibles potentielles : Japon & Marchés Émergents (Attente signal devise).</p>
+                <p class="text-gray-400 mt-2">Cibles potentielles : Japon & Marchés Émergents.</p>
             </div>
-            
             <div class="bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30 flex justify-between items-center">
                     <h3 class="text-sm font-bold text-white uppercase">Watchlist</h3>
@@ -167,26 +252,9 @@
                                 <th class="px-5 py-3 text-right text-yellow-400">Statut</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-700/50" id="watchlistBody">
-                            </tbody>
+                        <tbody class="divide-y divide-gray-700/50" id="watchlistBody"></tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-
-        <div id="convictions" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Thèse d'Investissement</h1><p class="text-gray-400 mt-2">Philosophie : <b>Croissance Ricardienne</b> & Retour du Réel.</p></div>
-            <div class="bg-gradient-to-br from-gray-900 to-card border-l-4 border-blue-500 rounded-r-xl p-8 mb-8 shadow-2xl">
-                <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🌍</span><h2 class="text-2xl font-bold text-white">Allocation Tactique</h2></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div><h3 class="text-gold font-bold uppercase text-sm mb-2 tracking-wide">Conviction Principale</h3><p class="text-gray-300 leading-relaxed text-sm text-justify">Notre thèse centrale repose sur les <strong>Matières Premières</strong> (Super-cycle). C'est le pilier du portefeuille : seul actif offrant une protection réelle contre l'inflation structurelle.</p></div>
-                    <div><h3 class="text-blue-400 font-bold uppercase text-sm mb-2 tracking-wide">Watchlist (En Observation)</h3><p class="text-gray-300 leading-relaxed text-sm text-justify">Nous surveillons activement le <strong>Japon et les Marchés Émergents</strong>. Nous restons patients et attendons une <strong>reprise technique de leur monnaie</strong> avant de déployer du capital.</p></div>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300">Conviction N°1. Exposition aux mines (Cuivre, Fer).</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300">Le Bunker. Visibilité parfaite et contrats long terme.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300">Cash Machine. Rendement > 5%.</p></div>
             </div>
         </div>
 
@@ -227,11 +295,9 @@
                 if(b===id){el.classList.add('bg-blue-600','text-white');el.classList.remove('text-gray-400','bg-transparent')}
                 else{el.classList.remove('bg-blue-600','text-white');el.classList.add('text-gray-400','bg-transparent')}
             });
-            
-            // Logic Trigger
             if(id!=='home') document.getElementById('resultCard').classList.add('hidden');
             if(id==='simulation') calculateSim();
-            if(id==='watchlist') setTimeout(startWatchlistFeed, 500); // Lance le scan Watchlist
+            if(id==='watchlist') setTimeout(startWatchlistFeed, 500); 
         }
 
         // --- FETCH ENGINE ---
@@ -265,7 +331,7 @@
 
             for (let i = 0; i < portfolio.length; i++) {
                 const stock = portfolio[i];
-                updateTxt.innerText = `Scan : ${stock.tick}`;
+                updateTxt.innerText = `Mise à jour : ${i+1} / ${portfolio.length} (${stock.tick})`;
                 const row = document.getElementById(`row-${i}`);
                 if(row) row.classList.add('scanning-row');
 
@@ -291,17 +357,16 @@
         async function startWatchlistFeed() {
             const status = document.getElementById('wl-scan-status');
             status.classList.remove('hidden');
-            renderWatchlist(); // Init table
+            renderWatchlist(); 
 
             for (let i = 0; i < watchlist.length; i++) {
                 const item = watchlist[i];
                 status.innerText = `Scan: ${item.tick}...`;
-                
                 const data = await fetchPriceRobust(item.tick);
                 if (data && data.price) {
                     item.price = data.price;
                     item.prev = data.prev;
-                    renderWatchlist(i); // Update row
+                    renderWatchlist(i); 
                 }
                 await new Promise(r => setTimeout(r, 800));
             }
@@ -327,7 +392,6 @@
                 if(calculatedPER > 0) { totalPER += calculatedPER; countPER++; }
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
                 
-                // Formats
                 const dPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '<span class="text-gray-500 animate-pulse">...</span>';
                 const dValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
                 const dPerf = stock.price > 0 ? (perfPct > 0 ? '+' : '') + perfPct.toFixed(2) + "%" : '-';
@@ -384,7 +448,6 @@
 
             watchlist.forEach((item, index) => {
                 let dayVarPct = item.price > 0 && item.prev > 0 ? ((item.price - item.prev) / item.prev) * 100 : 0;
-                
                 const dPrice = item.price > 0 ? item.price.toFixed(2) : '<span class="animate-pulse">...</span>';
                 const dDay = item.price > 0 ? (dayVarPct > 0 ? '+' : '') + dayVarPct.toFixed(2) + "%" : '-';
                 const cDay = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
