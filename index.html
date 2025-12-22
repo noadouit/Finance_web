@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | Fundamental Live</title>
+    <title>Noa Capital | Sequential Live</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -29,21 +29,12 @@
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        #home.active { 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: calc(100vh - 64px); 
-        }
-
+        #home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: calc(100vh - 64px); }
         .search-glow:focus-within { box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
         .loader { border: 3px solid #333; border-top: 3px solid #3b82f6; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display:none; margin: 0 auto; }
-        .blink { animation: pulse 1.5s infinite; }
+        .blink { animation: pulse 1s infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        
-        /* Flash update */
         .flash-update { animation: highlight 1s ease-out; background-color: rgba(34, 197, 94, 0.1); }
         @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
     </style>
@@ -52,25 +43,21 @@
 <body class="antialiased min-h-screen flex flex-col">
 
     <nav class="border-b border-gray-800 bg-card/90 backdrop-blur-md sticky top-0 z-50 h-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-            <div class="flex items-center justify-between h-full">
-                <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition" onclick="switchTab('home')">
-                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-9 h-9 rounded-lg flex items-center justify-center font-black text-white shadow-lg">N</div>
-                    <span class="text-xl font-bold tracking-tight">Noa Capital</span>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-9 h-9 rounded-lg flex items-center justify-center font-black text-white shadow-lg">N</div>
+                <span class="text-xl font-bold tracking-tight">Noa Capital</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="status-badge" class="hidden md:flex items-center gap-2 bg-gray-900/80 px-3 py-1 rounded-full border border-gray-700">
+                    <span class="w-2 h-2 rounded-full bg-blue-500" id="status-dot"></span>
+                    <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider" id="status-text">Initialisation</span>
                 </div>
-                
-                <div class="flex items-center gap-4">
-                    <div id="status-badge" class="hidden md:flex items-center gap-2 bg-gray-900/80 px-3 py-1 rounded-full border border-gray-700">
-                        <span class="w-2 h-2 rounded-full bg-gray-500" id="status-dot"></span>
-                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider" id="status-text">En attente</span>
-                    </div>
-
-                    <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto">
-                        <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition whitespace-nowrap">🔎 Recherche</button>
-                        <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Portefeuille</button>
-                        <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Stratégie</button>
-                        <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Simulateur</button>
-                    </div>
+                <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700">
+                    <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition">Recherche</button>
+                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Portefeuille</button>
+                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Stratégie</button>
+                    <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Simulateur</button>
                 </div>
             </div>
         </div>
@@ -80,67 +67,51 @@
 
         <div id="home" class="tab-content active">
             <div class="text-center mb-12 w-full px-4">
-                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">
-                    Market Intelligence.
-                </h1>
-                <p class="text-gray-400 text-xl max-w-2xl mx-auto">
-                    Fondamentaux & Prix en temps réel.<br>
-                    <span class="text-sm opacity-60">Yahoo Finance™ Quote API</span>
-                </p>
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-6">Market Intelligence.</h1>
+                <p class="text-gray-400 text-xl">Séquençage Multi-API Yahoo Finance™.</p>
             </div>
-
             <div class="w-full max-w-3xl px-4 relative z-10">
                 <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
-                    <div class="pl-5 text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:ring-0 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: MC.PA, AAPL)..." onkeypress="if(event.key === 'Enter') searchTicker()">
-                    <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg shadow-blue-600/30">GO</button>
+                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
+                    <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">GO</button>
                 </div>
-                <div class="mt-8 flex flex-wrap justify-center gap-3 text-sm text-gray-500">
-                    <button onclick="fillSearch('AI.PA')" class="hover:text-blue-400 transition bg-gray-800/50 px-3 py-1 rounded-full border border-gray-700">Air Liquide</button>
-                    <button onclick="fillSearch('MC.PA')" class="hover:text-blue-400 transition bg-gray-800/50 px-3 py-1 rounded-full border border-gray-700">LVMH</button>
-                    <button onclick="fillSearch('RMS.PA')" class="hover:text-blue-400 transition bg-gray-800/50 px-3 py-1 rounded-full border border-gray-700">Hermès</button>
+                <div class="mt-8 flex justify-center gap-3 text-sm text-gray-500">
+                    <button onclick="fillSearch('AI.PA')" class="hover:text-blue-400 transition">Air Liquide</button>
+                    <button onclick="fillSearch('MC.PA')" class="hover:text-blue-400 transition">LVMH</button>
                 </div>
             </div>
-
             <div id="searchLoader" class="loader mt-10"></div>
-            
             <div id="resultCard" class="hidden mt-10 w-full max-w-4xl px-4">
                 <div class="bg-card/90 backdrop-blur border border-gray-700 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
-                    <div class="absolute -top-5 -right-5 p-8 opacity-5 font-black text-9xl text-white select-none pointer-events-none" id="bg-ticker">AI</div>
-                    <div class="relative z-10">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-700 pb-6 mb-6">
-                            <div><h2 class="text-3xl font-bold text-white tracking-tight" id="res-name">Nom</h2><div class="flex items-center gap-3 mt-2"><span class="bg-blue-900/30 text-blue-200 px-2 py-0.5 rounded text-sm font-mono border border-blue-500/30" id="res-symbol">TICKER</span><span class="text-gray-400 text-sm" id="res-exchange">Market</span></div></div>
-                            <div class="text-left md:text-right"><div class="text-5xl font-black text-white tracking-tighter" id="res-price">--</div><div class="text-xl font-bold mt-2 flex items-center md:justify-end gap-2" id="res-perf">-- %</div></div>
-                        </div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                            <div><div class="text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Clôture Préc.</div><div class="text-white font-mono text-lg" id="res-prev">--</div></div>
-                            <div><div class="text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Ouverture</div><div class="text-white font-mono text-lg" id="res-open">--</div></div>
-                            <div><div class="text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Range Jour</div><div class="text-white font-mono text-sm" id="res-range">--</div></div>
-                            <div><div class="text-gray-500 text-[10px] uppercase font-bold tracking-wider mb-1">Volume</div><div class="text-white font-mono text-lg" id="res-vol">--</div></div>
-                        </div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div><h2 class="text-3xl font-bold text-white" id="res-name">Nom</h2><div class="text-gray-400 text-sm" id="res-symbol">TICKER</div></div>
+                        <div class="text-right"><div class="text-5xl font-black text-white" id="res-price">--</div><div class="text-xl font-bold mt-2" id="res-perf">--</div></div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-4 text-center border-t border-gray-700 pt-4">
+                        <div><div class="text-xs text-gray-500 uppercase">Clôture</div><div id="res-prev" class="font-mono">--</div></div>
+                        <div><div class="text-xs text-gray-500 uppercase">Ouverture</div><div id="res-open" class="font-mono">--</div></div>
+                        <div><div class="text-xs text-gray-500 uppercase">Haut</div><div id="res-high" class="font-mono">--</div></div>
+                        <div><div class="text-xs text-gray-500 uppercase">Bas</div><div id="res-low" class="font-mono">--</div></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="dashboard" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div class="mb-8 flex justify-between items-end">
                 <div>
-                    <h1 class="text-3xl font-bold text-white tracking-tight">Portefeuille Global</h1>
+                    <h1 class="text-3xl font-bold text-white">Portefeuille Global</h1>
                     <p class="text-gray-400 mt-1 text-sm font-mono flex items-center gap-2">
-                        <span id="scan-progress" class="hidden text-blue-400 animate-pulse">Initialisation du scan...</span>
-                        <span id="last-update">En attente de connexion...</span>
+                        <span id="scan-progress" class="hidden text-blue-400 animate-pulse">Démarrage...</span>
+                        <span id="last-update">Données vierges.</span>
                     </p>
                 </div>
-                <div class="text-right">
-                    <div class="text-sm text-gray-400 uppercase tracking-wider">AUM Total</div>
-                    <div class="text-4xl font-extrabold text-white tracking-tight tabular-nums" id="totalVal">Calcul...</div>
-                </div>
+                <div class="text-right"><div class="text-sm text-gray-400 uppercase">AUM Total</div><div class="text-4xl font-extrabold text-white tabular-nums" id="totalVal">-- €</div></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                 <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Plus-Value</p><p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">--</p><span class="text-xs font-bold px-2 py-0.5 rounded bg-gray-800 mt-2 inline-block" id="totalPerf">-- %</span></div>
-                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Dividendes (Est.)</p><p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">--</p></div>
+                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Dividendes</p><p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">--</p></div>
                 <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">PER Moyen</p><p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p></div>
                 <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Top Perf</p><p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p><p class="text-xs text-green-400 font-bold" id="topStockPerf">--</p></div>
             </div>
@@ -181,17 +152,17 @@
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Le Bunker.</strong> Modèle unique : contrats de 15 ans indexés sur l'énergie. Visibilité parfaite. Leader de l'hydrogène décarboné. C'est l'action "Fond de portefeuille" par excellence.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Mégatendance Électrification.</strong> Vente de pelles et pioches pour l'IA (Data Centers) et la rénovation. Ne vend pas l'énergie, mais l'efficacité. Croissance structurelle.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Le Bunker.</strong> Modèle unique : contrats de 15 ans indexés sur l'énergie. Visibilité parfaite. Leader de l'hydrogène décarboné.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Mégatendance Électrification.</strong> Vente de pelles et pioches pour l'IA (Data Centers) et la rénovation. Ne vend pas l'énergie, mais l'efficacité.</p></div>
                 <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Cash Machine.</strong> Valorisation ridicule (PER < 8). Finance sa transition verte avec son pétrole low-cost. Le dividende (>5%) sécurise la performance globale.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-sky-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Duopole Mondial.</strong> Boeing est en crise, Airbus rafle tout. Carnet de commandes plein pour 10 ans. Barrières à l'entrée technologiques immenses.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-sky-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Duopole Mondial.</strong> Boeing est en crise, Airbus rafle tout. Carnet de commandes plein pour 10 ans.</p></div>
                 <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-400/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3><div class="text-xs text-gray-500">Construction</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Transformation Réussie.</strong> Leader mondial de la construction durable. Marges records. Joue la thématique de la rénovation thermique obligatoire en Europe.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Protection Inflation.</strong> Exposition aux mines (Cuivre, Fer) indispensables à la transition. Actifs réels qui s'apprécient quand la monnaie perd de sa valeur.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Protection Inflation.</strong> Exposition aux mines (Cuivre, Fer) indispensables à la transition. Actifs réels.</p></div>
             </div>
         </div>
 
         <div id="simulation" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection Patrimoniale</h1>
+            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection</h1>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="bg-card border border-gray-700 rounded-xl p-6 h-fit"><h3 class="font-bold text-white mb-6 uppercase text-sm">Paramètres</h3><div class="space-y-4"><div><label class="block text-xs font-medium text-gray-400 mb-1">Capital Initial</label><input type="number" id="sim-start" value="10000" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Mensuel</label><input type="number" id="sim-monthly" value="500" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Rendement %</label><input type="number" id="sim-rate" value="8" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Années</label><input type="number" id="sim-years" value="20" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div></div><button onclick="calculateSim()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition">Calculer</button></div>
                 <div class="lg:col-span-2 bg-card border border-gray-700 rounded-xl p-6 flex flex-col"><div class="text-center mb-6"><div class="text-sm text-gray-400 uppercase">Capital Final</div><div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mt-2" id="sim-result">-- €</div></div><div class="flex-1 relative min-h-[300px]"><canvas id="simChart"></canvas></div></div>
@@ -201,7 +172,7 @@
     </main>
 
     <script>
-        // --- 1. CONFIGURATION "A VIDE" ---
+        // --- 1. CONFIGURATION "CLEAN" (Tout à 0) ---
         let portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, per: 0, beta: 0 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, per: 0, beta: 0 },
@@ -211,7 +182,7 @@
             { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 0, per: 0, beta: 0 },
         ];
 
-        // --- 2. NAVIGATION ---
+        // --- 2. FONCTIONS NAVIGATION ---
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -224,70 +195,83 @@
             if(id==='simulation') calculateSim();
         }
 
-        // --- 3. FETCH INDIVIDUEL (QUOTE API - LE SECRET POUR AVOIR PER/BETA) ---
-        async function fetchOneTicker(ticker) {
+        // --- 3. FETCH PRICE (Fiable) ---
+        async function fetchPriceOnly(ticker) {
             const proxy = "https://corsproxy.io/?";
-            // Changement Crucial : "quote" au lieu de "chart" pour avoir les fondamentaux
+            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
+            try {
+                const res = await fetch(proxy + encodeURIComponent(url));
+                const json = await res.json();
+                return json.chart.result[0].meta.regularMarketPrice;
+            } catch (e) { return null; }
+        }
+
+        // --- 4. FETCH FUNDAMENTALS (Bonus) ---
+        async function fetchFundamentals(ticker) {
+            const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${Date.now()}`;
             try {
                 const res = await fetch(proxy + encodeURIComponent(url));
                 const json = await res.json();
                 const data = json.quoteResponse.result[0];
-                return {
-                    price: data.regularMarketPrice,
-                    per: data.trailingPE || 0,
-                    beta: data.beta || 0
-                };
+                return { per: data.trailingPE || 0, beta: data.beta || 0 };
             } catch (e) { return null; }
         }
 
-        // --- 4. UPDATE CASCADE (Live) ---
-        async function startLiveFeed() {
+        // --- 5. SEQUENCER ---
+        async function startSequences() {
             const dot = document.getElementById('status-dot');
             const txt = document.getElementById('status-text');
             const scanLabel = document.getElementById('scan-progress');
 
-            txt.innerText = "CONNEXION...";
+            // --- PHASE 1 : PRIX ---
+            txt.innerText = "PHASE 1 : PRIX";
             dot.classList.add('bg-blue-500', 'blink');
             scanLabel.classList.remove('hidden');
 
             for (let i = 0; i < portfolio.length; i++) {
                 const stock = portfolio[i];
-                scanLabel.innerText = `Scan : ${stock.tick}...`;
+                scanLabel.innerText = `Prix : ${stock.tick}...`;
                 
-                const data = await fetchOneTicker(stock.tick);
-                if (data && data.price) {
-                    stock.price = data.price;
-                    stock.per = data.per;
-                    stock.beta = data.beta;
-                    renderDashboard(i); // Update partiel (flash)
+                const price = await fetchPriceOnly(stock.tick);
+                if (price) {
+                    stock.price = price;
+                    renderDashboard(i);
                 }
-                
-                // Pause pour éviter le blocage
-                await new Promise(r => setTimeout(r, 1200));
+                await new Promise(r => setTimeout(r, 1200)); // Pause 1.2s
             }
 
-            // Fin du cycle
-            txt.innerText = "LIVE";
-            txt.className = "text-[10px] font-bold text-green-500 uppercase tracking-wider";
-            dot.classList.remove('bg-blue-500', 'blink'); dot.classList.add('bg-green-500');
-            document.getElementById('last-update').innerText = "Données mises à jour à l'instant.";
-            document.getElementById('last-update').className = "text-green-400 mt-1 text-sm font-mono animate-pulse";
-            scanLabel.classList.add('hidden');
+            // --- PHASE 2 : FONDAMENTAUX ---
+            txt.innerText = "PHASE 2 : INDICATEURS";
             
-            // Recalcul global final
-            renderDashboard(); 
+            for (let i = 0; i < portfolio.length; i++) {
+                const stock = portfolio[i];
+                scanLabel.innerText = `Data : ${stock.tick}...`;
+                
+                const fund = await fetchFundamentals(stock.tick);
+                if (fund) {
+                    stock.per = fund.per;
+                    stock.beta = fund.beta;
+                    renderDashboard(i);
+                }
+                await new Promise(r => setTimeout(r, 1500)); // Pause 1.5s (Plus lent pour Quote API)
+            }
+
+            // --- FIN ---
+            txt.innerText = "SYNC COMPLETE";
+            dot.classList.remove('bg-blue-500', 'blink'); dot.classList.add('bg-green-500');
+            scanLabel.classList.add('hidden');
+            document.getElementById('last-update').innerText = "Données Live synchronisées.";
+            document.getElementById('last-update').className = "text-green-400 mt-1 text-sm font-mono";
         }
 
-        // --- 5. RENDER (KPI + TABLE + CHART) ---
+        // --- 6. RENDER ---
         function renderDashboard(highlightIndex = -1) {
             let totalVal = 0, totalInvest = 0, totalDiv = 0;
             let totalPER = 0, countPER = 0;
             let topStock = { name: '-', perf: -999 };
             
             const tbody = document.getElementById('tableBody');
-            
-            // Si c'est le premier rendu, on vide
             if (highlightIndex === -1) tbody.innerHTML = '';
 
             const sectors = {};
@@ -296,7 +280,6 @@
                 const valo = stock.price * stock.q;
                 const invest = stock.pru * stock.q;
                 
-                // Calcul Perf (Attention division par zéro)
                 let perfPct = 0;
                 if(stock.pru > 0 && stock.price > 0) {
                     perfPct = ((stock.price - stock.pru) / stock.pru) * 100;
@@ -306,24 +289,19 @@
                 totalInvest += invest; 
                 totalDiv += valo * stock.div;
                 
-                // On ne compte le PER que s'il est > 0 (pas les ETF ou boites en perte)
                 if(stock.per > 0) { totalPER += stock.per; countPER++; }
-                
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
                 
                 sectors[stock.sec] = (sectors[stock.sec] || 0) + valo;
 
-                // Affichage conditionnel (loading ou valeur)
                 const displayPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '<span class="text-gray-600 animate-pulse">...</span>';
                 const displayValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
                 const displayPerf = stock.price > 0 ? (perfPct > 0 ? '+' : '') + perfPct.toFixed(2) + "%" : '-';
                 const colorPerf = perfPct >= 0 ? 'text-success' : 'text-danger';
                 
-                // Formatage PER / Beta
-                const displayPER = stock.per > 0 ? stock.per.toFixed(2) : '-';
-                const displayBeta = stock.beta > 0 ? stock.beta.toFixed(2) : '-';
+                const displayPER = stock.per > 0 ? stock.per.toFixed(2) : (stock.price > 0 ? '-' : '...'); // Affiche ... si pas encore fetché
+                const displayBeta = stock.beta > 0 ? stock.beta.toFixed(2) : (stock.price > 0 ? '-' : '...');
 
-                // Construction HTML Ligne
                 if (highlightIndex === -1) {
                     const row = `
                         <tr id="row-${index}" class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0 transition-colors duration-500">
@@ -337,14 +315,12 @@
                     tbody.innerHTML += row;
                 } 
                 else if (index === highlightIndex) {
-                    // Update flash
                     const row = document.getElementById(`row-${index}`);
                     row.classList.add('flash-update');
-                    setTimeout(() => row.classList.remove('flash-update'), 1000);
+                    setTimeout(() => row.classList.remove('flash-update'), 500);
                     
                     document.getElementById(`price-${index}`).innerHTML = displayPrice;
                     document.getElementById(`valo-${index}`).innerHTML = displayValo;
-                    
                     const pEl = document.getElementById(`perf-${index}`);
                     pEl.innerHTML = displayPerf;
                     pEl.className = `px-5 py-4 text-right font-mono font-bold ${colorPerf}`;
@@ -354,7 +330,6 @@
                 }
             });
 
-            // Update KPI Cards
             if(totalVal > 0) {
                 const globalPv = totalVal - totalInvest;
                 const globalPerf = totalInvest > 0 ? (globalPv / totalInvest) * 100 : 0;
@@ -373,33 +348,14 @@
                 document.getElementById('totalVal').innerText = "Chargement...";
             }
 
-            // Chart (Uniquement au chargement initial)
             if (highlightIndex === -1 && document.getElementById('sectorChart')) {
                 if(window.myChart) window.myChart.destroy();
-                // Données fictives pour le graph initial si tout est à 0
                 const initialData = [20, 15, 30, 10, 10, 15]; 
-                
-                window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { 
-                    type: 'doughnut', 
-                    data: { 
-                        labels: portfolio.map(s => s.sec), 
-                        datasets: [{ 
-                            data: initialData, 
-                            backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], 
-                            borderWidth: 0 
-                        }] 
-                    }, 
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, font: {size: 11}, padding: 15, usePointStyle:true } } }, 
-                        cutout: '70%' 
-                    } 
-                });
+                window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { type: 'doughnut', data: { labels: portfolio.map(s => s.sec), datasets: [{ data: initialData, backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, font: {size: 11}, padding: 15, usePointStyle:true } } }, cutout: '70%' } });
             }
         }
 
-        // --- 6. SEARCH (Mise à jour pour utiliser Quote API aussi si besoin, mais Chart est mieux pour le range) ---
+        // --- 7. SEARCH ---
         function fillSearch(t) { document.getElementById('mainTickerInput').value = t; searchTicker(); }
         async function searchTicker() {
             const t = document.getElementById('mainTickerInput').value.toUpperCase();
@@ -408,8 +364,6 @@
             card.classList.add('hidden');
             document.getElementById('searchLoader').style.display = 'block';
             
-            // Pour la recherche, on peut garder chart qui donne le range jour plus facilement
-            // Ou utiliser fetchOneTicker si on veut être cohérent. Gardons l'ancien search qui marchait bien.
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=1d&t=${Date.now()}`;
             
@@ -424,32 +378,26 @@
                     document.getElementById('res-name').innerText = t;
                     document.getElementById('res-symbol').innerText = "PRIX LIVE";
                     document.getElementById('res-price').innerText = price.toFixed(2) + " €";
-                    
-                    // Calcul perf jour
                     const perf = ((price - prev) / prev) * 100;
                     const pEl = document.getElementById('res-perf');
                     pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %";
                     pEl.className = perf>=0 ? "text-xl font-bold mt-2 text-green-400" : "text-xl font-bold mt-2 text-red-400";
-
                     document.getElementById('res-prev').innerText = prev.toFixed(2);
                     document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
-                    // Yahoo v8 chart donne parfois le range, sinon on met des tirets
                     document.getElementById('res-range').innerText = (meta.regularMarketDayLow || "-") + " - " + (meta.regularMarketDayHigh || "-");
                     document.getElementById('res-vol').innerText = meta.regularMarketVolume ? (meta.regularMarketVolume/1000).toFixed(0)+" K" : "-";
-
                     card.classList.remove('hidden');
                 } else { alert("Ticker introuvable"); }
             } catch(e) { alert("Ticker introuvable"); }
             finally { document.getElementById('searchLoader').style.display = 'none'; }
         }
 
-        // --- 7. SIMU ---
+        // --- 8. SIMU ---
         function calculateSim() { const start=parseFloat(document.getElementById('sim-start').value),monthly=parseFloat(document.getElementById('sim-monthly').value),rate=parseFloat(document.getElementById('sim-rate').value)/100,years=parseInt(document.getElementById('sim-years').value);let capital=start,totalInvested=start,labels=[],dataCapital=[],dataInvested=[];for(let i=0;i<=years;i++){labels.push("An "+i);dataCapital.push(capital);dataInvested.push(totalInvested);if(i<years){for(let m=0;m<12;m++){capital+=monthly;capital*=(1+rate/12);totalInvested+=monthly}}}const final=dataCapital[dataCapital.length-1];document.getElementById('sim-result').innerText=Math.round(final).toLocaleString()+" €";const ctx=document.getElementById('simChart').getContext('2d');if(window.simChart)window.simChart.destroy();window.simChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Patrimoine',data:dataCapital,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true},{label:'Investi',data:dataInvested,borderColor:'#64748b',borderDash:[5,5]}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{grid:{color:'#1e293b'}}}}});}
 
         // START
-        renderDashboard(); // Affiche les "..."
-        setTimeout(startLiveFeed, 1500); // Lance la cascade
-        setInterval(startLiveFeed, 120000); // Relance toutes les 2 min
+        renderDashboard(); // Affiche la structure (vide)
+        setTimeout(startSequences, 1000); // Lance la double séquence
     </script>
 </body>
 </html>
