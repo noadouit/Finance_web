@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | V35 Stable</title>
+    <title>Noa Capital | V36 Daily Var</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -36,8 +36,7 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         
-        /* Effet flash stable */
-        .flash-row { animation: highlight 0.8s ease-out; background-color: rgba(34, 197, 94, 0.1); }
+        .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
         @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
         .scanning-row { border-left: 3px solid #3b82f6; background-color: rgba(59,130,246,0.05); }
     </style>
@@ -71,11 +70,11 @@
         <div id="home" class="tab-content active">
             <div class="text-center mb-12 w-full px-4">
                 <h1 class="text-5xl md:text-7xl font-black text-white mb-6">Market Intelligence.</h1>
-                <p class="text-gray-400 text-xl">Flux Live & Analyse Fondamentale.</p>
+                <p class="text-gray-400 text-xl">Analyse Live & Fondamentaux.</p>
             </div>
             <div class="w-full max-w-3xl px-4 relative z-10">
                 <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
-                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA, LVMH)..." onkeypress="if(event.key === 'Enter') searchTicker()">
+                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
                     <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">GO</button>
                 </div>
                 <div class="mt-8 flex justify-center gap-3 text-sm text-gray-500">
@@ -128,8 +127,9 @@
                                 <tr>
                                     <th class="px-5 py-3">Société</th>
                                     <th class="px-5 py-3 text-right">Cours</th>
+                                    <th class="px-5 py-3 text-center">Var. J</th>
                                     <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
-                                    <th class="px-5 py-3 text-right">Perf</th>
+                                    <th class="px-5 py-3 text-right">Perf Globale</th>
                                     <th class="px-5 py-3 text-center text-blue-400">PER</th>
                                     <th class="px-5 py-3 text-center text-yellow-400">Bêta</th>
                                 </tr>
@@ -165,7 +165,7 @@
         </div>
 
         <div id="simulation" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection Patrimoniale</h1>
+            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection</h1>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="bg-card border border-gray-700 rounded-xl p-6 h-fit"><h3 class="font-bold text-white mb-6 uppercase text-sm">Paramètres</h3><div class="space-y-4"><div><label class="block text-xs font-medium text-gray-400 mb-1">Capital Initial</label><input type="number" id="sim-start" value="10000" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Mensuel</label><input type="number" id="sim-monthly" value="500" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Rendement %</label><input type="number" id="sim-rate" value="8" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Années</label><input type="number" id="sim-years" value="20" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div></div><button onclick="calculateSim()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition">Calculer</button></div>
                 <div class="lg:col-span-2 bg-card border border-gray-700 rounded-xl p-6 flex flex-col"><div class="text-center mb-6"><div class="text-sm text-gray-400 uppercase">Capital Final</div><div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mt-2" id="sim-result">-- €</div></div><div class="flex-1 relative min-h-[300px]"><canvas id="simChart"></canvas></div></div>
@@ -176,14 +176,13 @@
 
     <script>
         // --- 1. CONFIGURATION ---
-        // (Prix à 0 pour démarrer propre, EPS pour calculs)
         let portfolio = [
-            { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, eps: 5.90, beta: 0.8 },
-            { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, eps: 7.50, beta: 1.1 },
-            { tick: "TTE.PA", name: "TotalEnergies",      sec: "Energie",    q: 38, pru: 56.97,  div: 0.052, price: 0, eps: 8.00, beta: 0.6 },
-            { tick: "AIR.PA", name: "Airbus",             sec: "Aéro.",      q: 5,  pru: 212.46, div: 0.012, price: 0, eps: 4.90, beta: 1.2 },
-            { tick: "SGO.PA", name: "Saint-Gobain",       sec: "Construct.", q: 7,  pru: 88.15,  div: 0.026, price: 0, eps: 5.50, beta: 1.3 },
-            { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 0, eps: 0,    beta: 1.0 },
+            { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, prev: 0, eps: 5.90, beta: 0.8 },
+            { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, prev: 0, eps: 7.50, beta: 1.1 },
+            { tick: "TTE.PA", name: "TotalEnergies",      sec: "Energie",    q: 38, pru: 56.97,  div: 0.052, price: 0, prev: 0, eps: 8.00, beta: 0.6 },
+            { tick: "AIR.PA", name: "Airbus",             sec: "Aéro.",      q: 5,  pru: 212.46, div: 0.012, price: 0, prev: 0, eps: 4.90, beta: 1.2 },
+            { tick: "SGO.PA", name: "Saint-Gobain",       sec: "Construct.", q: 7,  pru: 88.15,  div: 0.026, price: 0, prev: 0, eps: 5.50, beta: 1.3 },
+            { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 0, prev: 0, eps: 0,    beta: 1.0 },
         ];
 
         // --- 2. NAV ---
@@ -199,20 +198,24 @@
             if(id==='simulation') calculateSim();
         }
 
-        // --- 3. MOTEUR ROBUSTE ---
+        // --- 3. MOTEUR ROBUSTE (Récupère Prix + Clôture Précédente) ---
         async function fetchPriceRobust(ticker) {
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
             
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s Timeout
+            const timeoutId = setTimeout(() => controller.abort(), 3500); 
 
             try {
                 const response = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
                 clearTimeout(timeoutId);
                 if (!response.ok) throw new Error("HTTP Error");
                 const json = await response.json();
-                return json.chart.result[0].meta.regularMarketPrice;
+                const meta = json.chart.result[0].meta;
+                return {
+                    price: meta.regularMarketPrice,
+                    prev: meta.chartPreviousClose
+                };
             } catch (e) { return null; }
         }
 
@@ -234,10 +237,11 @@
                 const row = document.getElementById(`row-${i}`);
                 if(row) row.classList.add('scanning-row');
 
-                const price = await fetchPriceRobust(stock.tick);
-                if (price) {
-                    stock.price = price;
-                    renderDashboard(i); // Update row specific
+                const data = await fetchPriceRobust(stock.tick);
+                if (data && data.price) {
+                    stock.price = data.price;
+                    stock.prev = data.prev;
+                    renderDashboard(i); 
                 }
                 
                 if(row) row.classList.remove('scanning-row');
@@ -251,10 +255,10 @@
             updateTxt.className = "text-green-400 mt-1 text-sm font-mono";
             label.classList.add('hidden');
             
-            renderDashboard(); // Update total
+            renderDashboard(); 
         }
 
-        // --- 5. RENDER (KPI + TOP PERF FIX) ---
+        // --- 5. RENDER (AVEC NOUVELLE COLONNE VAR JOUR) ---
         function renderDashboard(highlightIndex = -1) {
             let totalVal = 0, totalInvest = 0, totalDiv = 0, totalPER = 0, countPER = 0;
             let topStock = { name: '-', perf: -999 };
@@ -273,6 +277,12 @@
                     perfPct = ((stock.price - stock.pru) / stock.pru) * 100;
                 }
                 
+                // Calcul Variation Jour
+                let dayVarPct = 0;
+                if(stock.price > 0 && stock.prev > 0) {
+                    dayVarPct = ((stock.price - stock.prev) / stock.prev) * 100;
+                }
+                
                 let calculatedPER = 0;
                 if (stock.price > 0 && stock.eps > 0) calculatedPER = stock.price / stock.eps;
 
@@ -287,16 +297,23 @@
                 const displayValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
                 const displayPerf = stock.price > 0 ? (perfPct > 0 ? '+' : '') + perfPct.toFixed(2) + "%" : '-';
                 const colorPerf = perfPct >= 0 ? 'text-success' : 'text-danger';
+                
+                // Affichage Var Jour
+                const displayDayVar = stock.price > 0 ? (dayVarPct > 0 ? '+' : '') + dayVarPct.toFixed(2) + "%" : '-';
+                const colorDayVar = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
+
                 const displayPER = calculatedPER > 0 ? calculatedPER.toFixed(2) : '-';
                 const displayBeta = stock.price > 0 ? stock.beta.toFixed(2) : '-';
 
-                // Creation ligne
                 if (highlightIndex === -1) {
                     const row = `
                         <tr id="row-${index}" class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0 transition-colors duration-500">
                             <td class="px-5 py-4"><div class="font-bold text-white">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td>
                             <td class="px-5 py-4 text-right text-white font-mono" id="price-${index}">${displayPrice}</td>
-                            <td class="px-5 py-4 text-right font-bold text-gray-300" id="valo-${index}">${displayValo}</td>
+                            
+                            <td class="px-5 py-4 text-center font-mono font-bold ${colorDayVar}" id="day-${index}">${displayDayVar}</td>
+                            
+                            <td class="px-5 py-4 text-right font-bold text-gray-300 hidden sm:table-cell" id="valo-${index}">${displayValo}</td>
                             <td class="px-5 py-4 text-right ${colorPerf} font-mono font-bold" id="perf-${index}">${displayPerf}</td>
                             <td class="px-5 py-4 text-center text-blue-300 font-mono text-sm" id="per-${index}">${displayPER}</td>
                             <td class="px-5 py-4 text-center text-yellow-200 opacity-80 font-mono text-sm" id="beta-${index}">${displayBeta}</td>
@@ -305,14 +322,18 @@
                 } 
                 else if (index === highlightIndex) {
                     const row = document.getElementById(`row-${index}`);
-                    row.classList.add('flash-row');
-                    setTimeout(() => row.classList.remove('flash-row'), 800);
+                    row.classList.add('flash-update');
+                    setTimeout(() => row.classList.remove('flash-update'), 500);
                     
                     document.getElementById(`price-${index}`).innerHTML = displayPrice;
+                    document.getElementById(`day-${index}`).innerHTML = displayDayVar;
+                    document.getElementById(`day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${colorDayVar}`;
                     document.getElementById(`valo-${index}`).innerHTML = displayValo;
+                    
                     const pEl = document.getElementById(`perf-${index}`);
                     pEl.innerHTML = displayPerf;
                     pEl.className = `px-5 py-4 text-right font-mono font-bold ${colorPerf}`;
+                    
                     document.getElementById(`per-${index}`).innerHTML = displayPER;
                     document.getElementById(`beta-${index}`).innerHTML = displayBeta;
                 }
@@ -346,7 +367,7 @@
             }
         }
 
-        // --- 6. SEARCH (MOTEUR DÉDIÉ) ---
+        // --- 6. SEARCH ---
         function fillSearch(t) { document.getElementById('mainTickerInput').value = t; searchTicker(); }
         async function searchTicker() {
             const t = document.getElementById('mainTickerInput').value.toUpperCase();
@@ -355,7 +376,6 @@
             card.classList.add('hidden');
             document.getElementById('searchLoader').style.display = 'block';
             
-            // Pour le Search, on veut tout le JSON (Volume, Range...)
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=1d&t=${Date.now()}`;
             
@@ -391,7 +411,7 @@
             finally { document.getElementById('searchLoader').style.display = 'none'; }
         }
 
-        // --- 7. SIMU (FIX INIT) ---
+        // --- 7. SIMU ---
         let simChartInstance = null;
         function calculateSim() { 
             const start=parseFloat(document.getElementById('sim-start').value);
@@ -422,7 +442,7 @@
         }
 
         // START
-        calculateSim(); // Init Simu Graph
+        calculateSim(); // Init Graph Simu au démarrage
         renderDashboard(); // Structure vide
         setTimeout(startLiveFeed, 1000); // Lance le live
         setInterval(startLiveFeed, 120000); // Relance 2min
