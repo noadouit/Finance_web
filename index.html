@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | V37 Stratège</title>
+    <title>DOUIT Capital | V38 Watchtower</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -55,11 +55,12 @@
                     <span class="w-2 h-2 rounded-full bg-blue-500" id="status-dot"></span>
                     <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider" id="status-text">Prêt</span>
                 </div>
-                <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700">
-                    <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition">Recherche</button>
-                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Portefeuille</button>
-                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Stratégie</button>
-                    <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition">Simulateur</button>
+                <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto">
+                    <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition whitespace-nowrap">🔎 Recherche</button>
+                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Portefeuille</button>
+                    <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Surveillance</button>
+                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Stratégie</button>
+                    <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Simulateur</button>
                 </div>
             </div>
         </div>
@@ -129,9 +130,8 @@
                                     <th class="px-5 py-3 text-right">Cours</th>
                                     <th class="px-5 py-3 text-center">Var. J</th>
                                     <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
-                                    <th class="px-5 py-3 text-right">Perf Globale</th>
+                                    <th class="px-5 py-3 text-right">Perf</th>
                                     <th class="px-5 py-3 text-center text-blue-400">PER</th>
-                                    <th class="px-5 py-3 text-center text-yellow-400">Bêta</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-700/50" id="tableBody"></tbody>
@@ -145,37 +145,48 @@
             </div>
         </div>
 
-        <div id="convictions" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Thèse d'Investissement</h1><p class="text-gray-400 mt-2">Philosophie : <b>Croissance Ricardienne</b> & Retour du Réel.</p></div>
+        <div id="watchlist" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-white tracking-tight">Liste de Surveillance</h1>
+                <p class="text-gray-400 mt-2">Cibles potentielles : Japon & Marchés Émergents (Attente signal devise).</p>
+            </div>
             
-            <div class="bg-gradient-to-br from-gray-900 to-card border-l-4 border-blue-500 rounded-r-xl p-8 mb-8 shadow-2xl">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="text-2xl">🌍</span>
-                    <h2 class="text-2xl font-bold text-white">Allocation Tactique & Convictions</h2>
+            <div class="bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30 flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-white uppercase">Watchlist</h3>
+                    <span id="wl-scan-status" class="text-xs text-blue-400 font-mono hidden">Scan...</span>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-gold font-bold uppercase text-sm mb-2 tracking-wide">Conviction Principale</h3>
-                        <p class="text-gray-300 leading-relaxed text-sm text-justify">
-                            Notre thèse centrale repose sur les <strong>Matières Premières</strong> (Super-cycle). C'est le pilier du portefeuille : seul actif offrant une protection réelle contre l'inflation structurelle et bénéficiant des pénuries d'offre à venir.
-                        </p>
-                    </div>
-                    <div>
-                        <h3 class="text-blue-400 font-bold uppercase text-sm mb-2 tracking-wide">Watchlist (En Observation)</h3>
-                        <p class="text-gray-300 leading-relaxed text-sm text-justify">
-                            Nous surveillons activement le <strong>Japon et les Marchés Émergents</strong>. Nous restons patients et attendons une <strong>reprise technique de leur monnaie</strong> (stabilisation du Yen et du Forex) avant de déployer du capital sur ces zones.
-                        </p>
-                    </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-400">
+                        <thead class="bg-gray-900/50 uppercase text-xs text-gray-500">
+                            <tr>
+                                <th class="px-5 py-3">Actif</th>
+                                <th class="px-5 py-3">Thèse / Objectif</th>
+                                <th class="px-5 py-3 text-right">Cours Live</th>
+                                <th class="px-5 py-3 text-center">Var. J</th>
+                                <th class="px-5 py-3 text-right text-yellow-400">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700/50" id="watchlistBody">
+                            </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
+        <div id="convictions" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+            <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Thèse d'Investissement</h1><p class="text-gray-400 mt-2">Philosophie : <b>Croissance Ricardienne</b> & Retour du Réel.</p></div>
+            <div class="bg-gradient-to-br from-gray-900 to-card border-l-4 border-blue-500 rounded-r-xl p-8 mb-8 shadow-2xl">
+                <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🌍</span><h2 class="text-2xl font-bold text-white">Allocation Tactique</h2></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div><h3 class="text-gold font-bold uppercase text-sm mb-2 tracking-wide">Conviction Principale</h3><p class="text-gray-300 leading-relaxed text-sm text-justify">Notre thèse centrale repose sur les <strong>Matières Premières</strong> (Super-cycle). C'est le pilier du portefeuille : seul actif offrant une protection réelle contre l'inflation structurelle.</p></div>
+                    <div><h3 class="text-blue-400 font-bold uppercase text-sm mb-2 tracking-wide">Watchlist (En Observation)</h3><p class="text-gray-300 leading-relaxed text-sm text-justify">Nous surveillons activement le <strong>Japon et les Marchés Émergents</strong>. Nous restons patients et attendons une <strong>reprise technique de leur monnaie</strong> avant de déployer du capital.</p></div>
+                </div>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Conviction N°1.</strong> Exposition aux mines (Cuivre, Fer) indispensables. Le seul actif "vert" du portefeuille actuellement.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Le Bunker.</strong> Modèle unique : contrats de 15 ans indexés sur l'énergie. Visibilité parfaite. Leader de l'hydrogène décarboné.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Mégatendance Électrification.</strong> Vente de pelles et pioches pour l'IA (Data Centers) et la rénovation. Ne vend pas l'énergie, mais l'efficacité.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Cash Machine.</strong> Valorisation ridicule (PER < 8). Finance sa transition verte avec son pétrole low-cost. Le dividende (>5%) sécurise la performance.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-sky-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Duopole Mondial.</strong> Boeing est en crise, Airbus rafle tout. Carnet de commandes plein pour 10 ans.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gray-400/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3><div class="text-xs text-gray-500">Construction</div></div></div></div><p class="text-sm text-gray-300 leading-relaxed"><strong class="text-white">Transformation Réussie.</strong> Leader mondial de la construction durable. Marges records. Joue la thématique de la rénovation thermique.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300">Conviction N°1. Exposition aux mines (Cuivre, Fer).</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300">Le Bunker. Visibilité parfaite et contrats long terme.</p></div>
+                <div class="bg-card border border-gray-700 rounded-xl p-6 group"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300">Cash Machine. Rendement > 5%.</p></div>
             </div>
         </div>
 
@@ -190,7 +201,7 @@
     </main>
 
     <script>
-        // --- 1. CONFIGURATION ---
+        // --- DATA PORTFOLIO ---
         let portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, prev: 0, eps: 5.90, beta: 0.8 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, prev: 0, eps: 7.50, beta: 1.1 },
@@ -200,55 +211,61 @@
             { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 0, prev: 0, eps: 0,    beta: 1.0 },
         ];
 
-        // --- 2. NAV ---
+        // --- DATA WATCHLIST ---
+        let watchlist = [
+            { tick: "CJ1.PA", name: "Amundi MSCI Japan", thesis: "Attente rebond Yen", price: 0, prev: 0 },
+            { tick: "AEEM.PA", name: "Amundi MSCI Emerging", thesis: "Attente point bas cycle", price: 0, prev: 0 },
+            { tick: "EURJPY=X", name: "Forex EUR/JPY", thesis: "Surveillance volatilité", price: 0, prev: 0 }
+        ];
+
+        // --- NAV ---
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            ['home','dashboard','convictions','simulation'].forEach(b=>{
+            ['home','dashboard','watchlist','convictions','simulation'].forEach(b=>{
                 const el=document.getElementById('btn-'+b);
                 if(b===id){el.classList.add('bg-blue-600','text-white');el.classList.remove('text-gray-400','bg-transparent')}
                 else{el.classList.remove('bg-blue-600','text-white');el.classList.add('text-gray-400','bg-transparent')}
             });
+            
+            // Logic Trigger
             if(id!=='home') document.getElementById('resultCard').classList.add('hidden');
             if(id==='simulation') calculateSim();
+            if(id==='watchlist') setTimeout(startWatchlistFeed, 500); // Lance le scan Watchlist
         }
 
-        // --- 3. MOTEUR ROBUSTE (Récupère Prix + Clôture Précédente) ---
+        // --- FETCH ENGINE ---
         async function fetchPriceRobust(ticker) {
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
-            
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3500); 
-
             try {
                 const response = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
                 clearTimeout(timeoutId);
                 if (!response.ok) throw new Error("HTTP Error");
                 const json = await response.json();
-                const meta = json.chart.result[0].meta;
                 return {
-                    price: meta.regularMarketPrice,
-                    prev: meta.chartPreviousClose
+                    price: json.chart.result[0].meta.regularMarketPrice,
+                    prev: json.chart.result[0].meta.chartPreviousClose
                 };
             } catch (e) { return null; }
         }
 
-        // --- 4. BOUCLE FEEDBACK ---
+        // --- LIVE FEED PORTFOLIO ---
         async function startLiveFeed() {
             const dot = document.getElementById('status-dot');
             const txt = document.getElementById('status-text');
             const label = document.getElementById('scan-progress');
             const updateTxt = document.getElementById('last-update');
 
-            txt.innerText = "CONNEXION...";
+            txt.innerText = "SCAN...";
             dot.classList.add('bg-blue-500', 'blink');
             label.classList.remove('hidden');
-            updateTxt.innerText = "Démarrage du scan...";
 
             for (let i = 0; i < portfolio.length; i++) {
                 const stock = portfolio[i];
-                updateTxt.innerText = `Mise à jour : ${i+1} / ${portfolio.length} (${stock.tick})`;
+                updateTxt.innerText = `Scan : ${stock.tick}`;
                 const row = document.getElementById(`row-${i}`);
                 if(row) row.classList.add('scanning-row');
 
@@ -258,123 +275,101 @@
                     stock.prev = data.prev;
                     renderDashboard(i); 
                 }
-                
                 if(row) row.classList.remove('scanning-row');
                 await new Promise(r => setTimeout(r, 1000));
             }
 
             txt.innerText = "LIVE";
-            txt.className = "text-[10px] font-bold text-green-500 uppercase tracking-wider";
             dot.classList.remove('bg-blue-500', 'blink'); dot.classList.add('bg-green-500');
-            updateTxt.innerText = "Synchronisation terminée.";
+            updateTxt.innerText = "Mise à jour OK.";
             updateTxt.className = "text-green-400 mt-1 text-sm font-mono";
             label.classList.add('hidden');
-            
             renderDashboard(); 
         }
 
-        // --- 5. RENDER (AVEC NOUVELLE COLONNE VAR JOUR) ---
+        // --- LIVE FEED WATCHLIST ---
+        async function startWatchlistFeed() {
+            const status = document.getElementById('wl-scan-status');
+            status.classList.remove('hidden');
+            renderWatchlist(); // Init table
+
+            for (let i = 0; i < watchlist.length; i++) {
+                const item = watchlist[i];
+                status.innerText = `Scan: ${item.tick}...`;
+                
+                const data = await fetchPriceRobust(item.tick);
+                if (data && data.price) {
+                    item.price = data.price;
+                    item.prev = data.prev;
+                    renderWatchlist(i); // Update row
+                }
+                await new Promise(r => setTimeout(r, 800));
+            }
+            status.innerText = "Scan terminé";
+            setTimeout(() => status.classList.add('hidden'), 2000);
+        }
+
+        // --- RENDER DASHBOARD ---
         function renderDashboard(highlightIndex = -1) {
             let totalVal = 0, totalInvest = 0, totalDiv = 0, totalPER = 0, countPER = 0;
             let topStock = { name: '-', perf: -999 };
-            
             const tbody = document.getElementById('tableBody');
             if (highlightIndex === -1) tbody.innerHTML = '';
-
-            const sectors = {};
 
             portfolio.forEach((stock, index) => {
                 const valo = stock.price * stock.q;
                 const invest = stock.pru * stock.q;
-                
-                let perfPct = 0;
-                if(stock.pru > 0 && stock.price > 0) {
-                    perfPct = ((stock.price - stock.pru) / stock.pru) * 100;
-                }
-                
-                // Calcul Variation Jour
-                let dayVarPct = 0;
-                if(stock.price > 0 && stock.prev > 0) {
-                    dayVarPct = ((stock.price - stock.prev) / stock.prev) * 100;
-                }
-                
-                let calculatedPER = 0;
-                if (stock.price > 0 && stock.eps > 0) calculatedPER = stock.price / stock.eps;
+                let perfPct = stock.pru > 0 && stock.price > 0 ? ((stock.price - stock.pru) / stock.pru) * 100 : 0;
+                let dayVarPct = stock.price > 0 && stock.prev > 0 ? ((stock.price - stock.prev) / stock.prev) * 100 : 0;
+                let calculatedPER = (stock.price > 0 && stock.eps > 0) ? stock.price / stock.eps : 0;
 
                 totalVal += valo; totalInvest += invest; totalDiv += valo * stock.div;
-                
                 if(calculatedPER > 0) { totalPER += calculatedPER; countPER++; }
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
                 
-                sectors[stock.sec] = (sectors[stock.sec] || 0) + valo;
-
-                const displayPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '<span class="text-gray-500 animate-pulse">...</span>';
-                const displayValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
-                const displayPerf = stock.price > 0 ? (perfPct > 0 ? '+' : '') + perfPct.toFixed(2) + "%" : '-';
-                const colorPerf = perfPct >= 0 ? 'text-success' : 'text-danger';
-                
-                // Affichage Var Jour
-                const displayDayVar = stock.price > 0 ? (dayVarPct > 0 ? '+' : '') + dayVarPct.toFixed(2) + "%" : '-';
-                const colorDayVar = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
-
-                const displayPER = calculatedPER > 0 ? calculatedPER.toFixed(2) : '-';
-                const displayBeta = stock.price > 0 ? stock.beta.toFixed(2) : '-';
+                // Formats
+                const dPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '<span class="text-gray-500 animate-pulse">...</span>';
+                const dValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
+                const dPerf = stock.price > 0 ? (perfPct > 0 ? '+' : '') + perfPct.toFixed(2) + "%" : '-';
+                const cPerf = perfPct >= 0 ? 'text-success' : 'text-danger';
+                const dDay = stock.price > 0 ? (dayVarPct > 0 ? '+' : '') + dayVarPct.toFixed(2) + "%" : '-';
+                const cDay = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
+                const dPER = calculatedPER > 0 ? calculatedPER.toFixed(2) : '-';
 
                 if (highlightIndex === -1) {
                     const row = `
                         <tr id="row-${index}" class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0 transition-colors duration-500">
                             <td class="px-5 py-4"><div class="font-bold text-white">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td>
-                            <td class="px-5 py-4 text-right text-white font-mono" id="price-${index}">${displayPrice}</td>
-                            
-                            <td class="px-5 py-4 text-center font-mono font-bold ${colorDayVar}" id="day-${index}">${displayDayVar}</td>
-                            
-                            <td class="px-5 py-4 text-right font-bold text-gray-300 hidden sm:table-cell" id="valo-${index}">${displayValo}</td>
-                            <td class="px-5 py-4 text-right ${colorPerf} font-mono font-bold" id="perf-${index}">${displayPerf}</td>
-                            <td class="px-5 py-4 text-center text-blue-300 font-mono text-sm" id="per-${index}">${displayPER}</td>
-                            <td class="px-5 py-4 text-center text-yellow-200 opacity-80 font-mono text-sm" id="beta-${index}">${displayBeta}</td>
+                            <td class="px-5 py-4 text-right text-white font-mono" id="price-${index}">${dPrice}</td>
+                            <td class="px-5 py-4 text-center font-mono font-bold ${cDay}" id="day-${index}">${dDay}</td>
+                            <td class="px-5 py-4 text-right font-bold text-gray-300 hidden sm:table-cell" id="valo-${index}">${dValo}</td>
+                            <td class="px-5 py-4 text-right ${cPerf} font-mono font-bold" id="perf-${index}">${dPerf}</td>
+                            <td class="px-5 py-4 text-center text-blue-300 font-mono text-sm" id="per-${index}">${dPER}</td>
                         </tr>`;
                     tbody.innerHTML += row;
-                } 
-                else if (index === highlightIndex) {
+                } else if (index === highlightIndex) {
                     const row = document.getElementById(`row-${index}`);
-                    row.classList.add('flash-update');
-                    setTimeout(() => row.classList.remove('flash-update'), 500);
-                    
-                    document.getElementById(`price-${index}`).innerHTML = displayPrice;
-                    document.getElementById(`day-${index}`).innerHTML = displayDayVar;
-                    document.getElementById(`day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${colorDayVar}`;
-                    document.getElementById(`valo-${index}`).innerHTML = displayValo;
-                    
-                    const pEl = document.getElementById(`perf-${index}`);
-                    pEl.innerHTML = displayPerf;
-                    pEl.className = `px-5 py-4 text-right font-mono font-bold ${colorPerf}`;
-                    
-                    document.getElementById(`per-${index}`).innerHTML = displayPER;
-                    document.getElementById(`beta-${index}`).innerHTML = displayBeta;
+                    row.classList.add('flash-update'); setTimeout(() => row.classList.remove('flash-update'), 500);
+                    document.getElementById(`price-${index}`).innerHTML = dPrice;
+                    document.getElementById(`day-${index}`).innerHTML = dDay; document.getElementById(`day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
+                    document.getElementById(`valo-${index}`).innerHTML = dValo;
+                    document.getElementById(`perf-${index}`).innerHTML = dPerf; document.getElementById(`perf-${index}`).className = `px-5 py-4 text-right font-mono font-bold ${cPerf}`;
+                    document.getElementById(`per-${index}`).innerHTML = dPER;
                 }
             });
 
             if(totalVal > 0) {
                 const globalPv = totalVal - totalInvest;
                 const globalPerf = totalInvest > 0 ? (globalPv / totalInvest) * 100 : 0;
-                const avgPER = countPER > 0 ? (totalPER / countPER).toFixed(1) : "-";
-
                 document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
                 document.getElementById('totalPv').innerText = (globalPv > 0 ? '+' : '') + Math.round(globalPv).toLocaleString() + " €";
-                document.getElementById('totalPv').className = `mt-1 text-2xl font-bold tabular-nums ${globalPv >= 0 ? 'text-success' : 'text-danger'}`;
                 document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
-                document.getElementById('avgPER').innerText = avgPER;
-                
+                document.getElementById('avgPER').innerText = countPER > 0 ? (totalPER/countPER).toFixed(1) : "-";
                 document.getElementById('topStock').innerText = topStock.name;
                 const topPerfEl = document.getElementById('topStockPerf');
-                if(topStock.perf > -999) {
-                    topPerfEl.innerText = "+" + topStock.perf.toFixed(2) + " %";
-                    topPerfEl.className = "text-xs font-bold text-green-400 mt-1";
-                }
-            } else {
-                document.getElementById('totalVal').innerText = "Chargement...";
+                if(topStock.perf > -999) { topPerfEl.innerText = "+" + topStock.perf.toFixed(2) + " %"; topPerfEl.className = "text-xs font-bold text-green-400 mt-1"; }
             }
-
+            
             if (highlightIndex === -1 && document.getElementById('sectorChart')) {
                 if(window.myChart) window.myChart.destroy();
                 const initialData = [20, 15, 30, 10, 10, 15]; 
@@ -382,7 +377,39 @@
             }
         }
 
-        // --- 6. SEARCH ---
+        // --- RENDER WATCHLIST ---
+        function renderWatchlist(highlightIndex = -1) {
+            const tbody = document.getElementById('watchlistBody');
+            if (highlightIndex === -1) tbody.innerHTML = '';
+
+            watchlist.forEach((item, index) => {
+                let dayVarPct = item.price > 0 && item.prev > 0 ? ((item.price - item.prev) / item.prev) * 100 : 0;
+                
+                const dPrice = item.price > 0 ? item.price.toFixed(2) : '<span class="animate-pulse">...</span>';
+                const dDay = item.price > 0 ? (dayVarPct > 0 ? '+' : '') + dayVarPct.toFixed(2) + "%" : '-';
+                const cDay = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
+
+                if (highlightIndex === -1) {
+                    const row = `
+                        <tr id="wl-row-${index}" class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0">
+                            <td class="px-5 py-4"><div class="font-bold text-white">${item.name}</div><div class="text-[10px] text-gray-500">${item.tick}</div></td>
+                            <td class="px-5 py-4 text-xs text-blue-300">${item.thesis}</td>
+                            <td class="px-5 py-4 text-right text-white font-mono" id="wl-price-${index}">${dPrice}</td>
+                            <td class="px-5 py-4 text-center font-mono font-bold ${cDay}" id="wl-day-${index}">${dDay}</td>
+                            <td class="px-5 py-4 text-right"><span class="bg-yellow-900/30 text-yellow-400 px-2 py-1 rounded text-[10px] uppercase font-bold border border-yellow-700/50">En Attente</span></td>
+                        </tr>`;
+                    tbody.innerHTML += row;
+                } else if (index === highlightIndex) {
+                    const row = document.getElementById(`wl-row-${index}`);
+                    row.classList.add('flash-update'); setTimeout(() => row.classList.remove('flash-update'), 500);
+                    document.getElementById(`wl-price-${index}`).innerText = dPrice;
+                    document.getElementById(`wl-day-${index}`).innerText = dDay;
+                    document.getElementById(`wl-day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
+                }
+            });
+        }
+
+        // --- SEARCH ---
         function fillSearch(t) { document.getElementById('mainTickerInput').value = t; searchTicker(); }
         async function searchTicker() {
             const t = document.getElementById('mainTickerInput').value.toUpperCase();
@@ -390,77 +417,48 @@
             const card = document.getElementById('resultCard');
             card.classList.add('hidden');
             document.getElementById('searchLoader').style.display = 'block';
-            
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=1d&t=${Date.now()}`;
-            
             try {
                 const res = await fetch(proxy + encodeURIComponent(url));
                 const json = await res.json();
                 const meta = json.chart.result[0].meta;
                 const price = meta.regularMarketPrice;
                 const prev = meta.chartPreviousClose;
-                
                 if(price) {
-                    document.getElementById('res-name').innerText = t;
-                    document.getElementById('res-symbol').innerText = "PRIX LIVE";
+                    document.getElementById('res-name').innerText = t; document.getElementById('res-symbol').innerText = "PRIX LIVE";
                     document.getElementById('res-price').innerText = price.toFixed(2) + " €";
-                    
                     const perf = ((price - prev) / prev) * 100;
-                    const pEl = document.getElementById('res-perf');
-                    pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %";
-                    pEl.className = perf>=0 ? "text-xl font-bold mt-2 text-green-400" : "text-xl font-bold mt-2 text-red-400";
-
+                    const pEl = document.getElementById('res-perf'); pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %"; pEl.className = perf>=0 ? "text-xl font-bold mt-2 text-green-400" : "text-xl font-bold mt-2 text-red-400";
                     document.getElementById('res-prev').innerText = prev.toFixed(2);
                     document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
                     document.getElementById('res-range').innerText = (meta.regularMarketDayLow || "-") + " - " + (meta.regularMarketDayHigh || "-");
-                    
-                    let vol = meta.regularMarketVolume || 0;
-                    if(vol > 1000000) vol = (vol/1000000).toFixed(1) + "M";
-                    else if(vol > 1000) vol = (vol/1000).toFixed(1) + "K";
-                    document.getElementById('res-vol').innerText = vol;
-
+                    let vol = meta.regularMarketVolume || 0; document.getElementById('res-vol').innerText = vol > 1000000 ? (vol/1000000).toFixed(1) + "M" : (vol/1000).toFixed(1) + "K";
                     card.classList.remove('hidden');
                 } else { alert("Ticker introuvable"); }
             } catch(e) { alert("Erreur Recherche"); }
             finally { document.getElementById('searchLoader').style.display = 'none'; }
         }
 
-        // --- 7. SIMU ---
+        // --- SIMU ---
         let simChartInstance = null;
         function calculateSim() { 
-            const start=parseFloat(document.getElementById('sim-start').value);
-            const monthly=parseFloat(document.getElementById('sim-monthly').value);
-            const rate=parseFloat(document.getElementById('sim-rate').value)/100;
-            const years=parseInt(document.getElementById('sim-years').value);
-            let capital=start,totalInvested=start,labels=[],dataCapital=[],dataInvested=[];
-            
+            const start=parseFloat(document.getElementById('sim-start').value), monthly=parseFloat(document.getElementById('sim-monthly').value), rate=parseFloat(document.getElementById('sim-rate').value)/100, years=parseInt(document.getElementById('sim-years').value);
+            let capital=start, totalInvested=start, labels=[], dataCapital=[], dataInvested=[];
             for(let i=0;i<=years;i++){
-                labels.push("An "+i);
-                dataCapital.push(capital);
-                dataInvested.push(totalInvested);
-                if(i<years){
-                    for(let m=0;m<12;m++){
-                        capital+=monthly;
-                        capital*=(1+rate/12);
-                        totalInvested+=monthly;
-                    }
-                }
+                labels.push("An "+i); dataCapital.push(capital); dataInvested.push(totalInvested);
+                if(i<years){ for(let m=0;m<12;m++){ capital+=monthly; capital*=(1+rate/12); totalInvested+=monthly; } }
             }
-            
-            const final=dataCapital[dataCapital.length-1];
-            document.getElementById('sim-result').innerText=Math.round(final).toLocaleString()+" €";
-            
+            document.getElementById('sim-result').innerText=Math.round(dataCapital[dataCapital.length-1]).toLocaleString()+" €";
             const ctx=document.getElementById('simChart').getContext('2d');
             if(simChartInstance) simChartInstance.destroy();
             simChartInstance = new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Patrimoine',data:dataCapital,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true,tension:0.4},{label:'Investi',data:dataInvested,borderColor:'#64748b',borderDash:[5,5],tension:0.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{grid:{color:'#1e293b'}}},plugins:{legend:{labels:{color:'#94a3b8'}}}}});
         }
 
-        // START
-        calculateSim(); // Init Graph Simu au démarrage
-        renderDashboard(); // Structure vide
-        setTimeout(startLiveFeed, 1000); // Lance le live
-        setInterval(startLiveFeed, 120000); // Relance 2min
+        calculateSim();
+        renderDashboard();
+        setTimeout(startLiveFeed, 1000);
+        setInterval(startLiveFeed, 120000);
     </script>
 </body>
 </html>
