@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | Unstoppable V31</title>
+    <title>Noa Capital | V32 Feedback</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -36,9 +36,10 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         
-        .flash-update { animation: highlight 1s ease-out; background-color: rgba(34, 197, 94, 0.1); }
+        .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
         @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
         
+        /* Barre de progression ligne active */
         .scanning-row { border-left: 3px solid #3b82f6; background-color: rgba(59,130,246,0.05); }
     </style>
 </head>
@@ -53,8 +54,8 @@
             </div>
             <div class="flex items-center gap-4">
                 <div id="status-badge" class="hidden md:flex items-center gap-2 bg-gray-900/80 px-3 py-1 rounded-full border border-gray-700">
-                    <span class="w-2 h-2 rounded-full bg-blue-500" id="status-dot"></span>
-                    <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider" id="status-text">Standby</span>
+                    <span class="w-2 h-2 rounded-full bg-gray-500" id="status-dot"></span>
+                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider" id="status-text">Prêt</span>
                 </div>
                 <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700">
                     <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition">Recherche</button>
@@ -71,11 +72,11 @@
         <div id="home" class="tab-content active">
             <div class="text-center mb-12 w-full px-4">
                 <h1 class="text-5xl md:text-7xl font-black text-white mb-6">Market Intelligence.</h1>
-                <p class="text-gray-400 text-xl">Flux Sécurisé (Timeout Protection).</p>
+                <p class="text-gray-400 text-xl">Moteur Live + Calculs en temps réel.</p>
             </div>
             <div class="w-full max-w-3xl px-4 relative z-10">
                 <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
-                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA, MC.PA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
+                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
                     <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">GO</button>
                 </div>
                 <div class="mt-8 flex justify-center gap-3 text-sm text-gray-500">
@@ -105,8 +106,8 @@
                 <div>
                     <h1 class="text-3xl font-bold text-white">Portefeuille Global</h1>
                     <p class="text-gray-400 mt-1 text-sm font-mono flex items-center gap-2">
-                        <span id="scan-progress" class="hidden text-blue-400 animate-pulse">Initialisation...</span>
-                        <span id="last-update">En attente.</span>
+                        <span id="scan-progress" class="hidden text-blue-400 font-bold">...</span>
+                        <span id="last-update">En attente de connexion...</span>
                     </p>
                 </div>
                 <div class="text-right"><div class="text-sm text-gray-400 uppercase">AUM Total</div><div class="text-4xl font-extrabold text-white tabular-nums" id="totalVal">-- €</div></div>
@@ -175,7 +176,7 @@
     </main>
 
     <script>
-        // --- CONFIGURATION ---
+        // --- 1. CONFIGURATION (EPS pour calcul PER + Beta Fixe) ---
         let portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, eps: 5.90, beta: 0.8 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, eps: 7.50, beta: 1.1 },
@@ -185,7 +186,7 @@
             { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 0, eps: 0,    beta: 1.0 },
         ];
 
-        // --- NAVIGATION ---
+        // --- 2. FONCTIONS DE NAVIGATION ---
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -198,41 +199,40 @@
             if(id==='simulation') calculateSim();
         }
 
-        // --- MOTEUR ROBUSTE AVEC TIMEOUT ---
+        // --- 3. FETCH PRIX SEUL (L'API qui marche) ---
         async function fetchPriceRobust(ticker) {
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
             
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5 secondes max
+            const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s Timeout
 
             try {
                 const response = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
-                clearTimeout(timeoutId); // Annule le kill si réussi
-                
+                clearTimeout(timeoutId);
                 if (!response.ok) throw new Error("HTTP Error");
                 const json = await response.json();
                 return json.chart.result[0].meta.regularMarketPrice;
-            } catch (e) {
-                return null; // En cas d'erreur ou timeout, on renvoie null pour passer à la suite
-            }
+            } catch (e) { return null; }
         }
 
-        // --- BOUCLE INCREVABLE ---
+        // --- 4. BOUCLE DE FEEDBACK ---
         async function startLiveFeed() {
             const dot = document.getElementById('status-dot');
             const txt = document.getElementById('status-text');
-            const scanLabel = document.getElementById('scan-progress');
+            const label = document.getElementById('scan-progress');
+            const updateTxt = document.getElementById('last-update');
 
             txt.innerText = "CONNEXION...";
             dot.classList.add('bg-blue-500', 'blink');
-            scanLabel.classList.remove('hidden');
+            label.classList.remove('hidden');
+            updateTxt.innerText = "Démarrage du scan...";
 
             for (let i = 0; i < portfolio.length; i++) {
                 const stock = portfolio[i];
-                scanLabel.innerText = `Scan : ${stock.tick}...`;
                 
-                // Highlight row
+                // Feedback Visuel Immédiat
+                updateTxt.innerText = `Mise à jour : ${i+1} / ${portfolio.length} (${stock.tick})`;
                 const row = document.getElementById(`row-${i}`);
                 if(row) row.classList.add('scanning-row');
 
@@ -240,29 +240,27 @@
                 
                 if (price) {
                     stock.price = price;
-                    renderDashboard(i); // Update partiel
-                } else {
-                    console.log(`Echec sur ${stock.tick}, passage au suivant.`);
+                    renderDashboard(i); // Mise à jour de la ligne (avec Calcul PER)
                 }
                 
                 if(row) row.classList.remove('scanning-row');
                 
-                // Pause de 2 secondes pour laisser respirer le proxy
-                await new Promise(r => setTimeout(r, 2000));
+                // Pause de 1s (Suffisant si on ne fait que le prix)
+                await new Promise(r => setTimeout(r, 1000));
             }
 
-            // Fin du cycle
+            // Fin
             txt.innerText = "LIVE";
             txt.className = "text-[10px] font-bold text-green-500 uppercase tracking-wider";
             dot.classList.remove('bg-blue-500', 'blink'); dot.classList.add('bg-green-500');
-            document.getElementById('last-update').innerText = "Données Yahoo Finance™ mises à jour.";
-            document.getElementById('last-update').className = "text-green-400 mt-1 text-sm font-mono animate-pulse";
-            scanLabel.classList.add('hidden');
+            updateTxt.innerText = "Synchronisation terminée.";
+            updateTxt.className = "text-green-400 mt-1 text-sm font-mono";
+            label.classList.add('hidden');
             
-            renderDashboard(); // Recalcul global
+            renderDashboard(); // Recalcul KPI
         }
 
-        // --- RENDER ---
+        // --- 5. RENDER (AVEC CALCUL MATHÉMATIQUE) ---
         function renderDashboard(highlightIndex = -1) {
             let totalVal = 0, totalInvest = 0, totalDiv = 0;
             let totalPER = 0, countPER = 0;
@@ -282,7 +280,7 @@
                     perfPct = ((stock.price - stock.pru) / stock.pru) * 100;
                 }
                 
-                // Calcul PER Live (Prix / EPS)
+                // --- LE CALCUL MAGIQUE ---
                 let calculatedPER = 0;
                 if (stock.price > 0 && stock.eps > 0) calculatedPER = stock.price / stock.eps;
 
@@ -293,14 +291,15 @@
                 
                 sectors[stock.sec] = (sectors[stock.sec] || 0) + valo;
 
-                const displayPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '<span class="text-gray-600 animate-pulse">...</span>';
+                // Affichage
+                const displayPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '<span class="text-gray-500 animate-pulse">...</span>';
                 const displayValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
                 const displayPerf = stock.price > 0 ? (perfPct > 0 ? '+' : '') + perfPct.toFixed(2) + "%" : '-';
                 const colorPerf = perfPct >= 0 ? 'text-success' : 'text-danger';
+                
                 const displayPER = calculatedPER > 0 ? calculatedPER.toFixed(2) : '-';
-                const displayBeta = stock.price > 0 ? stock.beta.toFixed(2) : '-';
+                const displayBeta = stock.price > 0 ? stock.beta.toFixed(2) : '-'; // On attend le prix pour afficher
 
-                // HTML Construction
                 if (highlightIndex === -1) {
                     const row = `
                         <tr id="row-${index}" class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0 transition-colors duration-500">
@@ -316,13 +315,14 @@
                 else if (index === highlightIndex) {
                     const row = document.getElementById(`row-${index}`);
                     row.classList.add('flash-update');
-                    setTimeout(() => row.classList.remove('flash-update'), 1000);
+                    setTimeout(() => row.classList.remove('flash-update'), 500);
                     
                     document.getElementById(`price-${index}`).innerHTML = displayPrice;
                     document.getElementById(`valo-${index}`).innerHTML = displayValo;
                     const pEl = document.getElementById(`perf-${index}`);
                     pEl.innerHTML = displayPerf;
                     pEl.className = `px-5 py-4 text-right font-mono font-bold ${colorPerf}`;
+                    
                     document.getElementById(`per-${index}`).innerHTML = displayPER;
                     document.getElementById(`beta-${index}`).innerHTML = displayBeta;
                 }
@@ -337,17 +337,14 @@
                 document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
                 document.getElementById('totalPv').innerText = (globalPv > 0 ? '+' : '') + Math.round(globalPv).toLocaleString() + " €";
                 document.getElementById('totalPv').className = `mt-1 text-2xl font-bold tabular-nums ${globalPv >= 0 ? 'text-success' : 'text-danger'}`;
-                document.getElementById('totalPerf').innerText = (globalPerf > 0 ? '+' : '') + globalPerf.toFixed(2) + " %";
-                document.getElementById('totalPerf').className = `text-xs font-bold px-2 py-0.5 rounded mt-2 inline-block ${globalPerf >= 0 ? 'bg-green-900/30 text-success' : 'bg-red-900/30 text-danger'}`;
                 document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
                 document.getElementById('avgPER').innerText = avgPER;
                 document.getElementById('topStock').innerText = topStock.name;
-                if(document.getElementById('topStockPerf')) document.getElementById('topStockPerf').innerText = "+" + topStock.perf.toFixed(2) + " %";
             } else {
                 document.getElementById('totalVal').innerText = "Chargement...";
             }
 
-            // Chart
+            // Chart (Init)
             if (highlightIndex === -1 && document.getElementById('sectorChart')) {
                 if(window.myChart) window.myChart.destroy();
                 const initialData = [20, 15, 30, 10, 10, 15]; 
@@ -355,7 +352,7 @@
             }
         }
 
-        // --- SEARCH ---
+        // --- 6. SEARCH ---
         function fillSearch(t) { document.getElementById('mainTickerInput').value = t; searchTicker(); }
         async function searchTicker() {
             const t = document.getElementById('mainTickerInput').value.toUpperCase();
@@ -364,24 +361,43 @@
             card.classList.add('hidden');
             document.getElementById('searchLoader').style.display = 'block';
             
-            const price = await fetchPriceRobust(t);
-            document.getElementById('searchLoader').style.display = 'none';
+            const proxy = "https://corsproxy.io/?";
+            const url = `https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=1d&t=${Date.now()}`;
             
-            if(price) {
-                document.getElementById('res-name').innerText = t;
-                document.getElementById('res-symbol').innerText = "PRIX LIVE";
-                document.getElementById('res-price').innerText = price.toFixed(2) + " €";
-                document.getElementById('res-perf').innerText = "Donnée récupérée";
-                card.classList.remove('hidden');
-            } else { alert("Ticker introuvable"); }
+            try {
+                const res = await fetch(proxy + encodeURIComponent(url));
+                const json = await res.json();
+                const meta = json.chart.result[0].meta;
+                const price = meta.regularMarketPrice;
+                const prev = meta.chartPreviousClose;
+                
+                if(price) {
+                    document.getElementById('res-name').innerText = t;
+                    document.getElementById('res-symbol').innerText = "PRIX LIVE";
+                    document.getElementById('res-price').innerText = price.toFixed(2) + " €";
+                    
+                    const perf = ((price - prev) / prev) * 100;
+                    const pEl = document.getElementById('res-perf');
+                    pEl.innerText = (perf>0?'+':'') + perf.toFixed(2) + " %";
+                    pEl.className = perf>=0 ? "text-xl font-bold mt-2 text-green-400" : "text-xl font-bold mt-2 text-red-400";
+
+                    document.getElementById('res-prev').innerText = prev.toFixed(2);
+                    document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
+                    document.getElementById('res-range').innerText = (meta.regularMarketDayLow || "-") + " - " + (meta.regularMarketDayHigh || "-");
+                    document.getElementById('res-vol').innerText = meta.regularMarketVolume ? (meta.regularMarketVolume/1000).toFixed(0)+" K" : "-";
+
+                    card.classList.remove('hidden');
+                } else { alert("Ticker introuvable"); }
+            } catch(e) { alert("Ticker introuvable"); }
+            finally { document.getElementById('searchLoader').style.display = 'none'; }
         }
 
-        // --- SIMU ---
+        // --- 7. SIMU ---
         function calculateSim() { const start=parseFloat(document.getElementById('sim-start').value),monthly=parseFloat(document.getElementById('sim-monthly').value),rate=parseFloat(document.getElementById('sim-rate').value)/100,years=parseInt(document.getElementById('sim-years').value);let capital=start,totalInvested=start,labels=[],dataCapital=[],dataInvested=[];for(let i=0;i<=years;i++){labels.push("An "+i);dataCapital.push(capital);dataInvested.push(totalInvested);if(i<years){for(let m=0;m<12;m++){capital+=monthly;capital*=(1+rate/12);totalInvested+=monthly}}}const final=dataCapital[dataCapital.length-1];document.getElementById('sim-result').innerText=Math.round(final).toLocaleString()+" €";const ctx=document.getElementById('simChart').getContext('2d');if(window.simChart)window.simChart.destroy();window.simChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Patrimoine',data:dataCapital,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true},{label:'Investi',data:dataInvested,borderColor:'#64748b',borderDash:[5,5]}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{grid:{color:'#1e293b'}}}}});}
 
         // START
         renderDashboard(); // Structure vide
-        setTimeout(startLiveFeed, 1000); // Lance la cascade robuste
+        setTimeout(startLiveFeed, 1000); // Lance la cascade
         setInterval(startLiveFeed, 120000); // Relance 2min
     </script>
 </body>
