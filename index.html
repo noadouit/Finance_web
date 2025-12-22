@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | V45 Clean</title>
+    <title>Noa Capital | V46 Manifesto</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -28,65 +28,17 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #0f172a; 
-            color: white; 
-            overflow-x: hidden; 
-        }
-        .tab-content { 
-            display: none; 
-            width: 100%; 
-            animation: fadeIn 0.4s ease-out; 
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; overflow-x: hidden; }
+        .tab-content { display: none; width: 100%; animation: fadeIn 0.4s ease-out; }
         .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        
-        #home.active { 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: calc(100vh - 64px); 
-        }
-        
-        .search-glow:focus-within { 
-            box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); 
-            border-color: #3b82f6; 
-        }
-        
-        .loader { 
-            border: 3px solid #333; 
-            border-top: 3px solid #3b82f6; 
-            border-radius: 50%; 
-            width: 24px; 
-            height: 24px; 
-            animation: spin 1s linear infinite; 
-            display:none; 
-            margin: 0 auto; 
-        }
-        
-        .flash-update { 
-            animation: highlight 0.5s ease-out; 
-            background-color: rgba(34, 197, 94, 0.1); 
-        }
-        
-        @keyframes highlight { 
-            0% { background-color: rgba(34, 197, 94, 0.3); } 
-            100% { background-color: transparent; } 
-        }
-        
-        .scanning-row { 
-            border-left: 3px solid #3b82f6; 
-            background-color: rgba(59,130,246,0.05); 
-        }
-        
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        #home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: calc(100vh - 64px); }
+        .search-glow:focus-within { box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
+        .loader { border: 3px solid #333; border-top: 3px solid #3b82f6; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display:none; margin: 0 auto; }
+        .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
+        @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
+        .scanning-row { border-left: 3px solid #3b82f6; background-color: rgba(59,130,246,0.05); }
     </style>
 </head>
 
@@ -138,7 +90,6 @@
             
             <div id="resultCard" class="hidden w-full max-w-5xl px-4 pb-20">
                 <div class="bg-card/90 backdrop-blur border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
-                    
                     <div class="p-6 border-b border-gray-700/50 flex justify-between items-center bg-gray-800/20">
                         <div>
                             <div class="flex items-center gap-3">
@@ -174,35 +125,122 @@
             </div>
         </div>
 
-        <div id="convictions" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Thèse d'Investissement</h1><p class="text-gray-400 mt-2">Philosophie : <b>Croissance Ricardienne</b> & Retour du Réel.</p></div>
+        <div id="convictions" class="tab-content max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
             
-            <div class="bg-gradient-to-br from-gray-900 to-card border-l-4 border-blue-500 rounded-r-xl p-8 mb-8 shadow-2xl">
-                <div class="flex items-center gap-3 mb-4"><span class="text-2xl">🌍</span><h2 class="text-2xl font-bold text-white">Allocation Tactique</h2></div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-gold font-bold uppercase text-sm mb-2 tracking-wide">Conviction Principale</h3>
-                        <p class="text-gray-300 leading-relaxed text-sm text-justify">
-                            Notre thèse centrale repose sur les <strong>Matières Premières</strong> (Super-cycle). C'est le pilier du portefeuille : seul actif offrant une protection réelle contre l'inflation structurelle.
+            <div class="mb-12 border-b border-gray-700 pb-8">
+                <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-6">Thèse d'Investissement</h1>
+                <p class="text-xl text-gray-400 leading-relaxed max-w-3xl">
+                    Pourquoi nous quittons la Tech pour revenir au Réel. Analyse structurelle d'un changement de paradigme économique.
+                </p>
+            </div>
+
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-red-500">01.</span> La Grande Rotation : Fuir la Bulle Tech
+                </h2>
+                <div class="prose prose-invert prose-lg max-w-none text-gray-300 space-y-6 text-justify">
+                    <p>
+                        Depuis 2010, les marchés ont été drogués à l'argent gratuit (taux zéro). Cela a favorisé les actifs de "croissance longue" comme la Tech, le SaaS et récemment l'IA. Aujourd'hui, les valorisations de la Tech (Nasdaq) ont atteint des niveaux de perfection qui ne tolèrent aucune erreur. Le PER moyen du secteur dépasse les 35x, ce qui implique une croissance ininterrompue pour les 10 prochaines années. <strong>C'est un risque asymétrique défavorable.</strong>
+                    </p>
+                    <p>
+                        Nous assistons au dégonflement inévitable de cette prime de risque. L'IA est une révolution réelle, mais les gagnants actuels (Nvidia, Microsoft) sont "pricés" pour la perfection. À l'inverse, l'économie réelle a été sous-investie pendant une décennie. Les infrastructures vieillissent, les réseaux électriques saturent, et l'offre de matières premières est contrainte.
+                    </p>
+                    <div class="bg-red-900/10 border-l-4 border-red-500 p-6 rounded-r-lg my-8">
+                        <h4 class="font-bold text-red-400 mb-2">Notre Décision Radicale</h4>
+                        <p class="text-sm">Nous sortons des actifs immatériels survalorisés pour nous positionner sur des actifs tangibles sous-valorisés. Nous préférons posséder une mine de cuivre (P/E 12) indispensable à l'IA, plutôt qu'un logiciel (P/E 50) qui pourrait être obsolète dans 6 mois.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-gold">02.</span> La Croissance Ricardienne (Le Retour du Réel)
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <div class="bg-card p-6 rounded-xl border border-gray-700">
+                        <div class="text-3xl mb-4">⛏️</div>
+                        <h3 class="font-bold text-white mb-2">Rareté Physique</h3>
+                        <p class="text-sm text-gray-400">On ne peut pas "imprimer" du cuivre ou de l'énergie. L'offre est inélastique à court terme.</p>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl border border-gray-700">
+                        <div class="text-3xl mb-4">🏭</div>
+                        <h3 class="font-bold text-white mb-2">Pricing Power</h3>
+                        <p class="text-sm text-gray-400">Les entreprises qui possèdent des actifs critiques peuvent monter leurs prix sans perdre de clients.</p>
+                    </div>
+                    <div class="bg-card p-6 rounded-xl border border-gray-700">
+                        <div class="text-3xl mb-4">🛡️</div>
+                        <h3 class="font-bold text-white mb-2">Barrières à l'entrée</h3>
+                        <p class="text-sm text-gray-400">Il faut 15 ans pour ouvrir une mine ou construire une usine chimique. La concurrence est limitée.</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 leading-relaxed text-justify">
+                    Cette stratégie vise à capturer la "Rente de situation" décrite par David Ricardo. Dans un monde où l'inflation devient structurelle (démographie, déglobalisation, transition verte), les marges se déplacent vers l'amont de la chaîne de valeur : ceux qui extraient, ceux qui transforment, et ceux qui distribuent l'énergie.
+                </p>
+            </div>
+
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-blue-500">03.</span> Stock Picking : Pourquoi ces entreprises ?
+                </h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500 transition duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-white">Air Liquide (AI.PA)</h3>
+                            <span class="bg-blue-900/30 text-blue-400 px-3 py-1 rounded-full text-xs font-bold border border-blue-500/30">DÉFENSIF</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed text-justify">
+                            C'est la fondation du portefeuille. Air Liquide ne vend pas du gaz, elle vend de la fiabilité. Ses contrats de 15 ans incluent des clauses d'indexation sur l'énergie. Si l'électricité augmente, Air Liquide facture plus cher. C'est l'un des rares "business models" au monde parfaitement protégé contre l'inflation. De plus, elle est le leader incontesté de l'hydrogène vert, le carburant du futur pour l'industrie lourde.
                         </p>
                     </div>
-                    <div>
-                        <h3 class="text-blue-400 font-bold uppercase text-sm mb-2 tracking-wide">Watchlist (En Observation)</h3>
-                        <p class="text-gray-300 leading-relaxed text-sm text-justify">
-                            Nous surveillons activement le <strong>Japon et les Marchés Émergents</strong>. Nous restons patients et attendons une <strong>reprise technique de leur monnaie</strong> avant de déployer du capital.
+
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold transition duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-white">ETF Basic Resources (BRES.PA)</h3>
+                            <span class="bg-yellow-900/30 text-gold px-3 py-1 rounded-full text-xs font-bold border border-yellow-500/30">OFFENSIF</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed text-justify">
+                            Notre conviction la plus forte. Cet ETF regroupe les géants miniers (Rio Tinto, Glencore, etc.). La thèse est simple : il n'y a pas de transition énergétique sans métaux. Une voiture électrique demande 4x plus de cuivre qu'une thermique. L'IA demande des data centers bourrés de câbles. L'offre est déficitaire pour la décennie à venir. C'est un "Super-cycle" qui commence.
+                        </p>
+                    </div>
+
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500 transition duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-white">TotalEnergies (TTE.PA)</h3>
+                            <span class="bg-red-900/30 text-red-400 px-3 py-1 rounded-full text-xs font-bold border border-red-500/30">RENDEMENT</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed text-justify">
+                            Le marché déteste le pétrole par idéologie, ce qui nous offre une opportunité financière incroyable. Total se paie moins de 8 fois ses bénéfices avec un rendement sur dividende > 5%. Contrairement à BP ou Shell, Total a gardé une approche pragmatique : utiliser le cash-flow énorme du pétrole pour financer intelligemment sa transition verte sans s'endetter. C'est notre "Vache à Lait".
+                        </p>
+                    </div>
+
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500 transition duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-white">Schneider Electric (SU.PA)</h3>
+                            <span class="bg-green-900/30 text-green-400 px-3 py-1 rounded-full text-xs font-bold border border-green-500/30">CROISSANCE</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed text-justify">
+                            C'est notre façon de jouer l'Intelligence Artificielle sans payer les multiples absurdes de la Tech. L'IA a besoin de Data Centers. Les Data Centers ont besoin de gestion électrique ultra-complexe pour ne pas surchauffer. Schneider est le leader mondial de la gestion de l'énergie et de l'automatisation. C'est le vendeur de "pelles et de pioches" de la ruée vers l'or numérique.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-gold/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-yellow-600 transition">ETF</div><div><h3 class="font-bold text-white">Basic Resources</h3><div class="text-xs text-gray-500">Matériaux</div></div></div></div><p class="text-sm text-gray-300">Conviction N°1. Exposition aux mines (Cuivre, Fer).</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-blue-500/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-blue-600 transition">AI</div><div><h3 class="font-bold text-white">Air Liquide</h3><div class="text-xs text-gray-500">Chimie</div></div></div></div><p class="text-sm text-gray-300">Le Bunker. Visibilité parfaite et contrats long terme.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-green-500/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-green-600 transition">SU</div><div><h3 class="font-bold text-white">Schneider</h3><div class="text-xs text-gray-500">Industrie</div></div></div></div><p class="text-sm text-gray-300">Mégatendance Électrification. Data Centers & IA.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-red-500/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-red-600 transition">TTE</div><div><h3 class="font-bold text-white">TotalEnergies</h3><div class="text-xs text-gray-500">Énergie</div></div></div></div><p class="text-sm text-gray-300">Cash Machine. Rendement > 5%.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-sky-500/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-sky-600 transition">AIR</div><div><h3 class="font-bold text-white">Airbus</h3><div class="text-xs text-gray-500">Aéro</div></div></div></div><p class="text-sm text-gray-300">Duopole Mondial. Carnet de commandes plein.</p></div>
-                <div class="bg-card border border-gray-700 rounded-xl p-6 group hover:border-gray-400/50 transition duration-300"><div class="flex justify-between items-start mb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center font-bold text-white group-hover:bg-gray-500 transition">SGO</div><div><h3 class="font-bold text-white">Saint-Gobain</h3><div class="text-xs text-gray-500">Construction</div></div></div></div><p class="text-sm text-gray-300">Transformation Réussie. Rénovation thermique.</p></div>
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-purple-500">04.</span> La Prochaine Frontière
+                </h2>
+                <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-700">
+                    <p class="text-gray-300 text-justify mb-4">
+                        Une fois notre socle "Actifs Réels" consolidé, nous regarderons vers l'Est et le Sud.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-400 space-y-2 ml-4">
+                        <li><strong>Japon :</strong> Des entreprises riches en cash, une gouvernance qui s'améliore, mais un Yen trop faible. Nous attendons le pivot de la Banque du Japon.</li>
+                        <li><strong>Émergents (Inde/Brésil) :</strong> La démographie est là-bas. La croissance aussi. Mais tant que le Dollar est fort, ces marchés souffrent. Nous attendons la baisse des taux US pour entrer.</li>
+                    </ul>
+                </div>
             </div>
+
         </div>
 
         <div id="dashboard" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
@@ -270,7 +308,7 @@
     </main>
 
     <script>
-        // CONFIGURATION (Avec SPS pour le PSR)
+        // CONFIG
         let portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, prev: 0, eps: 5.90, sps: 53.5, beta: 0.8 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, prev: 0, eps: 7.50, sps: 63.0, beta: 1.1 },
@@ -286,70 +324,52 @@
             { tick: "EURJPY=X", name: "Forex EUR/JPY", thesis: "Surveillance volatilité", price: 0, prev: 0 }
         ];
 
-        // FONCTIONS DE NAVIGATION
+        // NAV
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             ['home','dashboard','watchlist','convictions','simulation'].forEach(b=>{
                 const el=document.getElementById('btn-'+b);
-                if(b===id){
-                    el.classList.add('bg-blue-600','text-white');
-                    el.classList.remove('text-gray-400','bg-transparent');
-                } else {
-                    el.classList.remove('bg-blue-600','text-white');
-                    el.classList.add('text-gray-400','bg-transparent');
-                }
+                if(b===id){el.classList.add('bg-blue-600','text-white');el.classList.remove('text-gray-400','bg-transparent')}
+                else{el.classList.remove('bg-blue-600','text-white');el.classList.add('text-gray-400','bg-transparent')}
             });
-            
             if(id!=='home') document.getElementById('resultCard').classList.add('hidden');
             if(id==='simulation') calculateSim();
             if(id==='watchlist') setTimeout(startWatchlistFeed, 500); 
         }
 
-        // MOTEUR RECHERCHE (COMPLET AVEC CHART)
-        async function fetchFullDetails(ticker) {
-            const proxy = "https://corsproxy.io/?";
-            const now = Date.now();
-            const urlChart = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=5m&range=1d&t=${now}`;
-            const urlQuote = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${now}`;
-
-            let result = { price:0, prev:0, meta:{}, timestamps:[], quotes:[], fundamentals:{} };
-
-            try {
-                const res = await fetch(proxy + encodeURIComponent(urlChart));
-                const json = await res.json();
-                const d = json.chart.result[0];
-                result.meta = d.meta;
-                result.price = d.meta.regularMarketPrice;
-                result.prev = d.meta.chartPreviousClose;
-                result.timestamps = d.timestamp;
-                result.quotes = d.indicators.quote[0].close;
-            } catch(e) { return null; }
-
-            try {
-                const res = await fetch(proxy + encodeURIComponent(urlQuote));
-                const json = await res.json();
-                result.fundamentals = json.quoteResponse.result[0] || {};
-            } catch(e) { console.log("Quote blocked"); }
-
-            return result;
-        }
-
-        // MOTEUR SIMPLE (PORTEFEUILLE)
-        async function fetchPriceSimple(ticker) {
+        // FETCH ENGINE
+        async function fetchPriceRobust(ticker) {
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3500); 
             try {
-                const r = await fetch(proxy + encodeURIComponent(url));
-                const j = await r.json();
+                const response = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (!response.ok) throw new Error("HTTP Error");
+                const json = await response.json();
                 return {
-                    price: j.chart.result[0].meta.regularMarketPrice,
-                    prev: j.chart.result[0].meta.chartPreviousClose
+                    price: json.chart.result[0].meta.regularMarketPrice,
+                    prev: json.chart.result[0].meta.chartPreviousClose,
+                    meta: json.chart.result[0].meta,
+                    timestamps: json.chart.result[0].timestamp,
+                    quotes: json.chart.result[0].indicators.quote[0].close
                 };
+            } catch (e) { return null; }
+        }
+
+        async function fetchFundamentalsQuote(ticker) {
+            const proxy = "https://corsproxy.io/?";
+            const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${Date.now()}`;
+            try {
+                const response = await fetch(proxy + encodeURIComponent(url));
+                const json = await response.json();
+                return json.quoteResponse.result[0];
             } catch(e) { return null; }
         }
 
-        // FEED PORTEFEUILLE
+        // LIVE FEED PORTFOLIO
         async function startLiveFeed() {
             const dot = document.getElementById('status-dot');
             const label = document.getElementById('scan-progress');
@@ -357,7 +377,7 @@
 
             dot.classList.add('bg-blue-500', 'blink');
             label.classList.remove('hidden');
-            updateTxt.innerText = "Scan...";
+            updateTxt.innerText = "Démarrage...";
 
             for (let i = 0; i < portfolio.length; i++) {
                 const stock = portfolio[i];
@@ -365,7 +385,7 @@
                 const row = document.getElementById(`row-${i}`);
                 if(row) row.classList.add('scanning-row');
 
-                const data = await fetchPriceSimple(stock.tick);
+                const data = await fetchPriceRobust(stock.tick);
                 if (data && data.price) {
                     stock.price = data.price;
                     stock.prev = data.prev;
@@ -375,19 +395,19 @@
                 await new Promise(r => setTimeout(r, 1000));
             }
 
-            dot.classList.remove('bg-blue-500', 'blink'); 
-            dot.classList.add('bg-green-500');
-            updateTxt.innerText = "OK";
+            dot.classList.remove('bg-blue-500', 'blink'); dot.classList.add('bg-green-500');
+            updateTxt.innerText = "Mise à jour OK."; updateTxt.className = "text-green-400 mt-1 text-sm font-mono";
             label.classList.add('hidden');
             renderDashboard(); 
         }
 
-        // FEED WATCHLIST
+        // LIVE FEED WATCHLIST
         async function startWatchlistFeed() {
             renderWatchlist(); 
             for (let i = 0; i < watchlist.length; i++) {
                 const item = watchlist[i];
-                const data = await fetchPriceSimple(item.tick);
+                status.innerText = `Scan: ${item.tick}...`;
+                const data = await fetchPriceRobust(item.tick);
                 if (data && data.price) {
                     item.price = data.price;
                     item.prev = data.prev;
@@ -397,7 +417,7 @@
             }
         }
 
-        // AFFICHAGE PORTEFEUILLE
+        // RENDER DASHBOARD
         function renderDashboard(highlightIndex = -1) {
             let totalVal = 0, totalInvest = 0, totalDiv = 0, totalPER = 0, countPER = 0;
             let topStock = { name: '-', perf: -999 };
@@ -407,6 +427,7 @@
             portfolio.forEach((stock, index) => {
                 const valo = stock.price * stock.q;
                 const invest = stock.pru * stock.q;
+                
                 let perfPct = stock.pru > 0 && stock.price > 0 ? ((stock.price - stock.pru) / stock.pru) * 100 : 0;
                 let dayVarPct = stock.price > 0 && stock.prev > 0 ? ((stock.price - stock.prev) / stock.prev) * 100 : 0;
                 
@@ -441,18 +462,11 @@
                     tbody.innerHTML += row;
                 } else if (index === highlightIndex) {
                     const row = document.getElementById(`row-${index}`);
-                    row.classList.add('flash-update'); 
-                    setTimeout(() => row.classList.remove('flash-update'), 500);
-                    
+                    row.classList.add('flash-update'); setTimeout(() => row.classList.remove('flash-update'), 500);
                     document.getElementById(`price-${index}`).innerHTML = dPrice;
-                    document.getElementById(`day-${index}`).innerHTML = dDay; 
-                    document.getElementById(`day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
+                    document.getElementById(`day-${index}`).innerHTML = dDay; document.getElementById(`day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
                     document.getElementById(`valo-${index}`).innerHTML = dValo;
-                    
-                    const pEl = document.getElementById(`perf-${index}`);
-                    pEl.innerHTML = dPerf; 
-                    pEl.className = `px-5 py-4 text-right font-mono font-bold ${cPerf}`;
-                    
+                    document.getElementById(`perf-${index}`).innerHTML = dPerf; document.getElementById(`perf-${index}`).className = `px-5 py-4 text-right font-mono font-bold ${cPerf}`;
                     document.getElementById(`per-${index}`).innerHTML = dPER;
                     document.getElementById(`psr-${index}`).innerHTML = dPSR;
                 }
@@ -466,12 +480,8 @@
                 document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
                 document.getElementById('avgPER').innerText = countPER > 0 ? (totalPER/countPER).toFixed(1) : "-";
                 document.getElementById('topStock').innerText = topStock.name;
-                
                 const topPerfEl = document.getElementById('topStockPerf');
-                if(topStock.perf > -999) {
-                    topPerfEl.innerText = "+" + topStock.perf.toFixed(2) + " %";
-                    topPerfEl.className = "text-xs font-bold text-green-400 mt-1";
-                }
+                if(topStock.perf > -999) { topPerfEl.innerText = "+" + topStock.perf.toFixed(2) + " %"; topPerfEl.className = "text-xs font-bold text-green-400 mt-1"; }
             } else {
                 document.getElementById('totalVal').innerText = "Chargement...";
             }
@@ -479,27 +489,11 @@
             if (highlightIndex === -1 && document.getElementById('sectorChart')) {
                 if(window.myChart) window.myChart.destroy();
                 const initialData = [20, 15, 30, 10, 10, 15]; 
-                window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { 
-                    type: 'doughnut', 
-                    data: { 
-                        labels: portfolio.map(s => s.sec), 
-                        datasets: [{ 
-                            data: initialData, 
-                            backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], 
-                            borderWidth: 0 
-                        }] 
-                    }, 
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        cutout: '70%', 
-                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, usePointStyle: true } } } 
-                    } 
-                });
+                window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { type: 'doughnut', data: { labels: portfolio.map(s => s.sec), datasets: [{ data: initialData, backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, usePointStyle: true } } } } });
             }
         }
 
-        // AFFICHAGE WATCHLIST
+        // RENDER WATCHLIST
         function renderWatchlist(highlightIndex = -1) {
             const tbody = document.getElementById('watchlistBody');
             if (highlightIndex === -1) tbody.innerHTML = '';
@@ -522,8 +516,7 @@
                     tbody.innerHTML += row;
                 } else if (index === highlightIndex) {
                     const row = document.getElementById(`wl-row-${index}`);
-                    row.classList.add('flash-update'); 
-                    setTimeout(() => row.classList.remove('flash-update'), 500);
+                    row.classList.add('flash-update'); setTimeout(() => row.classList.remove('flash-update'), 500);
                     document.getElementById(`wl-price-${index}`).innerText = dPrice;
                     document.getElementById(`wl-day-${index}`).innerText = dDay;
                     document.getElementById(`wl-day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
@@ -531,7 +524,7 @@
             });
         }
 
-        // LOGIQUE RECHERCHE
+        // SEARCH
         let searchChartInstance = null;
         function fillSearch(t) { document.getElementById('mainTickerInput').value = t; searchTicker(); }
         
@@ -542,142 +535,76 @@
             card.classList.add('hidden');
             document.getElementById('searchLoader').style.display = 'block';
             
-            const data = await fetchFullDetails(t);
+            const dataChart = await fetchPriceRobust(t);
+            const dataQuote = await fetchFundamentalsQuote(t);
+
             document.getElementById('searchLoader').style.display = 'none';
             
-            if(data && data.price) {
-                // Header
-                document.getElementById('res-name').innerText = t; 
-                document.getElementById('res-symbol').innerText = data.meta.symbol;
-                document.getElementById('res-type').innerText = data.meta.instrumentType || "EQUITY";
-                document.getElementById('res-exchange').innerText = data.meta.exchangeName;
-                document.getElementById('res-price').innerText = data.price.toFixed(2);
+            if(dataChart && dataChart.price) {
+                const meta = dataChart.meta;
+                const price = dataChart.price;
+                const prev = dataChart.prev;
                 
-                const perf = ((data.price - data.prev) / data.prev) * 100;
+                document.getElementById('res-name').innerText = t; 
+                document.getElementById('res-symbol').innerText = meta.symbol;
+                document.getElementById('res-type').innerText = meta.instrumentType || "EQUITY";
+                document.getElementById('res-exchange').innerText = meta.exchangeName;
+                document.getElementById('res-price').innerText = price.toFixed(2);
+                
+                const perf = ((price - prev) / prev) * 100;
                 const pEl = document.getElementById('res-perf'); 
                 pEl.innerText = (perf > 0 ? '+' : '') + perf.toFixed(2) + " %"; 
                 pEl.className = perf >= 0 ? "text-xl font-bold flex items-center justify-end gap-2 text-green-400" : "text-xl font-bold flex items-center justify-end gap-2 text-red-400";
 
-                // Grille
-                document.getElementById('res-open').innerText = (data.meta.regularMarketOpen || data.prev).toFixed(2);
-                document.getElementById('res-range').innerText = (data.meta.regularMarketDayLow || data.price).toFixed(2) + " - " + (data.meta.regularMarketDayHigh || data.price).toFixed(2);
-                let vol = data.meta.regularMarketVolume || 0; 
+                document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
+                document.getElementById('res-range').innerText = (meta.regularMarketDayLow || "-") + " - " + (meta.regularMarketDayHigh || "-");
+                let vol = meta.regularMarketVolume || 0; 
                 document.getElementById('res-vol').innerText = vol > 1000000 ? (vol/1000000).toFixed(1) + "M" : (vol/1000).toFixed(1) + "K";
-                
-                const f = data.fundamentals;
-                const cap = f.marketCap || 0;
-                document.getElementById('res-cap').innerText = cap > 1000000000 ? (cap/1000000000).toFixed(2)+"B" : (cap > 0 ? cap : "-");
-                document.getElementById('res-pe').innerText = f.trailingPE ? f.trailingPE.toFixed(2) : "-";
-                document.getElementById('res-eps').innerText = f.epsTrailingTwelveMonths ? f.epsTrailingTwelveMonths.toFixed(2) : "-";
-                document.getElementById('res-beta').innerText = f.beta ? f.beta.toFixed(2) : "-";
-                const rating = f.averageAnalystRating || "-";
-                document.getElementById('res-rating').innerText = rating.replace("-", " ").toUpperCase();
 
-                // Graphique
-                if(data.timestamps && data.quotes) {
+                if(dataQuote) {
+                    const cap = dataQuote.marketCap || 0;
+                    document.getElementById('res-cap').innerText = cap > 1000000000 ? (cap/1000000000).toFixed(2)+"B" : (cap/1000000).toFixed(2)+"M";
+                    document.getElementById('res-pe').innerText = dataQuote.trailingPE ? dataQuote.trailingPE.toFixed(2) : "-";
+                    document.getElementById('res-eps').innerText = dataQuote.epsTrailingTwelveMonths ? dataQuote.epsTrailingTwelveMonths.toFixed(2) : "-";
+                    document.getElementById('res-beta').innerText = dataQuote.beta ? dataQuote.beta.toFixed(2) : "-";
+                    const rating = dataQuote.averageAnalystRating || "-";
+                    document.getElementById('res-rating').innerText = rating.replace("-", " ").toUpperCase();
+                }
+
+                if(dataChart.timestamps && dataChart.quotes) {
                     const ctx = document.getElementById('searchChart').getContext('2d');
                     if(searchChartInstance) searchChartInstance.destroy();
-                    
-                    const isGreen = data.price >= data.prev;
+                    const isGreen = price >= prev;
                     const lineColor = isGreen ? '#22c55e' : '#ef4444';
                     const fillColor = isGreen ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)';
-                    const clean = data.quotes.map((q,i) => ({ t: data.timestamps[i], y: q })).filter(p => p.y !== null);
+                    const clean = dataChart.quotes.map((q,i)=>({t:dataChart.timestamps[i],y:q})).filter(p=>p.y!==null);
 
                     searchChartInstance = new Chart(ctx, {
                         type: 'line',
                         data: {
                             labels: clean.map(p => new Date(p.t * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
-                            datasets: [{
-                                data: clean.map(p => p.y),
-                                borderColor: lineColor,
-                                backgroundColor: fillColor,
-                                borderWidth: 2,
-                                fill: true,
-                                pointRadius: 0,
-                                tension: 0.1
-                            }]
+                            datasets: [{ data: clean.map(p => p.y), borderColor: lineColor, backgroundColor: fillColor, borderWidth: 2, fill: true, pointRadius: 0, tension: 0.1 }]
                         },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: { legend: { display: false } },
-                            scales: {
-                                x: { display: false },
-                                y: { display: true, position: 'right', grid: { color: '#334155' } }
-                            }
-                        }
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: true, position: 'right', grid: { color: '#334155' } } } }
                     });
                 }
                 card.classList.remove('hidden');
             } else { alert("Ticker introuvable"); }
         }
 
-        // SIMULATION
+        // SIMU
         let simChartInstance = null;
         function calculateSim() { 
-            const start = parseFloat(document.getElementById('sim-start').value);
-            const monthly = parseFloat(document.getElementById('sim-monthly').value);
-            const rate = parseFloat(document.getElementById('sim-rate').value) / 100;
-            const years = parseInt(document.getElementById('sim-years').value);
-            
-            let capital = start;
-            let totalInvested = start;
-            let labels = [];
-            let dataCapital = [];
-            let dataInvested = [];
-            
-            for (let i = 0; i <= years; i++) {
-                labels.push("An " + i);
-                dataCapital.push(capital);
-                dataInvested.push(totalInvested);
-                
-                if (i < years) {
-                    for (let m = 0; m < 12; m++) {
-                        capital += monthly;
-                        capital *= (1 + rate / 12);
-                        totalInvested += monthly;
-                    }
-                }
+            const start=parseFloat(document.getElementById('sim-start').value), monthly=parseFloat(document.getElementById('sim-monthly').value), rate=parseFloat(document.getElementById('sim-rate').value)/100, years=parseInt(document.getElementById('sim-years').value);
+            let capital=start, totalInvested=start, labels=[], dataCapital=[], dataInvested=[];
+            for(let i=0;i<=years;i++){
+                labels.push("An "+i); dataCapital.push(capital); dataInvested.push(totalInvested);
+                if(i<years){ for(let m=0;m<12;m++){ capital+=monthly; capital*=(1+rate/12); totalInvested+=monthly; } }
             }
-            
-            document.getElementById('sim-result').innerText = Math.round(dataCapital[dataCapital.length - 1]).toLocaleString() + " €";
-            
-            const ctx = document.getElementById('simChart').getContext('2d');
-            if (simChartInstance) simChartInstance.destroy();
-            
-            simChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Patrimoine',
-                            data: dataCapital,
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59,130,246,0.1)',
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Investi',
-                            data: dataInvested,
-                            borderColor: '#64748b',
-                            borderDash: [5, 5],
-                            tension: 0.4,
-                            pointRadius: 0
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: { grid: { color: '#1e293b' } }
-                    },
-                    plugins: { legend: { labels: { color: '#94a3b8' } } }
-                }
-            });
+            document.getElementById('sim-result').innerText=Math.round(dataCapital[dataCapital.length-1]).toLocaleString()+" €";
+            const ctx=document.getElementById('simChart').getContext('2d');
+            if(simChartInstance) simChartInstance.destroy();
+            simChartInstance = new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Patrimoine',data:dataCapital,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true,tension:0.4},{label:'Investi',data:dataInvested,borderColor:'#64748b',borderDash:[5,5],tension:0.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{grid:{color:'#1e293b'}}},plugins:{legend:{labels:{color:'#94a3b8'}}}}});
         }
 
         // START
