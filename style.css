@@ -1,7 +1,9 @@
 /* style.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
 body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
 
-/* Background Grid Pattern */
+/* --- BACKGROUNDS & TEXTURES --- */
 .bg-grid {
     background-size: 40px 40px;
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
@@ -9,44 +11,54 @@ body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4
     mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
 }
 
-.tab-content { display: none; width: 100%; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-.tab-content.active { display: block; }
-
-@keyframes slideUp { 
-    from { opacity: 0; transform: translateY(20px) scale(0.98); } 
-    to { opacity: 1; transform: translateY(0) scale(1); } 
-}
-
-#home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: calc(100vh - 80px); }
-
 .glass-panel {
-    background: rgba(24, 27, 33, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(15, 17, 21, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-.loader { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #3b82f6; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; display:none; margin: 0 auto; }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+/* --- BOOT SEQUENCE ANIMATIONS --- */
+.boot-screen {
+    position: fixed; inset: 0; z-index: 10000; background: #000;
+    display: flex; flex-col; justify-content: center; align-items: center;
+}
 
-.flash-update { animation: flash 0.6s ease-out; background-color: rgba(16, 185, 129, 0.15) !important; }
-@keyframes flash { 0% { background-color: rgba(16, 185, 129, 0.3); } 100% { background-color: transparent; } }
+.boot-text {
+    font-family: 'JetBrains Mono', monospace;
+    color: #3b82f6;
+    font-size: 14px;
+    opacity: 0;
+}
 
-/* Boutons de navigation */
+.animate-boot-sequence { animation: bootSequence 2.5s forwards ease-in-out; }
+@keyframes bootSequence {
+    0% { opacity: 1; clip-path: inset(0 100% 0 0); }
+    30% { opacity: 1; clip-path: inset(0 0 0 0); }
+    80% { opacity: 1; transform: scale(1); filter: blur(0px); }
+    100% { opacity: 0; transform: scale(1.1); filter: blur(10px); display: none; }
+}
+
+.reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; transform: scale(0.98); }
+@keyframes revealApp {
+    0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* --- UTILS --- */
+.tab-content { display: none; width: 100%; }
+.tab-content.active { display: block; animation: fadeIn 0.5s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
 .nav-btn {
-    padding: 6px 16px;
-    font-size: 12px;
-    font-weight: 500;
-    border-radius: 8px;
-    transition: all 0.3s;
-    white-space: nowrap;
-    color: #9ca3af;
+    padding: 8px 18px; font-size: 12px; font-weight: 600; border-radius: 10px; transition: all 0.3s;
+    color: #71717a; letter-spacing: 0.02em;
 }
-.nav-btn:hover { color: white; }
-.nav-btn.active { background-color: white; color: black; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+.nav-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+.nav-btn.active { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #050505; }
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #555; }
