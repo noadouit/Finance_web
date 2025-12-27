@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | V49 Pro Feed</title>
+    <title>Noa Capital | V50 Stable</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -37,14 +37,11 @@
         #home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: calc(100vh - 64px); }
         .search-glow:focus-within { box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
         .loader { border: 3px solid #333; border-top: 3px solid #3b82f6; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display:none; margin: 0 auto; }
-        .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
-        @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* Login */
         #login-screen { position: fixed; inset: 0; z-index: 9999; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .login-box { width: 100%; max-width: 400px; padding: 2rem; background: #1e293b; border: 1px solid #334155; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); text-align: center; }
-        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
     </style>
 </head>
 
@@ -54,13 +51,13 @@
         <div class="mb-8 flex flex-col items-center gap-4">
             <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-16 h-16 rounded-2xl flex items-center justify-center font-black text-3xl text-white shadow-2xl shadow-blue-900/50">N</div>
             <h1 class="text-3xl font-bold tracking-tight text-white">Noa Capital</h1>
-            <p class="text-gray-400 text-sm">V49 Pro • API Key Required</p>
+            <p class="text-gray-400 text-sm">V50 Pro • Connected FMP</p>
         </div>
         
         <div class="login-box">
             <div class="mb-6 text-left">
                 <label class="block text-xs font-bold text-blue-400 uppercase mb-2">Mot de passe</label>
-                <input type="password" id="passwordInput" class="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition" placeholder="••••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
+                <input type="password" id="passwordInput" class="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition" placeholder="••••••••" value="admin" onkeypress="if(event.key === 'Enter') checkLogin()">
                 <p id="loginError" class="text-red-500 text-xs mt-2 hidden">Mot de passe incorrect.</p>
             </div>
             <button onclick="checkLogin()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-blue-900/20">
@@ -232,11 +229,10 @@
     <script>
         const PASSWORD_CONFIG = "admin";
         
-        // !!!!!!! COLLE TA CLÉ ICI !!!!!!!
+        // --- TA CLÉ EST INSÉRÉE ICI ---
         const API_KEY = "wtZ4ar0LfzPrZ7XFZeoXcKTJkARx5mbK"; 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        // PORTFOLIO - TICKERS FORMAT FMP (Financial Modeling Prep)
+        
+        // --- DONNÉES ---
         let portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, eps: 5.90 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, eps: 7.50 },
@@ -246,7 +242,7 @@
             { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   eps: 0    },
         ];
 
-        // Pour les stats
+        // Initialisation à zéro pour l'affichage avant chargement
         portfolio.forEach(p => { p.price = 0; p.prev = 0; });
 
         let watchlist = [
@@ -255,43 +251,61 @@
         ];
 
         let macro = [
-            { tick: "XAUUSD", name: "gold", price: 0, prev: 0 }, // Or Spot
-            { tick: "BZUSD",  name: "oil", price: 0, prev: 0 },  // Brent Oil
-            { tick: "EURUSD", name: "eur", price: 0, prev: 0 },  // Euro
-            { tick: "BTCUSD", name: "btc", price: 0, prev: 0 }   // Bitcoin
+            { tick: "GCUSD", name: "gold", price: 0, prev: 0 }, // Or Spot FMP code
+            { tick: "BZUSD",  name: "oil", price: 0, prev: 0 },  // Brent
+            { tick: "EURUSD", name: "eur", price: 0, prev: 0 },  
+            { tick: "BTCUSD", name: "btc", price: 0, prev: 0 }   
         ];
 
         // --- NAVIGATION ---
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            
+            // Gestion des boutons actifs
             ['home','dashboard','watchlist','convictions','macro','rentes','journal'].forEach(b=>{
-                const el=document.getElementById('btn-'+b);
-                if(el){ if(b===id){el.classList.add('bg-blue-600','text-white');el.classList.remove('text-gray-400','bg-transparent')} else{el.classList.remove('bg-blue-600','text-white');el.classList.add('text-gray-400','bg-transparent')} }
+                const el = document.getElementById('btn-'+b);
+                if(el){ 
+                    if(b===id){
+                        el.classList.add('bg-blue-600','text-white');
+                        el.classList.remove('text-gray-400','bg-transparent');
+                    } else {
+                        el.classList.remove('bg-blue-600','text-white');
+                        el.classList.add('text-gray-400','bg-transparent');
+                    } 
+                }
             });
-            if(id!=='home') document.getElementById('resultCard').classList.add('hidden');
-            if(id==='rentes') renderCalendar();
-            if(id==='journal') renderJournal();
+
+            if(id !== 'home') document.getElementById('resultCard').classList.add('hidden');
+            if(id === 'rentes') renderCalendar();
+            if(id === 'journal') renderJournal();
         }
 
         // --- MOTEUR API (FMP) ---
         async function fetchAllData() {
-            if(API_KEY === "TA_CLE_ICI" || API_KEY === "") {
-                alert("Attention : Tu dois coller ta clé API dans le code (Ligne 400 environ) !");
-                return;
-            }
-
+            // Concatenation de tous les tickers
             const allTickers = [...portfolio.map(i=>i.tick), ...watchlist.map(i=>i.tick), ...macro.map(i=>i.tick)].join(',');
-            document.getElementById('last-update').innerText = "Connexion...";
             
-            // FMP Quote Endpoint
+            const updateLabel = document.getElementById('last-update');
+            updateLabel.innerText = "Connexion...";
+            updateLabel.className = "text-yellow-400 font-mono text-sm";
+            
             const url = `https://financialmodelingprep.com/api/v3/quote/${allTickers}?apikey=${API_KEY}`;
             
             try {
                 const r = await fetch(url);
-                if(!r.ok) throw new Error("Erreur API");
                 const data = await r.json();
 
+                // Gestion d'erreur spécifique FMP (Quota ou Clé)
+                if(data['Error Message']) {
+                    console.error("Erreur API FMP:", data['Error Message']);
+                    updateLabel.innerText = "ERREUR CLÉ/QUOTA";
+                    updateLabel.className = "text-red-500 font-bold text-sm";
+                    alert("Erreur API : " + data['Error Message']);
+                    return;
+                }
+
+                // Mapping des données reçues
                 data.forEach(q => {
                     let pItem = portfolio.find(i => i.tick === q.symbol);
                     if(pItem) { pItem.price = q.price; pItem.prev = q.previousClose; }
@@ -303,8 +317,8 @@
                     if(mItem) { mItem.price = q.price; mItem.prev = q.previousClose; }
                 });
 
-                document.getElementById('last-update').innerText = "OK " + new Date().toLocaleTimeString();
-                document.getElementById('last-update').className = "text-green-400 font-mono text-sm";
+                updateLabel.innerText = "OK " + new Date().toLocaleTimeString();
+                updateLabel.className = "text-green-400 font-mono text-sm";
                 
                 renderDashboard();
                 renderWatchlist();
@@ -313,8 +327,8 @@
 
             } catch(e) {
                 console.error(e);
-                document.getElementById('last-update').innerText = "Erreur (Clé?)";
-                document.getElementById('last-update').className = "text-red-400 font-mono text-sm";
+                updateLabel.innerText = "Erreur Réseau";
+                updateLabel.className = "text-red-400 font-mono text-sm";
             }
         }
 
@@ -322,7 +336,8 @@
         function renderDashboard() {
             let totalVal = 0, totalInvest = 0, totalDiv = 0, totalPER = 0, countPER = 0;
             let topStock = { name: '-', perf: -999 };
-            const tbody = document.getElementById('tableBody'); tbody.innerHTML = '';
+            const tbody = document.getElementById('tableBody'); 
+            tbody.innerHTML = '';
 
             portfolio.forEach((stock) => {
                 const valo = stock.price * stock.q;
@@ -331,13 +346,23 @@
                 let dayVarPct = stock.price > 0 && stock.prev > 0 ? ((stock.price - stock.prev) / stock.prev) * 100 : 0;
                 let calculatedPER = (stock.price > 0 && stock.eps > 0) ? stock.price / stock.eps : 0;
 
-                totalVal += valo; totalInvest += invest; totalDiv += valo * stock.div;
+                totalVal += valo; 
+                totalInvest += invest; 
+                totalDiv += valo * stock.div;
                 if(calculatedPER > 0) { totalPER += calculatedPER; countPER++; }
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
                 
                 const dPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '...';
                 const dValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
-                const row = `<tr class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0"><td class="px-5 py-4"><div class="font-bold text-white">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td><td class="px-5 py-4 text-right text-white font-mono">${dPrice}</td><td class="px-5 py-4 text-center font-mono font-bold ${dayVarPct>=0?'text-green-400':'text-red-400'}">${dayVarPct>0?'+':''}${dayVarPct.toFixed(2)}%</td><td class="px-5 py-4 text-right font-bold text-gray-300 hidden sm:table-cell">${dValo}</td><td class="px-5 py-4 text-right ${perfPct>=0?'text-success':'text-danger'} font-mono font-bold">${perfPct>0?'+':''}${perfPct.toFixed(2)}%</td></tr>`;
+                
+                const row = `
+                <tr class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0">
+                    <td class="px-5 py-4"><div class="font-bold text-white">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td>
+                    <td class="px-5 py-4 text-right text-white font-mono">${dPrice}</td>
+                    <td class="px-5 py-4 text-center font-mono font-bold ${dayVarPct>=0?'text-green-400':'text-red-400'}">${dayVarPct>0?'+':''}${dayVarPct.toFixed(2)}%</td>
+                    <td class="px-5 py-4 text-right font-bold text-gray-300 hidden sm:table-cell">${dValo}</td>
+                    <td class="px-5 py-4 text-right ${perfPct>=0?'text-success':'text-danger'} font-mono font-bold">${perfPct>0?'+':''}${perfPct.toFixed(2)}%</td>
+                </tr>`;
                 tbody.innerHTML += row;
             });
 
@@ -351,9 +376,37 @@
                 document.getElementById('topStock').innerText = topStock.name;
                 document.getElementById('topStockPerf').innerText = (topStock.perf>0?'+':'') + topStock.perf.toFixed(2) + " %";
             }
+            
+            // Graphique Camembert
             if(window.myChart) window.myChart.destroy();
-            const initialData = [20, 15, 30, 10, 10, 15];
-            window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { type: 'doughnut', data: { labels: portfolio.map(s => s.sec), datasets: [{ data: initialData, backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, usePointStyle: true } } } } });
+            
+            // Regroupement par secteur pour le graph
+            let sectors = {};
+            portfolio.forEach(s => {
+                if(!sectors[s.sec]) sectors[s.sec] = 0;
+                sectors[s.sec] += (s.price * s.q);
+            });
+            
+            const labels = Object.keys(sectors);
+            const data = Object.values(sectors);
+
+            window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { 
+                type: 'doughnut', 
+                data: { 
+                    labels: labels, 
+                    datasets: [{ 
+                        data: data, 
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], 
+                        borderWidth: 0 
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    cutout: '70%', 
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, usePointStyle: true } } } 
+                } 
+            });
         }
 
         function renderMacro() {
@@ -363,7 +416,10 @@
                     const elPrice = document.getElementById(`macro-${m.name}-price`);
                     const elVar = document.getElementById(`macro-${m.name}-var`);
                     if(elPrice) elPrice.innerText = m.price.toFixed(2);
-                    if(elVar) { elVar.innerText = (varPct > 0 ? '+' : '') + varPct.toFixed(2) + "%"; elVar.className = `text-sm mt-1 font-mono font-bold ${varPct >= 0 ? 'text-green-400' : 'text-red-400'}`; }
+                    if(elVar) { 
+                        elVar.innerText = (varPct > 0 ? '+' : '') + varPct.toFixed(2) + "%"; 
+                        elVar.className = `text-sm mt-1 font-mono font-bold ${varPct >= 0 ? 'text-green-400' : 'text-red-400'}`; 
+                    }
                 }
             });
         }
@@ -379,18 +435,27 @@
         }
 
         function renderCalendar() {
-            const container = document.getElementById('dividend-list'); container.innerHTML = ""; const payments = [];
+            const container = document.getElementById('dividend-list'); 
+            container.innerHTML = ""; 
+            const payments = [];
+            
             portfolio.forEach(stock => {
                 if(stock.price > 0) {
-                    const annual = stock.q * stock.price * stock.div; if(annual < 1) return;
+                    const annual = stock.q * stock.price * stock.div; 
+                    if(annual < 1) return;
+                    
+                    // Simulation dates paiements (simplifiée)
                     if (stock.tick.includes("TTE")) { [0, 3, 5, 8].forEach(m => payments.push({ month: m, name: stock.name, amt: annual / 4 })); } 
                     else if (stock.tick.includes("AI") || stock.tick.includes("SU")) { payments.push({ month: 4, name: stock.name, amt: annual }); } 
                     else { payments.push({ month: 5, name: stock.name, amt: annual }); }
                 }
             });
-            if(payments.length === 0) { container.innerHTML = '<div class="p-8 text-center text-gray-500">Données manquantes ou Clé API invalide.</div>'; return; }
+            
+            if(payments.length === 0) { container.innerHTML = '<div class="p-8 text-center text-gray-500">Données en attente des prix...</div>'; return; }
+            
             payments.sort((a, b) => a.month - b.month);
             const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            
             payments.forEach(p => {
                 container.innerHTML += `<div class="p-4 flex justify-between items-center hover:bg-gray-800/20 transition"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-500 uppercase border border-gray-700">${months[p.month].substring(0,3)}</div><div><div class="font-bold text-white">${p.name}</div></div></div><div class="text-right"><div class="text-xl font-bold text-indigo-400">+${p.amt.toFixed(2)} €</div></div></div>`;
             });
@@ -400,20 +465,40 @@
         async function searchTicker() {
             const t = document.getElementById('mainTickerInput').value.toUpperCase(); if(!t)return;
             document.getElementById('resultCard').classList.add('hidden'); document.getElementById('searchLoader').style.display = 'block';
+            
             const url = `https://financialmodelingprep.com/api/v3/quote/${t}?apikey=${API_KEY}`;
+            
             try {
-                const r = await fetch(url); const d = await r.json();
+                const r = await fetch(url); 
+                const d = await r.json();
+                
+                if(d['Error Message']) { alert(d['Error Message']); throw new Error(d['Error Message']); }
+
                 if(d.length > 0) {
                     const m = d[0];
-                    document.getElementById('res-name').innerText = m.name; document.getElementById('res-symbol').innerText = m.symbol; document.getElementById('res-price').innerText = m.price.toFixed(2);
-                    document.getElementById('res-perf').innerText = (m.changesPercentage>0?'+':'') + m.changesPercentage.toFixed(2) + " %";
-                    document.getElementById('res-perf').className = m.changesPercentage>=0?"text-xl font-bold flex items-center justify-end gap-2 text-green-400":"text-xl font-bold flex items-center justify-end gap-2 text-red-400";
-                    document.getElementById('res-open').innerText = m.open.toFixed(2); document.getElementById('res-range').innerText = m.dayLow + " - " + m.dayHigh;
-                    let vol = m.volume || 0; document.getElementById('res-vol').innerText = vol > 1000000 ? (vol/1000000).toFixed(1) + "M" : (vol/1000).toFixed(1) + "K";
+                    document.getElementById('res-name').innerText = m.name; 
+                    document.getElementById('res-symbol').innerText = m.symbol; 
+                    document.getElementById('res-price').innerText = m.price.toFixed(2);
+                    
+                    const p = m.changesPercentage;
+                    document.getElementById('res-perf').innerText = (p>0?'+':'') + p.toFixed(2) + " %";
+                    document.getElementById('res-perf').className = p>=0?"text-xl font-bold flex items-center justify-end gap-2 text-green-400":"text-xl font-bold flex items-center justify-end gap-2 text-red-400";
+                    
+                    document.getElementById('res-open').innerText = m.open.toFixed(2); 
+                    document.getElementById('res-range').innerText = m.dayLow + " - " + m.dayHigh;
+                    
+                    let vol = m.volume || 0; 
+                    document.getElementById('res-vol').innerText = vol > 1000000 ? (vol/1000000).toFixed(1) + "M" : (vol/1000).toFixed(1) + "K";
+                    
                     document.getElementById('res-cap').innerText = m.marketCap > 1000000000 ? (m.marketCap/1000000000).toFixed(2)+"B" : (m.marketCap/1000000).toFixed(2)+"M";
-                    document.getElementById('searchLoader').style.display='none'; document.getElementById('resultCard').classList.remove('hidden');
-                } else { throw new Error(); }
-            } catch(e) { alert("Ticker introuvable ou erreur clé"); document.getElementById('searchLoader').style.display='none'; }
+                    
+                    document.getElementById('searchLoader').style.display='none'; 
+                    document.getElementById('resultCard').classList.remove('hidden');
+                } else { throw new Error("Symbol not found"); }
+            } catch(e) { 
+                alert("Ticker introuvable ou erreur clé"); 
+                document.getElementById('searchLoader').style.display='none'; 
+            }
         }
 
         function saveNote() {
@@ -429,12 +514,19 @@
         }
 
         function checkLogin() {
+            // Mot de passe par défaut : admin
             if(document.getElementById('passwordInput').value === PASSWORD_CONFIG) {
-                document.getElementById('login-screen').style.display='none'; document.getElementById('app-container').style.display='flex';
-                fetchAllData(); renderJournal();
-                // Actualisation auto toutes les 5 minutes pour ne pas griller ton quota gratuit (250 req/jour)
+                document.getElementById('login-screen').style.display='none'; 
+                document.getElementById('app-container').style.display='flex';
+                
+                fetchAllData(); 
+                renderJournal();
+                
+                // Refresh toutes les 5 minutes pour respecter les 250 calls/jour
                 setInterval(fetchAllData, 300000); 
-            } else { document.getElementById('loginError').classList.remove('hidden'); }
+            } else { 
+                document.getElementById('loginError').classList.remove('hidden'); 
+            }
         }
     </script>
 </body>
