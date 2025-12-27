@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | V46 Manifesto</title>
+    <title>Noa Capital | v1.2.1</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,329 +14,481 @@
             theme: {
                 extend: {
                     colors: { 
-                        dark: '#0f172a', 
-                        card: '#1e293b', 
+                        dark: '#050505', 
+                        panel: '#0f1115',
+                        surface: '#181b21',
                         accent: '#3b82f6', 
-                        success: '#22c55e', 
+                        success: '#10b981', 
                         danger: '#ef4444', 
-                        gold: '#fbbf24'
+                        gold: '#fbbf24',
+                        subtle: '#27272a'
                     },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Menlo', 'monospace'] 
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'hero-glow': 'conic-gradient(from 180deg at 50% 50%, #2a8af6 0deg, #a853ba 180deg, #e92a67 360deg)',
+                    }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; overflow-x: hidden; }
-        .tab-content { display: none; width: 100%; animation: fadeIn 0.4s ease-out; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
         
-        #home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: calc(100vh - 64px); }
-        .search-glow:focus-within { box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
-        .loader { border: 3px solid #333; border-top: 3px solid #3b82f6; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display:none; margin: 0 auto; }
-        .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
-        @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
-        .scanning-row { border-left: 3px solid #3b82f6; background-color: rgba(59,130,246,0.05); }
+        /* Background Grid Pattern */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
 
-        /* Styles LOGIN */
-        #login-screen { position: fixed; inset: 0; z-index: 9999; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .login-box { width: 100%; max-width: 400px; padding: 2rem; background: #1e293b; border: 1px solid #334155; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); text-align: center; }
-        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        .tab-content { display: none; width: 100%; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .tab-content.active { display: block; }
+        
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(20px) scale(0.98); } 
+            to { opacity: 1; transform: translateY(0) scale(1); } 
+        }
+        
+        #home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: calc(100vh - 80px); }
+        
+        .glass-panel {
+            background: rgba(24, 27, 33, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .search-input-wrapper:focus-within {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+        
+        .loader { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid #3b82f6; border-radius: 50%; width: 20px; height: 20px; animation: spin 0.8s linear infinite; display:none; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .flash-update { animation: flash 0.6s ease-out; background-color: rgba(16, 185, 129, 0.15) !important; }
+        @keyframes flash { 0% { background-color: rgba(16, 185, 129, 0.3); } 100% { background-color: transparent; } }
+
+        /* Login Specifics */
+        .login-glow {
+            position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: -1; pointer-events: none;
+        }
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
         @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
     </style>
 </head>
 
-<body class="antialiased min-h-screen flex flex-col">
+<body class="antialiased min-h-screen flex flex-col selection:bg-blue-500/30 selection:text-blue-200">
 
-    <div id="login-screen">
-        <div class="mb-8 flex flex-col items-center gap-4">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-16 h-16 rounded-2xl flex items-center justify-center font-black text-3xl text-white shadow-2xl shadow-blue-900/50">N</div>
-            <h1 class="text-3xl font-bold tracking-tight text-white">Noa Capital</h1>
-            <p class="text-gray-400 text-sm">V46 Private Access</p>
+    <div id="login-screen" class="fixed inset-0 z-[9999] bg-dark flex flex-col justify-center items-center overflow-hidden">
+        <div class="absolute inset-0 bg-grid opacity-40"></div>
+        <div class="login-glow"></div>
+        
+        <div class="relative z-10 flex flex-col items-center gap-6 animate-in fade-in duration-700 zoom-in-95">
+            <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-40 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative bg-panel border border-white/10 w-20 h-20 rounded-2xl flex items-center justify-center">
+                    <span class="font-bold text-4xl text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-500">N</span>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <h1 class="text-4xl font-bold tracking-tight text-white mb-2">Noa Capital</h1>
+                <div class="flex items-center justify-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <p class="text-gray-500 font-mono text-xs tracking-widest uppercase">System v1.2.1 • Restricted</p>
+                </div>
+            </div>
         </div>
         
-        <div class="login-box">
-            <div class="mb-6 text-left">
-                <label class="block text-xs font-bold text-blue-400 uppercase mb-2">Mot de passe</label>
-                <input type="password" id="passwordInput" class="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition" placeholder="••••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
-                <p id="loginError" class="text-red-500 text-xs mt-2 hidden">Accès refusé. Mot de passe incorrect.</p>
+        <div class="login-box w-full max-w-sm p-8 mt-8 glass-panel rounded-2xl shadow-2xl relative z-10 transition-all duration-300">
+            <div class="mb-6">
+                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Access Key</label>
+                <div class="relative group">
+                    <input type="password" id="passwordInput" 
+                        class="w-full bg-black/40 border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 outline-none transition font-mono placeholder-gray-700" 
+                        placeholder="••••••" 
+                        onkeypress="if(event.key === 'Enter') checkLogin()">
+                </div>
+                <p id="loginError" class="text-red-400 text-xs mt-3 text-center hidden font-medium flex items-center justify-center gap-2"><span class="block w-1 h-1 bg-red-500 rounded-full"></span> Invalid credentials</p>
             </div>
-            <button onclick="checkLogin()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-blue-900/20">
-                Déverrouiller
+            <button onclick="checkLogin()" class="w-full bg-white text-black hover:bg-gray-200 font-bold py-3.5 rounded-xl transition shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                Initialize Session
             </button>
         </div>
-        <div class="mt-8 text-gray-600 text-xs font-mono">Secured by NC-Protocol v2.1</div>
+        
+        <div class="absolute bottom-8 text-gray-700 text-[10px] font-mono">
+            NC-PROTOCOL SECURIZED CONNECTION
+        </div>
     </div>
 
-    <div id="app-container" style="display: none;" class="flex-1 flex flex-col w-full h-full">
+    <div id="app-container" style="display: none;" class="flex-1 flex flex-col w-full h-full relative">
+        <div class="fixed inset-0 bg-grid opacity-20 pointer-events-none z-0"></div>
 
-        <nav class="border-b border-gray-800 bg-card/90 backdrop-blur-md sticky top-0 z-50 h-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
-                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-9 h-9 rounded-lg flex items-center justify-center font-black text-white shadow-lg">N</div>
-                    <span class="text-xl font-bold tracking-tight">Noa Capital</span>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div id="status-badge" class="hidden md:flex items-center gap-2 bg-gray-900/80 px-3 py-1 rounded-full border border-gray-700">
-                        <span class="w-2 h-2 rounded-full bg-blue-500" id="status-dot"></span>
-                        <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider" id="status-text">Prêt</span>
+        <nav class="glass-panel sticky top-4 z-50 h-16 mx-4 mt-4 rounded-2xl border border-white/5 shadow-lg">
+            <div class="h-full flex items-center justify-between px-6">
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="switchTab('home')">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-900/30 group-hover:scale-105 transition">N</div>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-bold text-white leading-none">Noa Capital</span>
+                        <span class="text-[9px] text-gray-500 font-mono leading-none mt-1">v1.2.1</span>
                     </div>
-                    <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto">
-                        <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition whitespace-nowrap">🔎 Recherche</button>
-                        <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Stratégie</button>
-                        <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Portefeuille</button>
-                        <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Surveillance</button>
-                        <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Simulateur</button>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <div id="status-badge" class="hidden md:flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full border border-white/5">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500" id="status-dot"></span>
+                        </span>
+                        <span class="text-[10px] font-bold text-gray-300 uppercase tracking-wider" id="status-text">Live</span>
+                    </div>
+
+                    <div class="flex space-x-1 bg-black/40 p-1 rounded-xl border border-white/5 backdrop-blur-md">
+                        <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-xs font-medium rounded-lg transition-all duration-300">Recherche</button>
+                        <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-xs font-medium rounded-lg text-gray-400 hover:text-white transition-all duration-300">Thèse</button>
+                        <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-xs font-medium rounded-lg text-gray-400 hover:text-white transition-all duration-300">Portefeuille</button>
+                        <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-xs font-medium rounded-lg text-gray-400 hover:text-white transition-all duration-300">Watchlist</button>
+                        <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-xs font-medium rounded-lg text-gray-400 hover:text-white transition-all duration-300">Simulateur</button>
                     </div>
                 </div>
             </div>
         </nav>
 
-        <main class="flex-1 w-full">
+        <main class="flex-1 w-full relative z-10">
 
             <div id="home" class="tab-content active">
-                <div class="text-center mb-8 w-full px-4 pt-8">
-                    <h1 class="text-5xl font-black text-white mb-4">Market Intelligence.</h1>
-                    <p class="text-gray-400">Analyse Technique & Fondamentale.</p>
+                <div class="text-center mb-10 px-4 pt-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                    <div class="inline-block mb-4 px-3 py-1 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-400 text-xs font-mono">Market Intelligence v1.2.1</div>
+                    <h1 class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-6 tracking-tight">Market Insight.</h1>
+                    <p class="text-gray-400 max-w-lg mx-auto text-sm leading-relaxed">Plateforme d'analyse fondamentale et technique pour la gestion d'actifs réels et stratégiques.</p>
                 </div>
                 
-                <div class="w-full max-w-3xl px-4 relative z-10 mb-8">
-                    <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
-                        <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA, NVDA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
-                        <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">GO</button>
+                <div class="w-full max-w-2xl px-4 relative z-10 mb-12">
+                    <div class="search-input-wrapper glass-panel rounded-2xl p-2 flex items-center transition-all duration-300 group">
+                        <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-lg px-6 py-4 focus:outline-none placeholder-gray-600 font-medium tracking-wide" placeholder="Rechercher un actif (ex: AI.PA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
+                        <button onclick="searchTicker()" class="bg-white hover:bg-gray-200 text-black font-bold py-3 px-8 rounded-xl transition shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                        </button>
                     </div>
-                    <div class="mt-4 flex justify-center gap-3 text-sm text-gray-500">
-                        <button onclick="fillSearch('AI.PA')" class="hover:text-blue-400 transition">Air Liquide</button>
-                        <button onclick="fillSearch('MC.PA')" class="hover:text-blue-400 transition">LVMH</button>
-                        <button onclick="fillSearch('NVDA')" class="hover:text-blue-400 transition">Nvidia</button>
+                    <div class="mt-6 flex justify-center gap-4 text-xs font-mono text-gray-500">
+                        <span class="text-gray-600">Trending:</span>
+                        <button onclick="fillSearch('AI.PA')" class="hover:text-blue-400 transition underline decoration-dotted">Air Liquide</button>
+                        <button onclick="fillSearch('MC.PA')" class="hover:text-blue-400 transition underline decoration-dotted">LVMH</button>
+                        <button onclick="fillSearch('NVDA')" class="hover:text-blue-400 transition underline decoration-dotted">Nvidia</button>
                     </div>
                 </div>
                 
-                <div id="searchLoader" class="loader mt-10"></div>
+                <div id="searchLoader" class="loader mt-4"></div>
                 
                 <div id="resultCard" class="hidden w-full max-w-5xl px-4 pb-20">
-                    <div class="bg-card/90 backdrop-blur border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
-                        <div class="p-6 border-b border-gray-700/50 flex justify-between items-center bg-gray-800/20">
+                    <div class="glass-panel rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50">
+                        <div class="p-8 border-b border-white/5 flex justify-between items-start bg-gradient-to-r from-white/5 to-transparent">
                             <div>
-                                <div class="flex items-center gap-3">
-                                    <h2 class="text-3xl font-bold text-white" id="res-name">Nom</h2>
-                                    <span class="text-xs px-2 py-1 rounded bg-blue-900/30 text-blue-400 border border-blue-800" id="res-type">EQUITY</span>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h2 class="text-4xl font-bold text-white tracking-tight" id="res-name">Nom</h2>
+                                    <span class="text-[10px] px-2 py-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 font-mono tracking-wider" id="res-type">EQUITY</span>
                                 </div>
-                                <div class="text-gray-400 text-sm mt-1 font-mono">
-                                    <span id="res-symbol">TICKER</span> • <span id="res-exchange">Market</span>
+                                <div class="text-gray-400 text-xs font-mono flex gap-3">
+                                    <span id="res-symbol" class="text-white">TICKER</span>
+                                    <span class="text-gray-600">|</span>
+                                    <span id="res-exchange">Market</span>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <div class="text-5xl font-black text-white" id="res-price">--</div>
-                                <div class="text-xl font-bold flex items-center justify-end gap-2" id="res-perf">-- %</div>
+                                <div class="text-5xl font-mono font-bold text-white tracking-tighter" id="res-price">--</div>
+                                <div class="text-lg font-bold flex items-center justify-end gap-2 mt-1" id="res-perf">-- %</div>
                             </div>
                         </div>
 
-                        <div class="h-[350px] w-full p-4 bg-gray-900/50 relative">
+                        <div class="h-[400px] w-full p-6 bg-black/20 relative">
                             <canvas id="searchChart"></canvas>
                         </div>
                         
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-700/50">
-                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Ouverture</div><div class="text-lg font-mono text-white" id="res-open">--</div></div>
-                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Range Jour</div><div class="text-sm font-mono text-white" id="res-range">--</div></div>
-                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Volume</div><div class="text-lg font-mono text-blue-300" id="res-vol">--</div></div>
-                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Cap. Boursière</div><div class="text-lg font-mono text-white" id="res-cap">--</div></div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/5 border-t border-white/5 bg-black/40">
+                            <div class="p-6">
+                                <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Ouverture</div>
+                                <div class="text-lg font-mono text-white" id="res-open">--</div>
+                            </div>
+                            <div class="p-6">
+                                <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Range Jour</div>
+                                <div class="text-sm font-mono text-gray-300" id="res-range">--</div>
+                            </div>
+                            <div class="p-6">
+                                <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Volume</div>
+                                <div class="text-lg font-mono text-blue-300" id="res-vol">--</div>
+                            </div>
+                            <div class="p-6">
+                                <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-1">Cap. Boursière</div>
+                                <div class="text-lg font-mono text-white" id="res-cap">--</div>
+                            </div>
 
-                            <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">PER (P/E)</div><div class="text-xl font-bold text-white" id="res-pe">--</div></div>
-                            <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">BPA (EPS)</div><div class="text-xl font-bold text-white" id="res-eps">--</div></div>
-                            <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-yellow-400">Analystes</div><div class="text-sm font-bold text-white mt-1" id="res-rating">--</div></div>
-                            <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-purple-400">Bêta</div><div class="text-xl font-bold text-white" id="res-beta">--</div></div>
+                            <div class="p-6 border-t border-white/5">
+                                <div class="text-[10px] text-blue-400 uppercase font-bold tracking-wider mb-1">PER (P/E)</div>
+                                <div class="text-xl font-bold text-white" id="res-pe">--</div>
+                            </div>
+                            <div class="p-6 border-t border-white/5">
+                                <div class="text-[10px] text-blue-400 uppercase font-bold tracking-wider mb-1">BPA (EPS)</div>
+                                <div class="text-xl font-bold text-white" id="res-eps">--</div>
+                            </div>
+                            <div class="p-6 border-t border-white/5">
+                                <div class="text-[10px] text-yellow-400 uppercase font-bold tracking-wider mb-1">Analystes</div>
+                                <div class="text-sm font-bold text-white mt-1" id="res-rating">--</div>
+                            </div>
+                            <div class="p-6 border-t border-white/5">
+                                <div class="text-[10px] text-purple-400 uppercase font-bold tracking-wider mb-1">Bêta</div>
+                                <div class="text-xl font-bold text-white" id="res-beta">--</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="convictions" class="tab-content max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-                
-                <div class="mb-12 border-b border-gray-700 pb-8">
-                    <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-6">Thèse d'Investissement</h1>
-                    <p class="text-xl text-gray-400 leading-relaxed max-w-3xl">
-                        Pourquoi nous quittons la Tech pour revenir au Réel. Analyse structurelle d'un changement de paradigme économique.
+            <div id="convictions" class="tab-content max-w-5xl mx-auto p-6 lg:p-10">
+                <div class="mb-12 border-b border-white/10 pb-8">
+                    <span class="text-blue-500 font-mono text-xs tracking-wider uppercase mb-2 block">Macro Strategy</span>
+                    <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">Thèse d'Investissement.</h1>
+                    <p class="text-xl text-gray-400 leading-relaxed max-w-3xl font-light">
+                        Pivot structurel vers les <span class="text-white font-normal">Actifs Réels</span>. Analyse de la transition d'une économie immatérielle vers une économie de rareté physique.
                     </p>
                 </div>
 
-                <div class="mb-16">
-                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span class="text-red-500">01.</span> La Grande Rotation : Fuir la Bulle Tech
-                    </h2>
-                    <div class="prose prose-invert prose-lg max-w-none text-gray-300 space-y-6 text-justify">
-                        <p>
-                            Depuis 2010, les marchés ont été drogués à l'argent gratuit (taux zéro). Cela a favorisé les actifs de "croissance longue" comme la Tech, le SaaS et récemment l'IA. Aujourd'hui, les valorisations de la Tech (Nasdaq) ont atteint des niveaux de perfection qui ne tolèrent aucune erreur. Le PER moyen du secteur dépasse les 35x, ce qui implique une croissance ininterrompue pour les 10 prochaines années. <strong>C'est un risque asymétrique défavorable.</strong>
-                        </p>
-                        <p>
-                            Nous assistons au dégonflement inévitable de cette prime de risque. L'IA est une révolution réelle, mais les gagnants actuels (Nvidia, Microsoft) sont "pricés" pour la perfection. À l'inverse, l'économie réelle a été sous-investie pendant une décennie. Les infrastructures vieillissent, les réseaux électriques saturent, et l'offre de matières premières est contrainte.
-                        </p>
-                        <div class="bg-red-900/10 border-l-4 border-red-500 p-6 rounded-r-lg my-8">
-                            <h4 class="font-bold text-red-400 mb-2">Notre Décision Radicale</h4>
-                            <p class="text-sm">Nous sortons des actifs immatériels survalorisés pour nous positionner sur des actifs tangibles sous-valorisés. Nous préférons posséder une mine de cuivre (P/E 12) indispensable à l'IA, plutôt qu'un logiciel (P/E 50) qui pourrait être obsolète dans 6 mois.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-16">
-                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span class="text-gold">02.</span> La Croissance Ricardienne (Le Retour du Réel)
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                        <div class="bg-card p-6 rounded-xl border border-gray-700">
-                            <div class="text-3xl mb-4">⛏️</div>
-                            <h3 class="font-bold text-white mb-2">Rareté Physique</h3>
-                            <p class="text-sm text-gray-400">On ne peut pas "imprimer" du cuivre ou de l'énergie. L'offre est inélastique à court terme.</p>
-                        </div>
-                        <div class="bg-card p-6 rounded-xl border border-gray-700">
-                            <div class="text-3xl mb-4">🏭</div>
-                            <h3 class="font-bold text-white mb-2">Pricing Power</h3>
-                            <p class="text-sm text-gray-400">Les entreprises qui possèdent des actifs critiques peuvent monter leurs prix sans perdre de clients.</p>
-                        </div>
-                        <div class="bg-card p-6 rounded-xl border border-gray-700">
-                            <div class="text-3xl mb-4">🛡️</div>
-                            <h3 class="font-bold text-white mb-2">Barrières à l'entrée</h3>
-                            <p class="text-sm text-gray-400">Il faut 15 ans pour ouvrir une mine ou construire une usine chimique. La concurrence est limitée.</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 leading-relaxed text-justify">
-                        Cette stratégie vise à capturer la "Rente de situation" décrite par David Ricardo. Dans un monde où l'inflation devient structurelle (démographie, déglobalisation, transition verte), les marges se déplacent vers l'amont de la chaîne de valeur : ceux qui extraient, ceux qui transforment, et ceux qui distribuent l'énergie.
-                    </p>
-                </div>
-
-                <div class="mb-16">
-                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span class="text-blue-500">03.</span> Stock Picking : Pourquoi ces entreprises ?
-                    </h2>
-                    
-                    <div class="space-y-6">
-                        <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500 transition duration-300">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-xl font-bold text-white">Air Liquide (AI.PA)</h3>
-                                <span class="bg-blue-900/30 text-blue-400 px-3 py-1 rounded-full text-xs font-bold border border-blue-500/30">DÉFENSIF</span>
-                            </div>
-                            <p class="text-gray-400 text-sm leading-relaxed text-justify">
-                                C'est la fondation du portefeuille. Air Liquide ne vend pas du gaz, elle vend de la fiabilité. Ses contrats de 15 ans incluent des clauses d'indexation sur l'énergie. Si l'électricité augmente, Air Liquide facture plus cher. C'est l'un des rares "business models" au monde parfaitement protégé contre l'inflation. De plus, elle est le leader incontesté de l'hydrogène vert, le carburant du futur pour l'industrie lourde.
+                <div class="grid gap-16">
+                    <section>
+                        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-4">
+                            <span class="flex items-center justify-center w-8 h-8 rounded bg-red-500/10 text-red-500 text-sm font-mono border border-red-500/20">01</span> 
+                            La Grande Rotation
+                        </h2>
+                        <div class="glass-panel p-8 rounded-2xl border-l-2 border-l-red-500/50">
+                            <p class="text-gray-300 leading-relaxed text-lg mb-4">
+                                Les valorisations de la Tech (Nasdaq) ont atteint des niveaux de perfection qui ne tolèrent aucune erreur (PER > 35x). C'est un risque asymétrique défavorable.
+                            </p>
+                            <p class="text-gray-400 leading-relaxed">
+                                Nous sortons des actifs immatériels survalorisés pour nous positionner sur des actifs tangibles sous-valorisés. Nous préférons posséder une mine de cuivre (P/E 12) indispensable à l'IA, plutôt qu'un logiciel (P/E 50).
                             </p>
                         </div>
+                    </section>
 
-                        <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold transition duration-300">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-xl font-bold text-white">ETF Basic Resources (BRES.PA)</h3>
-                                <span class="bg-yellow-900/30 text-gold px-3 py-1 rounded-full text-xs font-bold border border-yellow-500/30">OFFENSIF</span>
+                    <section>
+                        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-4">
+                            <span class="flex items-center justify-center w-8 h-8 rounded bg-yellow-500/10 text-yellow-500 text-sm font-mono border border-yellow-500/20">02</span> 
+                            La Croissance Ricardienne
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-surface p-6 rounded-2xl border border-white/5 hover:border-yellow-500/30 transition">
+                                <div class="text-3xl mb-4 grayscale hover:grayscale-0 transition">⛏️</div>
+                                <h3 class="font-bold text-white mb-2">Rareté Physique</h3>
+                                <p class="text-sm text-gray-500 leading-relaxed">Offre inélastique. On ne peut pas "imprimer" du cuivre.</p>
                             </div>
-                            <p class="text-gray-400 text-sm leading-relaxed text-justify">
-                                Notre conviction la plus forte. Cet ETF regroupe les géants miniers (Rio Tinto, Glencore, etc.). La thèse est simple : il n'y a pas de transition énergétique sans métaux. Une voiture électrique demande 4x plus de cuivre qu'une thermique. L'IA demande des data centers bourrés de câbles. L'offre est déficitaire pour la décennie à venir. C'est un "Super-cycle" qui commence.
-                            </p>
+                            <div class="bg-surface p-6 rounded-2xl border border-white/5 hover:border-yellow-500/30 transition">
+                                <div class="text-3xl mb-4 grayscale hover:grayscale-0 transition">🏭</div>
+                                <h3 class="font-bold text-white mb-2">Pricing Power</h3>
+                                <p class="text-sm text-gray-500 leading-relaxed">Capacité à monter les prix sans perte de volume.</p>
+                            </div>
+                            <div class="bg-surface p-6 rounded-2xl border border-white/5 hover:border-yellow-500/30 transition">
+                                <div class="text-3xl mb-4 grayscale hover:grayscale-0 transition">🛡️</div>
+                                <h3 class="font-bold text-white mb-2">Moat Industriel</h3>
+                                <p class="text-sm text-gray-500 leading-relaxed">Barrières à l'entrée massives (CAPEX, Temps).</p>
+                            </div>
                         </div>
+                    </section>
 
-                        <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500 transition duration-300">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-xl font-bold text-white">TotalEnergies (TTE.PA)</h3>
-                                <span class="bg-red-900/30 text-red-400 px-3 py-1 rounded-full text-xs font-bold border border-red-500/30">RENDEMENT</span>
+                    <section>
+                        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-4">
+                            <span class="flex items-center justify-center w-8 h-8 rounded bg-blue-500/10 text-blue-500 text-sm font-mono border border-blue-500/20">03</span> 
+                            Sélection Tactique
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="glass-panel p-6 rounded-xl border border-white/5 hover:border-blue-500/40 transition duration-300 group">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-bold text-white group-hover:text-blue-400 transition">Air Liquide (AI.PA)</h3>
+                                    <span class="text-[10px] font-mono border border-blue-500/30 text-blue-300 px-2 py-0.5 rounded">DÉFENSIF</span>
+                                </div>
+                                <p class="text-gray-400 text-sm">Contrats indexés sur l'énergie. Business model anti-inflation. Leader hydrogène.</p>
                             </div>
-                            <p class="text-gray-400 text-sm leading-relaxed text-justify">
-                                Le marché déteste le pétrole par idéologie, ce qui nous offre une opportunité financière incroyable. Total se paie moins de 8 fois ses bénéfices avec un rendement sur dividende > 5%. Contrairement à BP ou Shell, Total a gardé une approche pragmatique : utiliser le cash-flow énorme du pétrole pour financer intelligemment sa transition verte sans s'endetter. C'est notre "Vache à Lait".
-                            </p>
-                        </div>
-
-                        <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500 transition duration-300">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-xl font-bold text-white">Schneider Electric (SU.PA)</h3>
-                                <span class="bg-green-900/30 text-green-400 px-3 py-1 rounded-full text-xs font-bold border border-green-500/30">CROISSANCE</span>
+                            <div class="glass-panel p-6 rounded-xl border border-white/5 hover:border-yellow-500/40 transition duration-300 group">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-bold text-white group-hover:text-gold transition">ETF Basic Resources</h3>
+                                    <span class="text-[10px] font-mono border border-yellow-500/30 text-yellow-300 px-2 py-0.5 rounded">OFFENSIF</span>
+                                </div>
+                                <p class="text-gray-400 text-sm">Super-cycle des métaux. L'infrastructure IA et EV nécessite une quantité massive de cuivre.</p>
                             </div>
-                            <p class="text-gray-400 text-sm leading-relaxed text-justify">
-                                C'est notre façon de jouer l'Intelligence Artificielle sans payer les multiples absurdes de la Tech. L'IA a besoin de Data Centers. Les Data Centers ont besoin de gestion électrique ultra-complexe pour ne pas surchauffer. Schneider est le leader mondial de la gestion de l'énergie et de l'automatisation. C'est le vendeur de "pelles et de pioches" de la ruée vers l'or numérique.
-                            </p>
+                            <div class="glass-panel p-6 rounded-xl border border-white/5 hover:border-red-500/40 transition duration-300 group">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-lg font-bold text-white group-hover:text-red-400 transition">TotalEnergies (TTE.PA)</h3>
+                                    <span class="text-[10px] font-mono border border-red-500/30 text-red-300 px-2 py-0.5 rounded">YIELD</span>
+                                </div>
+                                <p class="text-gray-400 text-sm">Cash-flow monstre financant la transition. Valorisation absurde (< 8x P/E).</p>
+                            </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
-
-                <div class="mb-12">
-                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span class="text-purple-500">04.</span> La Prochaine Frontière
-                    </h2>
-                    <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-700">
-                        <p class="text-gray-300 text-justify mb-4">
-                            Une fois notre socle "Actifs Réels" consolidé, nous regarderons vers l'Est et le Sud.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-400 space-y-2 ml-4">
-                            <li><strong>Japon :</strong> Des entreprises riches en cash, une gouvernance qui s'améliore, mais un Yen trop faible. Nous attendons le pivot de la Banque du Japon.</li>
-                            <li><strong>Émergents (Inde/Brésil) :</strong> La démographie est là-bas. La croissance aussi. Mais tant que le Dollar est fort, ces marchés souffrent. Nous attendons la baisse des taux US pour entrer.</li>
-                        </ul>
-                    </div>
-                </div>
-
             </div>
 
-            <div id="dashboard" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-                <div class="mb-8 flex justify-between items-end">
+            <div id="dashboard" class="tab-content max-w-7xl mx-auto p-6 lg:p-8">
+                <div class="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-4">
                     <div>
-                        <h1 class="text-3xl font-bold text-white">Portefeuille Global</h1>
-                        <p class="text-gray-400 mt-1 text-sm font-mono flex items-center gap-2">
-                            <span id="scan-progress" class="hidden text-blue-400 font-bold">...</span>
-                            <span id="last-update">En attente de connexion...</span>
-                        </p>
+                        <h1 class="text-3xl font-bold text-white tracking-tight">Portefeuille Global</h1>
+                        <div class="flex items-center gap-3 mt-2">
+                            <div class="text-xs text-gray-500 font-mono flex items-center gap-2 px-3 py-1 rounded bg-white/5 border border-white/5">
+                                <div class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse hidden" id="scan-progress-dot"></div>
+                                <span id="last-update">En attente de flux...</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-right"><div class="text-sm text-gray-400 uppercase">AUM Total</div><div class="text-4xl font-extrabold text-white tabular-nums" id="totalVal">-- €</div></div>
+                    <div class="glass-panel px-6 py-3 rounded-2xl border border-white/10 text-right min-w-[200px]">
+                        <div class="text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-1">AUM Total</div>
+                        <div class="text-4xl font-mono font-bold text-white tracking-tighter" id="totalVal">-- €</div>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Plus-Value</p><p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">--</p></div>
-                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Dividendes</p><p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">--</p></div>
-                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">PER Moyen</p><p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p></div>
-                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Top Perf</p><p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p><p class="text-xs font-bold text-green-400 mt-1" id="topStockPerf">--</p></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="glass-panel rounded-2xl p-5 border border-white/5 hover:border-white/10 transition">
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Plus-Value</p>
+                        <p class="mt-2 text-2xl font-mono font-bold tracking-tight" id="totalPv">--</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-5 border border-white/5 hover:border-white/10 transition">
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Dividendes (Est.)</p>
+                        <p class="mt-2 text-2xl font-mono font-bold text-indigo-400 tracking-tight" id="totalDiv">--</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-5 border border-white/5 hover:border-white/10 transition">
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">P/E Moyen</p>
+                        <p class="mt-2 text-2xl font-mono font-bold text-white tracking-tight" id="avgPER">--</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-5 border border-white/5 hover:border-white/10 transition relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-green-500/20 to-transparent rounded-bl-full"></div>
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Top Perf</p>
+                        <p class="mt-2 text-lg font-bold text-white truncate" id="topStock">--</p>
+                        <p class="text-xs font-mono font-bold text-green-400" id="topStockPerf">--</p>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col">
-                        <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30"><h3 class="text-sm font-bold text-white uppercase">Positions Actives</h3></div>
+                    <div class="lg:col-span-2 glass-panel rounded-3xl border border-white/5 overflow-hidden flex flex-col shadow-xl">
+                        <div class="px-6 py-4 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
+                            <h3 class="text-xs font-bold text-white uppercase tracking-widest">Positions Actives</h3>
+                            <button class="text-gray-500 hover:text-white transition"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg></button>
+                        </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
-                                <thead class="bg-gray-900/50 uppercase text-xs text-gray-500">
+                                <thead class="bg-black/20 uppercase text-[10px] text-gray-500 font-bold tracking-wider">
                                     <tr>
-                                        <th class="px-5 py-3">Société</th>
-                                        <th class="px-5 py-3 text-right">Cours</th>
-                                        <th class="px-5 py-3 text-center">Var. J</th>
-                                        <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
-                                        <th class="px-5 py-3 text-right">Perf</th>
-                                        <th class="px-5 py-3 text-center text-blue-400">PER</th>
-                                        <th class="px-5 py-3 text-center text-purple-400">PSR</th>
+                                        <th class="px-6 py-4">Société</th>
+                                        <th class="px-6 py-4 text-right">Cours</th>
+                                        <th class="px-6 py-4 text-center">Var. 24h</th>
+                                        <th class="px-6 py-4 text-right hidden sm:table-cell">Valo</th>
+                                        <th class="px-6 py-4 text-right">Perf.</th>
+                                        <th class="px-6 py-4 text-center text-blue-400">P/E</th>
+                                        <th class="px-6 py-4 text-center text-purple-400">P/S</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-700/50" id="tableBody"></tbody>
+                                <tbody class="divide-y divide-white/5" id="tableBody"></tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="bg-card rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col">
-                        <h3 class="text-sm font-bold text-white uppercase mb-4">Allocation</h3>
+                    
+                    <div class="glass-panel rounded-3xl border border-white/5 p-6 flex flex-col shadow-xl">
+                        <h3 class="text-xs font-bold text-white uppercase tracking-widest mb-6">Allocation Sectorielle</h3>
                         <div class="flex-1 relative min-h-[250px]"><canvas id="sectorChart"></canvas></div>
                     </div>
                 </div>
             </div>
 
-            <div id="watchlist" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-                <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Liste de Surveillance</h1><p class="text-gray-400 mt-2">Cibles potentielles : Japon & Marchés Émergents.</p></div>
-                <div class="bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30 flex justify-between items-center"><h3 class="text-sm font-bold text-white uppercase">Watchlist</h3><span id="wl-scan-status" class="text-xs text-blue-400 font-mono hidden">Scan...</span></div>
-                    <div class="overflow-x-auto"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-gray-900/50 uppercase text-xs text-gray-500"><tr><th class="px-5 py-3">Actif</th><th class="px-5 py-3">Thèse / Objectif</th><th class="px-5 py-3 text-right">Cours Live</th><th class="px-5 py-3 text-center">Var. J</th><th class="px-5 py-3 text-right text-yellow-400">Statut</th></tr></thead><tbody class="divide-y divide-gray-700/50" id="watchlistBody"></tbody></table></div>
+            <div id="watchlist" class="tab-content max-w-7xl mx-auto p-6 lg:p-8">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-white tracking-tight">Liste de Surveillance</h1>
+                    <p class="text-gray-400 mt-2 text-sm">Opportunités tactiques : Asie & Pays Émergents.</p>
+                </div>
+                <div class="glass-panel rounded-3xl border border-white/5 overflow-hidden shadow-xl">
+                    <div class="px-6 py-4 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
+                        <h3 class="text-xs font-bold text-white uppercase tracking-widest">Cibles</h3>
+                        <span id="wl-scan-status" class="text-[10px] text-blue-400 font-mono hidden animate-pulse">Scanning Live Data...</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-400">
+                            <thead class="bg-black/20 uppercase text-[10px] text-gray-500 font-bold tracking-wider">
+                                <tr>
+                                    <th class="px-6 py-4">Actif</th>
+                                    <th class="px-6 py-4">Thèse / Objectif</th>
+                                    <th class="px-6 py-4 text-right">Cours Live</th>
+                                    <th class="px-6 py-4 text-center">Var. 24h</th>
+                                    <th class="px-6 py-4 text-right text-yellow-400">Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5" id="watchlistBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <div id="simulation" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-                <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection</h1>
+            <div id="simulation" class="tab-content max-w-7xl mx-auto p-6 lg:p-8">
+                <h1 class="text-3xl font-bold text-white tracking-tight mb-8">Projection Patrimoniale</h1>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="bg-card border border-gray-700 rounded-xl p-6 h-fit"><h3 class="font-bold text-white mb-6 uppercase text-sm">Paramètres</h3><div class="space-y-4"><div><label class="block text-xs font-medium text-gray-400 mb-1">Capital Initial</label><input type="number" id="sim-start" value="10000" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Mensuel</label><input type="number" id="sim-monthly" value="500" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Rendement %</label><input type="number" id="sim-rate" value="8" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Années</label><input type="number" id="sim-years" value="20" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div></div><button onclick="calculateSim()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition">Calculer</button></div>
-                    <div class="lg:col-span-2 bg-card border border-gray-700 rounded-xl p-6 flex flex-col"><div class="text-center mb-6"><div class="text-sm text-gray-400 uppercase">Capital Final</div><div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mt-2" id="sim-result">-- €</div></div><div class="flex-1 relative min-h-[300px]"><canvas id="simChart"></canvas></div></div>
+                    <div class="glass-panel border border-white/5 rounded-3xl p-8 h-fit">
+                        <h3 class="font-bold text-white mb-6 uppercase text-xs tracking-widest flex items-center gap-2">
+                            <span class="w-1 h-4 bg-blue-500 rounded-full"></span> Paramètres
+                        </h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Capital Initial</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-3 text-gray-500">€</span>
+                                    <input type="number" id="sim-start" value="10000" class="w-full bg-black/30 border border-white/10 rounded-xl p-3 pl-8 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 outline-none transition font-mono">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Apport Mensuel</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-3 text-gray-500">€</span>
+                                    <input type="number" id="sim-monthly" value="500" class="w-full bg-black/30 border border-white/10 rounded-xl p-3 pl-8 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 outline-none transition font-mono">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Rendement Annuel (%)</label>
+                                <input type="number" id="sim-rate" value="8" class="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 outline-none transition font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Durée (Années)</label>
+                                <input type="number" id="sim-years" value="20" class="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 outline-none transition font-mono">
+                            </div>
+                        </div>
+                        <button onclick="calculateSim()" class="w-full mt-8 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-900/20 text-sm tracking-wide">
+                            ACTUALISER LA PROJECTION
+                        </button>
+                    </div>
+
+                    <div class="lg:col-span-2 glass-panel border border-white/5 rounded-3xl p-8 flex flex-col shadow-xl">
+                        <div class="text-center mb-8">
+                            <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Capital Final Estimé</div>
+                            <div class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-green-400 mt-2 font-mono tracking-tighter" id="sim-result">-- €</div>
+                        </div>
+                        <div class="flex-1 relative min-h-[350px]">
+                            <canvas id="simChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </main>
-    </div> <script>
+    </div> 
+
+    <script>
         // --- LOGIQUE DE LOGIN ---
-        const PASSWORD_CONFIG = "admin"; // <--- CHANGE LE MOT DE PASSE ICI
+        const PASSWORD_CONFIG = "admin"; 
 
         function checkLogin() {
             const input = document.getElementById('passwordInput');
@@ -344,28 +496,29 @@
             const errorMsg = document.getElementById('loginError');
 
             if (input.value === PASSWORD_CONFIG) {
-                // Succès
-                document.getElementById('login-screen').style.transition = 'opacity 0.5s ease';
+                // Succès Animation
+                document.getElementById('login-screen').style.transition = 'all 0.8s ease-in-out';
                 document.getElementById('login-screen').style.opacity = '0';
+                document.getElementById('login-screen').style.transform = 'scale(1.05)';
                 setTimeout(() => {
                     document.getElementById('login-screen').style.display = 'none';
                     document.getElementById('app-container').style.display = 'flex';
-                    // Lance le code existant une fois connecté
                     initApp();
-                }, 500);
+                }, 800);
             } else {
                 // Erreur
                 errorMsg.classList.remove('hidden');
                 box.classList.remove('shake');
-                void box.offsetWidth; // trigger reflow
+                void box.offsetWidth; 
                 box.classList.add('shake');
                 input.value = '';
                 input.focus();
+                input.classList.add('border-red-500');
+                setTimeout(()=>input.classList.remove('border-red-500'), 1000);
             }
         }
 
-        // --- CODE EXISTANT (ENCAPSULÉ DANS initApp) ---
-        
+        // --- DATA ---
         let portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, prev: 0, eps: 5.90, sps: 53.5, beta: 0.8 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, prev: 0, eps: 7.50, sps: 63.0, beta: 1.1 },
@@ -387,15 +540,20 @@
             document.getElementById(id).classList.add('active');
             ['home','dashboard','watchlist','convictions','simulation'].forEach(b=>{
                 const el=document.getElementById('btn-'+b);
-                if(b===id){el.classList.add('bg-blue-600','text-white');el.classList.remove('text-gray-400','bg-transparent')}
-                else{el.classList.remove('bg-blue-600','text-white');el.classList.add('text-gray-400','bg-transparent')}
+                if(b===id){
+                    el.classList.add('bg-white','text-black','shadow-lg');
+                    el.classList.remove('text-gray-400','hover:text-white');
+                } else {
+                    el.classList.remove('bg-white','text-black','shadow-lg');
+                    el.classList.add('text-gray-400','hover:text-white');
+                }
             });
             if(id!=='home') document.getElementById('resultCard').classList.add('hidden');
             if(id==='simulation') calculateSim();
             if(id==='watchlist') setTimeout(startWatchlistFeed, 500); 
         }
 
-        // FETCH ENGINE
+        // API ENGINE
         async function fetchPriceRobust(ticker) {
             const proxy = "https://corsproxy.io/?";
             const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d&t=${Date.now()}`;
@@ -429,18 +587,19 @@
         // LIVE FEED PORTFOLIO
         async function startLiveFeed() {
             const dot = document.getElementById('status-dot');
-            const label = document.getElementById('scan-progress');
             const updateTxt = document.getElementById('last-update');
+            const scanDot = document.getElementById('scan-progress-dot');
 
-            dot.classList.add('bg-blue-500', 'blink');
-            label.classList.remove('hidden');
-            updateTxt.innerText = "Démarrage...";
+            scanDot.classList.remove('hidden');
+            updateTxt.innerText = "Syncing...";
 
             for (let i = 0; i < portfolio.length; i++) {
                 const stock = portfolio[i];
-                updateTxt.innerText = `Scan : ${stock.tick}`;
+                updateTxt.innerText = `Sync: ${stock.tick}`;
+                
+                // Visual feedback on row
                 const row = document.getElementById(`row-${i}`);
-                if(row) row.classList.add('scanning-row');
+                if(row) row.style.backgroundColor = "rgba(59, 130, 246, 0.05)";
 
                 const data = await fetchPriceRobust(stock.tick);
                 if (data && data.price) {
@@ -448,13 +607,14 @@
                     stock.prev = data.prev;
                     renderDashboard(i); 
                 }
-                if(row) row.classList.remove('scanning-row');
-                await new Promise(r => setTimeout(r, 1000));
+                
+                if(row) setTimeout(()=> row.style.backgroundColor = "transparent", 400);
+                await new Promise(r => setTimeout(r, 600)); // Slightly faster scan
             }
 
-            dot.classList.remove('bg-blue-500', 'blink'); dot.classList.add('bg-green-500');
-            updateTxt.innerText = "Mise à jour OK."; updateTxt.className = "text-green-400 mt-1 text-sm font-mono";
-            label.classList.add('hidden');
+            scanDot.classList.add('hidden');
+            updateTxt.innerText = "Updated just now";
+            updateTxt.className = "text-xs text-gray-400 font-mono";
             renderDashboard(); 
         }
 
@@ -464,7 +624,7 @@
             for (let i = 0; i < watchlist.length; i++) {
                 const item = watchlist[i];
                 const status = document.getElementById('wl-scan-status');
-                if(status) { status.classList.remove('hidden'); status.innerText = `Scan: ${item.tick}...`; }
+                if(status) { status.classList.remove('hidden'); status.innerText = `Fetching ${item.tick}...`; }
                 
                 const data = await fetchPriceRobust(item.tick);
                 if (data && data.price) {
@@ -502,32 +662,32 @@
                 const dPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '...';
                 const dValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
                 const dPerf = stock.price > 0 ? (perfPct > 0 ? '+' : '') + perfPct.toFixed(2) + "%" : '-';
-                const cPerf = perfPct >= 0 ? 'text-success' : 'text-danger';
+                const cPerf = perfPct >= 0 ? 'text-emerald-400' : 'text-red-400';
                 const dDay = stock.price > 0 ? (dayVarPct > 0 ? '+' : '') + dayVarPct.toFixed(2) + "%" : '-';
-                const cDay = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
+                const cDay = dayVarPct >= 0 ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10';
                 
                 const dPER = calculatedPER > 0 ? calculatedPER.toFixed(2) : '-';
                 const dPSR = calculatedPSR > 0 ? calculatedPSR.toFixed(2) : '-';
 
                 if (highlightIndex === -1) {
                     const row = `
-                        <tr id="row-${index}" class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0">
-                            <td class="px-5 py-4"><div class="font-bold text-white">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td>
-                            <td class="px-5 py-4 text-right text-white font-mono" id="price-${index}">${dPrice}</td>
-                            <td class="px-5 py-4 text-center font-mono font-bold ${cDay}" id="day-${index}">${dDay}</td>
-                            <td class="px-5 py-4 text-right font-bold text-gray-300 hidden sm:table-cell" id="valo-${index}">${dValo}</td>
-                            <td class="px-5 py-4 text-right ${cPerf} font-mono font-bold" id="perf-${index}">${dPerf}</td>
-                            <td class="px-5 py-4 text-center text-blue-300 font-mono text-sm" id="per-${index}">${dPER}</td>
-                            <td class="px-5 py-4 text-center text-purple-400 font-mono text-sm" id="psr-${index}">${dPSR}</td>
+                        <tr id="row-${index}" class="hover:bg-white/[0.03] transition duration-200">
+                            <td class="px-6 py-4"><div class="font-bold text-white text-sm">${stock.name}</div><div class="text-[10px] text-gray-500 font-mono tracking-wider">${stock.tick}</div></td>
+                            <td class="px-6 py-4 text-right text-white font-mono text-sm" id="price-${index}">${dPrice}</td>
+                            <td class="px-6 py-4 text-center"><span class="px-2 py-1 rounded text-xs font-mono font-bold ${cDay}" id="day-${index}">${dDay}</span></td>
+                            <td class="px-6 py-4 text-right font-bold text-gray-300 font-mono text-sm hidden sm:table-cell" id="valo-${index}">${dValo}</td>
+                            <td class="px-6 py-4 text-right ${cPerf} font-mono font-bold text-sm" id="perf-${index}">${dPerf}</td>
+                            <td class="px-6 py-4 text-center text-blue-300 font-mono text-xs" id="per-${index}">${dPER}</td>
+                            <td class="px-6 py-4 text-center text-purple-400 font-mono text-xs" id="psr-${index}">${dPSR}</td>
                         </tr>`;
                     tbody.innerHTML += row;
                 } else if (index === highlightIndex) {
                     const row = document.getElementById(`row-${index}`);
-                    row.classList.add('flash-update'); setTimeout(() => row.classList.remove('flash-update'), 500);
+                    row.classList.add('flash-update'); setTimeout(() => row.classList.remove('flash-update'), 600);
                     document.getElementById(`price-${index}`).innerHTML = dPrice;
-                    document.getElementById(`day-${index}`).innerHTML = dDay; document.getElementById(`day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
+                    document.getElementById(`day-${index}`).innerHTML = dDay; document.getElementById(`day-${index}`).className = `px-2 py-1 rounded text-xs font-mono font-bold ${cDay}`;
                     document.getElementById(`valo-${index}`).innerHTML = dValo;
-                    document.getElementById(`perf-${index}`).innerHTML = dPerf; document.getElementById(`perf-${index}`).className = `px-5 py-4 text-right font-mono font-bold ${cPerf}`;
+                    document.getElementById(`perf-${index}`).innerHTML = dPerf; document.getElementById(`perf-${index}`).className = `px-6 py-4 text-right font-mono font-bold text-sm ${cPerf}`;
                     document.getElementById(`per-${index}`).innerHTML = dPER;
                     document.getElementById(`psr-${index}`).innerHTML = dPSR;
                 }
@@ -537,20 +697,40 @@
                 const gpv = totalVal - totalInvest;
                 document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
                 document.getElementById('totalPv').innerText = (gpv > 0 ? '+' : '') + Math.round(gpv).toLocaleString() + " €";
-                document.getElementById('totalPv').className = `mt-1 text-2xl font-bold tabular-nums ${gpv >= 0 ? 'text-success' : 'text-danger'}`;
+                document.getElementById('totalPv').className = `mt-2 text-2xl font-mono font-bold tracking-tight ${gpv >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
                 document.getElementById('totalDiv').innerText = Math.round(totalDiv) + " €";
                 document.getElementById('avgPER').innerText = countPER > 0 ? (totalPER/countPER).toFixed(1) : "-";
                 document.getElementById('topStock').innerText = topStock.name;
                 const topPerfEl = document.getElementById('topStockPerf');
-                if(topStock.perf > -999) { topPerfEl.innerText = "+" + topStock.perf.toFixed(2) + " %"; topPerfEl.className = "text-xs font-bold text-green-400 mt-1"; }
+                if(topStock.perf > -999) { topPerfEl.innerText = "+" + topStock.perf.toFixed(2) + " %"; }
             } else {
-                document.getElementById('totalVal').innerText = "Chargement...";
+                document.getElementById('totalVal').innerText = "Loading...";
             }
 
             if (highlightIndex === -1 && document.getElementById('sectorChart')) {
                 if(window.myChart) window.myChart.destroy();
                 const initialData = [20, 15, 30, 10, 10, 15]; 
-                window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { type: 'doughnut', data: { labels: portfolio.map(s => s.sec), datasets: [{ data: initialData, backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, usePointStyle: true } } } } });
+                
+                window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { 
+                    type: 'doughnut', 
+                    data: { 
+                        labels: portfolio.map(s => s.sec), 
+                        datasets: [{ 
+                            data: initialData, 
+                            backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], 
+                            borderWidth: 0,
+                            hoverOffset: 10
+                        }] 
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        cutout: '75%', 
+                        plugins: { 
+                            legend: { position: 'bottom', labels: { color: '#9ca3af', boxWidth: 6, usePointStyle: true, font: {family: 'Inter', size: 10} } } 
+                        } 
+                    } 
+                });
             }
         }
 
@@ -563,16 +743,16 @@
                 let dayVarPct = item.price > 0 && item.prev > 0 ? ((item.price - item.prev) / item.prev) * 100 : 0;
                 const dPrice = item.price > 0 ? item.price.toFixed(2) : '...';
                 const dDay = item.price > 0 ? (dayVarPct > 0 ? '+' : '') + dayVarPct.toFixed(2) + "%" : '-';
-                const cDay = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
+                const cDay = dayVarPct >= 0 ? 'text-emerald-400' : 'text-red-400';
 
                 if (highlightIndex === -1) {
                     const row = `
-                        <tr id="wl-row-${index}" class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0">
-                            <td class="px-5 py-4"><div class="font-bold text-white">${item.name}</div><div class="text-[10px] text-gray-500">${item.tick}</div></td>
-                            <td class="px-5 py-4 text-xs text-blue-300">${item.thesis}</td>
-                            <td class="px-5 py-4 text-right text-white font-mono" id="wl-price-${index}">${dPrice}</td>
-                            <td class="px-5 py-4 text-center font-mono font-bold ${cDay}" id="wl-day-${index}">${dDay}</td>
-                            <td class="px-5 py-4 text-right"><span class="bg-yellow-900/30 text-yellow-400 px-2 py-1 rounded text-[10px] uppercase font-bold border border-yellow-700/50">En Attente</span></td>
+                        <tr id="wl-row-${index}" class="hover:bg-white/[0.03] border-b border-white/5 last:border-0 transition">
+                            <td class="px-6 py-4"><div class="font-bold text-white text-sm">${item.name}</div><div class="text-[10px] text-gray-500 font-mono">${item.tick}</div></td>
+                            <td class="px-6 py-4 text-xs text-blue-300/80 italic">${item.thesis}</td>
+                            <td class="px-6 py-4 text-right text-white font-mono text-sm" id="wl-price-${index}">${dPrice}</td>
+                            <td class="px-6 py-4 text-center font-mono font-bold text-sm ${cDay}" id="wl-day-${index}">${dDay}</td>
+                            <td class="px-6 py-4 text-right"><span class="bg-yellow-500/10 text-yellow-500 px-2 py-1 rounded text-[10px] uppercase font-bold border border-yellow-500/20">Surveillance</span></td>
                         </tr>`;
                     tbody.innerHTML += row;
                 } else if (index === highlightIndex) {
@@ -580,7 +760,7 @@
                     row.classList.add('flash-update'); setTimeout(() => row.classList.remove('flash-update'), 500);
                     document.getElementById(`wl-price-${index}`).innerText = dPrice;
                     document.getElementById(`wl-day-${index}`).innerText = dDay;
-                    document.getElementById(`wl-day-${index}`).className = `px-5 py-4 text-center font-mono font-bold ${cDay}`;
+                    document.getElementById(`wl-day-${index}`).className = `px-6 py-4 text-center font-mono font-bold text-sm ${cDay}`;
                 }
             });
         }
@@ -615,7 +795,7 @@
                 const perf = ((price - prev) / prev) * 100;
                 const pEl = document.getElementById('res-perf'); 
                 pEl.innerText = (perf > 0 ? '+' : '') + perf.toFixed(2) + " %"; 
-                pEl.className = perf >= 0 ? "text-xl font-bold flex items-center justify-end gap-2 text-green-400" : "text-xl font-bold flex items-center justify-end gap-2 text-red-400";
+                pEl.className = perf >= 0 ? "text-lg font-bold flex items-center justify-end gap-2 mt-1 text-emerald-400" : "text-lg font-bold flex items-center justify-end gap-2 mt-1 text-red-400";
 
                 document.getElementById('res-open').innerText = (meta.regularMarketOpen||prev).toFixed(2);
                 document.getElementById('res-range').innerText = (meta.regularMarketDayLow || "-") + " - " + (meta.regularMarketDayHigh || "-");
@@ -636,17 +816,39 @@
                     const ctx = document.getElementById('searchChart').getContext('2d');
                     if(searchChartInstance) searchChartInstance.destroy();
                     const isGreen = price >= prev;
-                    const lineColor = isGreen ? '#22c55e' : '#ef4444';
-                    const fillColor = isGreen ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+                    const lineColor = isGreen ? '#34d399' : '#f87171';
+                    
+                    // Gradient Fill
+                    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                    gradient.addColorStop(0, isGreen ? 'rgba(52, 211, 153, 0.2)' : 'rgba(248, 113, 113, 0.2)');
+                    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
                     const clean = dataChart.quotes.map((q,i)=>({t:dataChart.timestamps[i],y:q})).filter(p=>p.y!==null);
 
                     searchChartInstance = new Chart(ctx, {
                         type: 'line',
                         data: {
                             labels: clean.map(p => new Date(p.t * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
-                            datasets: [{ data: clean.map(p => p.y), borderColor: lineColor, backgroundColor: fillColor, borderWidth: 2, fill: true, pointRadius: 0, tension: 0.1 }]
+                            datasets: [{ 
+                                data: clean.map(p => p.y), 
+                                borderColor: lineColor, 
+                                backgroundColor: gradient, 
+                                borderWidth: 2, 
+                                fill: true, 
+                                pointRadius: 0, 
+                                tension: 0.2 
+                            }]
                         },
-                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: true, position: 'right', grid: { color: '#334155' } } } }
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: false, 
+                            plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, 
+                            scales: { 
+                                x: { display: false }, 
+                                y: { position: 'right', grid: { color: '#333' } } 
+                            },
+                            interaction: { mode: 'nearest', axis: 'x', intersect: false }
+                        }
                     });
                 }
                 card.classList.remove('hidden');
@@ -663,20 +865,66 @@
                 if(i<years){ for(let m=0;m<12;m++){ capital+=monthly; capital*=(1+rate/12); totalInvested+=monthly; } }
             }
             document.getElementById('sim-result').innerText=Math.round(dataCapital[dataCapital.length-1]).toLocaleString()+" €";
+            
             const ctx=document.getElementById('simChart').getContext('2d');
             if(simChartInstance) simChartInstance.destroy();
-            simChartInstance = new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Patrimoine',data:dataCapital,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true,tension:0.4},{label:'Investi',data:dataInvested,borderColor:'#64748b',borderDash:[5,5],tension:0.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{grid:{color:'#1e293b'}}},plugins:{legend:{labels:{color:'#94a3b8'}}}}});
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(59, 130, 246, 0.3)');
+            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
+            simChartInstance = new Chart(ctx,{
+                type:'line',
+                data:{
+                    labels,
+                    datasets:[
+                        {
+                            label:'Patrimoine Composé',
+                            data:dataCapital,
+                            borderColor:'#3b82f6',
+                            backgroundColor: gradient,
+                            fill:true,
+                            tension:0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label:'Capital Investi',
+                            data:dataInvested,
+                            borderColor:'#52525b',
+                            borderDash:[5,5],
+                            tension:0.4,
+                            pointRadius:0
+                        }
+                    ]
+                },
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    scales:{
+                        x:{grid:{display:false, color: '#333'}, ticks: {color: '#666'}},
+                        y:{grid:{color:'#1e293b'}, ticks: {color: '#666'}}
+                    },
+                    plugins:{
+                        legend:{labels:{color:'#94a3b8', font:{family:'Inter'}}},
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(255,255,255,0.1)',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
         }
 
-        // INIT APP (Triggered after login)
         function initApp() {
             calculateSim(); 
             renderDashboard(); 
             setTimeout(startLiveFeed, 1000); 
             setInterval(startLiveFeed, 120000); 
         }
-
-        // Pas de démarrage automatique ici, on attend le login.
     </script>
 </body>
 </html>
