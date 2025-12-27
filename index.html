@@ -39,276 +39,333 @@
         .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
         @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
         .scanning-row { border-left: 3px solid #3b82f6; background-color: rgba(59,130,246,0.05); }
+
+        /* Styles LOGIN */
+        #login-screen { position: fixed; inset: 0; z-index: 9999; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .login-box { width: 100%; max-width: 400px; padding: 2rem; background: #1e293b; border: 1px solid #334155; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); text-align: center; }
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
     </style>
 </head>
 
 <body class="antialiased min-h-screen flex flex-col">
 
-    <nav class="border-b border-gray-800 bg-card/90 backdrop-blur-md sticky top-0 z-50 h-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-9 h-9 rounded-lg flex items-center justify-center font-black text-white shadow-lg">N</div>
-                <span class="text-xl font-bold tracking-tight">Noa Capital</span>
-            </div>
-            <div class="flex items-center gap-4">
-                <div id="status-badge" class="hidden md:flex items-center gap-2 bg-gray-900/80 px-3 py-1 rounded-full border border-gray-700">
-                    <span class="w-2 h-2 rounded-full bg-blue-500" id="status-dot"></span>
-                    <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider" id="status-text">Prêt</span>
-                </div>
-                <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto">
-                    <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition whitespace-nowrap">🔎 Recherche</button>
-                    <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Stratégie</button>
-                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Portefeuille</button>
-                    <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Surveillance</button>
-                    <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Simulateur</button>
-                </div>
-            </div>
+    <div id="login-screen">
+        <div class="mb-8 flex flex-col items-center gap-4">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-16 h-16 rounded-2xl flex items-center justify-center font-black text-3xl text-white shadow-2xl shadow-blue-900/50">N</div>
+            <h1 class="text-3xl font-bold tracking-tight text-white">Noa Capital</h1>
+            <p class="text-gray-400 text-sm">V46 Private Access</p>
         </div>
-    </nav>
-
-    <main class="flex-1 w-full">
-
-        <div id="home" class="tab-content active">
-            <div class="text-center mb-8 w-full px-4 pt-8">
-                <h1 class="text-5xl font-black text-white mb-4">Market Intelligence.</h1>
-                <p class="text-gray-400">Analyse Technique & Fondamentale.</p>
+        
+        <div class="login-box">
+            <div class="mb-6 text-left">
+                <label class="block text-xs font-bold text-blue-400 uppercase mb-2">Mot de passe</label>
+                <input type="password" id="passwordInput" class="w-full bg-gray-900/50 border border-gray-700 text-white rounded-lg p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition" placeholder="••••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
+                <p id="loginError" class="text-red-500 text-xs mt-2 hidden">Accès refusé. Mot de passe incorrect.</p>
             </div>
-            
-            <div class="w-full max-w-3xl px-4 relative z-10 mb-8">
-                <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
-                    <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA, NVDA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
-                    <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">GO</button>
-                </div>
-                <div class="mt-4 flex justify-center gap-3 text-sm text-gray-500">
-                    <button onclick="fillSearch('AI.PA')" class="hover:text-blue-400 transition">Air Liquide</button>
-                    <button onclick="fillSearch('MC.PA')" class="hover:text-blue-400 transition">LVMH</button>
-                    <button onclick="fillSearch('NVDA')" class="hover:text-blue-400 transition">Nvidia</button>
-                </div>
-            </div>
-            
-            <div id="searchLoader" class="loader mt-10"></div>
-            
-            <div id="resultCard" class="hidden w-full max-w-5xl px-4 pb-20">
-                <div class="bg-card/90 backdrop-blur border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
-                    <div class="p-6 border-b border-gray-700/50 flex justify-between items-center bg-gray-800/20">
-                        <div>
-                            <div class="flex items-center gap-3">
-                                <h2 class="text-3xl font-bold text-white" id="res-name">Nom</h2>
-                                <span class="text-xs px-2 py-1 rounded bg-blue-900/30 text-blue-400 border border-blue-800" id="res-type">EQUITY</span>
-                            </div>
-                            <div class="text-gray-400 text-sm mt-1 font-mono">
-                                <span id="res-symbol">TICKER</span> • <span id="res-exchange">Market</span>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-5xl font-black text-white" id="res-price">--</div>
-                            <div class="text-xl font-bold flex items-center justify-end gap-2" id="res-perf">-- %</div>
-                        </div>
-                    </div>
-
-                    <div class="h-[350px] w-full p-4 bg-gray-900/50 relative">
-                        <canvas id="searchChart"></canvas>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-700/50">
-                        <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Ouverture</div><div class="text-lg font-mono text-white" id="res-open">--</div></div>
-                        <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Range Jour</div><div class="text-sm font-mono text-white" id="res-range">--</div></div>
-                        <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Volume</div><div class="text-lg font-mono text-blue-300" id="res-vol">--</div></div>
-                        <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Cap. Boursière</div><div class="text-lg font-mono text-white" id="res-cap">--</div></div>
-
-                        <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">PER (P/E)</div><div class="text-xl font-bold text-white" id="res-pe">--</div></div>
-                        <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">BPA (EPS)</div><div class="text-xl font-bold text-white" id="res-eps">--</div></div>
-                        <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-yellow-400">Analystes</div><div class="text-sm font-bold text-white mt-1" id="res-rating">--</div></div>
-                        <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-purple-400">Bêta</div><div class="text-xl font-bold text-white" id="res-beta">--</div></div>
-                    </div>
-                </div>
-            </div>
+            <button onclick="checkLogin()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-blue-900/20">
+                Déverrouiller
+            </button>
         </div>
+        <div class="mt-8 text-gray-600 text-xs font-mono">Secured by NC-Protocol v2.1</div>
+    </div>
 
-        <div id="convictions" class="tab-content max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-            
-            <div class="mb-12 border-b border-gray-700 pb-8">
-                <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-6">Thèse d'Investissement</h1>
-                <p class="text-xl text-gray-400 leading-relaxed max-w-3xl">
-                    Pourquoi nous quittons la Tech pour revenir au Réel. Analyse structurelle d'un changement de paradigme économique.
-                </p>
-            </div>
+    <div id="app-container" style="display: none;" class="flex-1 flex flex-col w-full h-full">
 
-            <div class="mb-16">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                    <span class="text-red-500">01.</span> La Grande Rotation : Fuir la Bulle Tech
-                </h2>
-                <div class="prose prose-invert prose-lg max-w-none text-gray-300 space-y-6 text-justify">
-                    <p>
-                        Depuis 2010, les marchés ont été drogués à l'argent gratuit (taux zéro). Cela a favorisé les actifs de "croissance longue" comme la Tech, le SaaS et récemment l'IA. Aujourd'hui, les valorisations de la Tech (Nasdaq) ont atteint des niveaux de perfection qui ne tolèrent aucune erreur. Le PER moyen du secteur dépasse les 35x, ce qui implique une croissance ininterrompue pour les 10 prochaines années. <strong>C'est un risque asymétrique défavorable.</strong>
-                    </p>
-                    <p>
-                        Nous assistons au dégonflement inévitable de cette prime de risque. L'IA est une révolution réelle, mais les gagnants actuels (Nvidia, Microsoft) sont "pricés" pour la perfection. À l'inverse, l'économie réelle a été sous-investie pendant une décennie. Les infrastructures vieillissent, les réseaux électriques saturent, et l'offre de matières premières est contrainte.
-                    </p>
-                    <div class="bg-red-900/10 border-l-4 border-red-500 p-6 rounded-r-lg my-8">
-                        <h4 class="font-bold text-red-400 mb-2">Notre Décision Radicale</h4>
-                        <p class="text-sm">Nous sortons des actifs immatériels survalorisés pour nous positionner sur des actifs tangibles sous-valorisés. Nous préférons posséder une mine de cuivre (P/E 12) indispensable à l'IA, plutôt qu'un logiciel (P/E 50) qui pourrait être obsolète dans 6 mois.</p>
+        <nav class="border-b border-gray-800 bg-card/90 backdrop-blur-md sticky top-0 z-50 h-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-9 h-9 rounded-lg flex items-center justify-center font-black text-white shadow-lg">N</div>
+                    <span class="text-xl font-bold tracking-tight">Noa Capital</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div id="status-badge" class="hidden md:flex items-center gap-2 bg-gray-900/80 px-3 py-1 rounded-full border border-gray-700">
+                        <span class="w-2 h-2 rounded-full bg-blue-500" id="status-dot"></span>
+                        <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider" id="status-text">Prêt</span>
+                    </div>
+                    <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto">
+                        <button onclick="switchTab('home')" id="btn-home" class="px-4 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition whitespace-nowrap">🔎 Recherche</button>
+                        <button onclick="switchTab('convictions')" id="btn-convictions" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Stratégie</button>
+                        <button onclick="switchTab('dashboard')" id="btn-dashboard" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Portefeuille</button>
+                        <button onclick="switchTab('watchlist')" id="btn-watchlist" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Surveillance</button>
+                        <button onclick="switchTab('simulation')" id="btn-simulation" class="px-4 py-1.5 text-sm font-medium rounded-md text-gray-400 hover:text-white transition whitespace-nowrap">Simulateur</button>
                     </div>
                 </div>
             </div>
+        </nav>
 
-            <div class="mb-16">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                    <span class="text-gold">02.</span> La Croissance Ricardienne (Le Retour du Réel)
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                    <div class="bg-card p-6 rounded-xl border border-gray-700">
-                        <div class="text-3xl mb-4">⛏️</div>
-                        <h3 class="font-bold text-white mb-2">Rareté Physique</h3>
-                        <p class="text-sm text-gray-400">On ne peut pas "imprimer" du cuivre ou de l'énergie. L'offre est inélastique à court terme.</p>
-                    </div>
-                    <div class="bg-card p-6 rounded-xl border border-gray-700">
-                        <div class="text-3xl mb-4">🏭</div>
-                        <h3 class="font-bold text-white mb-2">Pricing Power</h3>
-                        <p class="text-sm text-gray-400">Les entreprises qui possèdent des actifs critiques peuvent monter leurs prix sans perdre de clients.</p>
-                    </div>
-                    <div class="bg-card p-6 rounded-xl border border-gray-700">
-                        <div class="text-3xl mb-4">🛡️</div>
-                        <h3 class="font-bold text-white mb-2">Barrières à l'entrée</h3>
-                        <p class="text-sm text-gray-400">Il faut 15 ans pour ouvrir une mine ou construire une usine chimique. La concurrence est limitée.</p>
-                    </div>
+        <main class="flex-1 w-full">
+
+            <div id="home" class="tab-content active">
+                <div class="text-center mb-8 w-full px-4 pt-8">
+                    <h1 class="text-5xl font-black text-white mb-4">Market Intelligence.</h1>
+                    <p class="text-gray-400">Analyse Technique & Fondamentale.</p>
                 </div>
-                <p class="text-gray-300 leading-relaxed text-justify">
-                    Cette stratégie vise à capturer la "Rente de situation" décrite par David Ricardo. Dans un monde où l'inflation devient structurelle (démographie, déglobalisation, transition verte), les marges se déplacent vers l'amont de la chaîne de valeur : ceux qui extraient, ceux qui transforment, et ceux qui distribuent l'énergie.
-                </p>
-            </div>
-
-            <div class="mb-16">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                    <span class="text-blue-500">03.</span> Stock Picking : Pourquoi ces entreprises ?
-                </h2>
                 
-                <div class="space-y-6">
-                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500 transition duration-300">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-bold text-white">Air Liquide (AI.PA)</h3>
-                            <span class="bg-blue-900/30 text-blue-400 px-3 py-1 rounded-full text-xs font-bold border border-blue-500/30">DÉFENSIF</span>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed text-justify">
-                            C'est la fondation du portefeuille. Air Liquide ne vend pas du gaz, elle vend de la fiabilité. Ses contrats de 15 ans incluent des clauses d'indexation sur l'énergie. Si l'électricité augmente, Air Liquide facture plus cher. C'est l'un des rares "business models" au monde parfaitement protégé contre l'inflation. De plus, elle est le leader incontesté de l'hydrogène vert, le carburant du futur pour l'industrie lourde.
-                        </p>
+                <div class="w-full max-w-3xl px-4 relative z-10 mb-8">
+                    <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
+                        <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA, NVDA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
+                        <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">GO</button>
                     </div>
-
-                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold transition duration-300">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-bold text-white">ETF Basic Resources (BRES.PA)</h3>
-                            <span class="bg-yellow-900/30 text-gold px-3 py-1 rounded-full text-xs font-bold border border-yellow-500/30">OFFENSIF</span>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed text-justify">
-                            Notre conviction la plus forte. Cet ETF regroupe les géants miniers (Rio Tinto, Glencore, etc.). La thèse est simple : il n'y a pas de transition énergétique sans métaux. Une voiture électrique demande 4x plus de cuivre qu'une thermique. L'IA demande des data centers bourrés de câbles. L'offre est déficitaire pour la décennie à venir. C'est un "Super-cycle" qui commence.
-                        </p>
+                    <div class="mt-4 flex justify-center gap-3 text-sm text-gray-500">
+                        <button onclick="fillSearch('AI.PA')" class="hover:text-blue-400 transition">Air Liquide</button>
+                        <button onclick="fillSearch('MC.PA')" class="hover:text-blue-400 transition">LVMH</button>
+                        <button onclick="fillSearch('NVDA')" class="hover:text-blue-400 transition">Nvidia</button>
                     </div>
-
-                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500 transition duration-300">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-bold text-white">TotalEnergies (TTE.PA)</h3>
-                            <span class="bg-red-900/30 text-red-400 px-3 py-1 rounded-full text-xs font-bold border border-red-500/30">RENDEMENT</span>
+                </div>
+                
+                <div id="searchLoader" class="loader mt-10"></div>
+                
+                <div id="resultCard" class="hidden w-full max-w-5xl px-4 pb-20">
+                    <div class="bg-card/90 backdrop-blur border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+                        <div class="p-6 border-b border-gray-700/50 flex justify-between items-center bg-gray-800/20">
+                            <div>
+                                <div class="flex items-center gap-3">
+                                    <h2 class="text-3xl font-bold text-white" id="res-name">Nom</h2>
+                                    <span class="text-xs px-2 py-1 rounded bg-blue-900/30 text-blue-400 border border-blue-800" id="res-type">EQUITY</span>
+                                </div>
+                                <div class="text-gray-400 text-sm mt-1 font-mono">
+                                    <span id="res-symbol">TICKER</span> • <span id="res-exchange">Market</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-5xl font-black text-white" id="res-price">--</div>
+                                <div class="text-xl font-bold flex items-center justify-end gap-2" id="res-perf">-- %</div>
+                            </div>
                         </div>
-                        <p class="text-gray-400 text-sm leading-relaxed text-justify">
-                            Le marché déteste le pétrole par idéologie, ce qui nous offre une opportunité financière incroyable. Total se paie moins de 8 fois ses bénéfices avec un rendement sur dividende > 5%. Contrairement à BP ou Shell, Total a gardé une approche pragmatique : utiliser le cash-flow énorme du pétrole pour financer intelligemment sa transition verte sans s'endetter. C'est notre "Vache à Lait".
-                        </p>
-                    </div>
 
-                    <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500 transition duration-300">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-bold text-white">Schneider Electric (SU.PA)</h3>
-                            <span class="bg-green-900/30 text-green-400 px-3 py-1 rounded-full text-xs font-bold border border-green-500/30">CROISSANCE</span>
+                        <div class="h-[350px] w-full p-4 bg-gray-900/50 relative">
+                            <canvas id="searchChart"></canvas>
                         </div>
-                        <p class="text-gray-400 text-sm leading-relaxed text-justify">
-                            C'est notre façon de jouer l'Intelligence Artificielle sans payer les multiples absurdes de la Tech. L'IA a besoin de Data Centers. Les Data Centers ont besoin de gestion électrique ultra-complexe pour ne pas surchauffer. Schneider est le leader mondial de la gestion de l'énergie et de l'automatisation. C'est le vendeur de "pelles et de pioches" de la ruée vers l'or numérique.
-                        </p>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-700/50">
+                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Ouverture</div><div class="text-lg font-mono text-white" id="res-open">--</div></div>
+                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Range Jour</div><div class="text-sm font-mono text-white" id="res-range">--</div></div>
+                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Volume</div><div class="text-lg font-mono text-blue-300" id="res-vol">--</div></div>
+                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Cap. Boursière</div><div class="text-lg font-mono text-white" id="res-cap">--</div></div>
+
+                            <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">PER (P/E)</div><div class="text-xl font-bold text-white" id="res-pe">--</div></div>
+                            <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-blue-400">BPA (EPS)</div><div class="text-xl font-bold text-white" id="res-eps">--</div></div>
+                            <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-yellow-400">Analystes</div><div class="text-sm font-bold text-white mt-1" id="res-rating">--</div></div>
+                            <div class="bg-card p-4 border-t border-gray-700/30"><div class="text-[10px] text-gray-500 uppercase font-bold text-purple-400">Bêta</div><div class="text-xl font-bold text-white" id="res-beta">--</div></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="mb-12">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                    <span class="text-purple-500">04.</span> La Prochaine Frontière
-                </h2>
-                <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-700">
-                    <p class="text-gray-300 text-justify mb-4">
-                        Une fois notre socle "Actifs Réels" consolidé, nous regarderons vers l'Est et le Sud.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-400 space-y-2 ml-4">
-                        <li><strong>Japon :</strong> Des entreprises riches en cash, une gouvernance qui s'améliore, mais un Yen trop faible. Nous attendons le pivot de la Banque du Japon.</li>
-                        <li><strong>Émergents (Inde/Brésil) :</strong> La démographie est là-bas. La croissance aussi. Mais tant que le Dollar est fort, ces marchés souffrent. Nous attendons la baisse des taux US pour entrer.</li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-
-        <div id="dashboard" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mb-8 flex justify-between items-end">
-                <div>
-                    <h1 class="text-3xl font-bold text-white">Portefeuille Global</h1>
-                    <p class="text-gray-400 mt-1 text-sm font-mono flex items-center gap-2">
-                        <span id="scan-progress" class="hidden text-blue-400 font-bold">...</span>
-                        <span id="last-update">En attente de connexion...</span>
+            <div id="convictions" class="tab-content max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+                
+                <div class="mb-12 border-b border-gray-700 pb-8">
+                    <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-6">Thèse d'Investissement</h1>
+                    <p class="text-xl text-gray-400 leading-relaxed max-w-3xl">
+                        Pourquoi nous quittons la Tech pour revenir au Réel. Analyse structurelle d'un changement de paradigme économique.
                     </p>
                 </div>
-                <div class="text-right"><div class="text-sm text-gray-400 uppercase">AUM Total</div><div class="text-4xl font-extrabold text-white tabular-nums" id="totalVal">-- €</div></div>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Plus-Value</p><p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">--</p></div>
-                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Dividendes</p><p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">--</p></div>
-                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">PER Moyen</p><p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p></div>
-                <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Top Perf</p><p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p><p class="text-xs font-bold text-green-400 mt-1" id="topStockPerf">--</p></div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col">
-                    <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30"><h3 class="text-sm font-bold text-white uppercase">Positions Actives</h3></div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-gray-400">
-                            <thead class="bg-gray-900/50 uppercase text-xs text-gray-500">
-                                <tr>
-                                    <th class="px-5 py-3">Société</th>
-                                    <th class="px-5 py-3 text-right">Cours</th>
-                                    <th class="px-5 py-3 text-center">Var. J</th>
-                                    <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
-                                    <th class="px-5 py-3 text-right">Perf</th>
-                                    <th class="px-5 py-3 text-center text-blue-400">PER</th>
-                                    <th class="px-5 py-3 text-center text-purple-400">PSR</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-700/50" id="tableBody"></tbody>
-                        </table>
+                <div class="mb-16">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-red-500">01.</span> La Grande Rotation : Fuir la Bulle Tech
+                    </h2>
+                    <div class="prose prose-invert prose-lg max-w-none text-gray-300 space-y-6 text-justify">
+                        <p>
+                            Depuis 2010, les marchés ont été drogués à l'argent gratuit (taux zéro). Cela a favorisé les actifs de "croissance longue" comme la Tech, le SaaS et récemment l'IA. Aujourd'hui, les valorisations de la Tech (Nasdaq) ont atteint des niveaux de perfection qui ne tolèrent aucune erreur. Le PER moyen du secteur dépasse les 35x, ce qui implique une croissance ininterrompue pour les 10 prochaines années. <strong>C'est un risque asymétrique défavorable.</strong>
+                        </p>
+                        <p>
+                            Nous assistons au dégonflement inévitable de cette prime de risque. L'IA est une révolution réelle, mais les gagnants actuels (Nvidia, Microsoft) sont "pricés" pour la perfection. À l'inverse, l'économie réelle a été sous-investie pendant une décennie. Les infrastructures vieillissent, les réseaux électriques saturent, et l'offre de matières premières est contrainte.
+                        </p>
+                        <div class="bg-red-900/10 border-l-4 border-red-500 p-6 rounded-r-lg my-8">
+                            <h4 class="font-bold text-red-400 mb-2">Notre Décision Radicale</h4>
+                            <p class="text-sm">Nous sortons des actifs immatériels survalorisés pour nous positionner sur des actifs tangibles sous-valorisés. Nous préférons posséder une mine de cuivre (P/E 12) indispensable à l'IA, plutôt qu'un logiciel (P/E 50) qui pourrait être obsolète dans 6 mois.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="bg-card rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col">
-                    <h3 class="text-sm font-bold text-white uppercase mb-4">Allocation</h3>
-                    <div class="flex-1 relative min-h-[250px]"><canvas id="sectorChart"></canvas></div>
+
+                <div class="mb-16">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-gold">02.</span> La Croissance Ricardienne (Le Retour du Réel)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                        <div class="bg-card p-6 rounded-xl border border-gray-700">
+                            <div class="text-3xl mb-4">⛏️</div>
+                            <h3 class="font-bold text-white mb-2">Rareté Physique</h3>
+                            <p class="text-sm text-gray-400">On ne peut pas "imprimer" du cuivre ou de l'énergie. L'offre est inélastique à court terme.</p>
+                        </div>
+                        <div class="bg-card p-6 rounded-xl border border-gray-700">
+                            <div class="text-3xl mb-4">🏭</div>
+                            <h3 class="font-bold text-white mb-2">Pricing Power</h3>
+                            <p class="text-sm text-gray-400">Les entreprises qui possèdent des actifs critiques peuvent monter leurs prix sans perdre de clients.</p>
+                        </div>
+                        <div class="bg-card p-6 rounded-xl border border-gray-700">
+                            <div class="text-3xl mb-4">🛡️</div>
+                            <h3 class="font-bold text-white mb-2">Barrières à l'entrée</h3>
+                            <p class="text-sm text-gray-400">Il faut 15 ans pour ouvrir une mine ou construire une usine chimique. La concurrence est limitée.</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed text-justify">
+                        Cette stratégie vise à capturer la "Rente de situation" décrite par David Ricardo. Dans un monde où l'inflation devient structurelle (démographie, déglobalisation, transition verte), les marges se déplacent vers l'amont de la chaîne de valeur : ceux qui extraient, ceux qui transforment, et ceux qui distribuent l'énergie.
+                    </p>
+                </div>
+
+                <div class="mb-16">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-blue-500">03.</span> Stock Picking : Pourquoi ces entreprises ?
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-blue-500 transition duration-300">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-white">Air Liquide (AI.PA)</h3>
+                                <span class="bg-blue-900/30 text-blue-400 px-3 py-1 rounded-full text-xs font-bold border border-blue-500/30">DÉFENSIF</span>
+                            </div>
+                            <p class="text-gray-400 text-sm leading-relaxed text-justify">
+                                C'est la fondation du portefeuille. Air Liquide ne vend pas du gaz, elle vend de la fiabilité. Ses contrats de 15 ans incluent des clauses d'indexation sur l'énergie. Si l'électricité augmente, Air Liquide facture plus cher. C'est l'un des rares "business models" au monde parfaitement protégé contre l'inflation. De plus, elle est le leader incontesté de l'hydrogène vert, le carburant du futur pour l'industrie lourde.
+                            </p>
+                        </div>
+
+                        <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-gold transition duration-300">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-white">ETF Basic Resources (BRES.PA)</h3>
+                                <span class="bg-yellow-900/30 text-gold px-3 py-1 rounded-full text-xs font-bold border border-yellow-500/30">OFFENSIF</span>
+                            </div>
+                            <p class="text-gray-400 text-sm leading-relaxed text-justify">
+                                Notre conviction la plus forte. Cet ETF regroupe les géants miniers (Rio Tinto, Glencore, etc.). La thèse est simple : il n'y a pas de transition énergétique sans métaux. Une voiture électrique demande 4x plus de cuivre qu'une thermique. L'IA demande des data centers bourrés de câbles. L'offre est déficitaire pour la décennie à venir. C'est un "Super-cycle" qui commence.
+                            </p>
+                        </div>
+
+                        <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-red-500 transition duration-300">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-white">TotalEnergies (TTE.PA)</h3>
+                                <span class="bg-red-900/30 text-red-400 px-3 py-1 rounded-full text-xs font-bold border border-red-500/30">RENDEMENT</span>
+                            </div>
+                            <p class="text-gray-400 text-sm leading-relaxed text-justify">
+                                Le marché déteste le pétrole par idéologie, ce qui nous offre une opportunité financière incroyable. Total se paie moins de 8 fois ses bénéfices avec un rendement sur dividende > 5%. Contrairement à BP ou Shell, Total a gardé une approche pragmatique : utiliser le cash-flow énorme du pétrole pour financer intelligemment sa transition verte sans s'endetter. C'est notre "Vache à Lait".
+                            </p>
+                        </div>
+
+                        <div class="bg-card border border-gray-700 rounded-xl p-6 hover:border-green-500 transition duration-300">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-white">Schneider Electric (SU.PA)</h3>
+                                <span class="bg-green-900/30 text-green-400 px-3 py-1 rounded-full text-xs font-bold border border-green-500/30">CROISSANCE</span>
+                            </div>
+                            <p class="text-gray-400 text-sm leading-relaxed text-justify">
+                                C'est notre façon de jouer l'Intelligence Artificielle sans payer les multiples absurdes de la Tech. L'IA a besoin de Data Centers. Les Data Centers ont besoin de gestion électrique ultra-complexe pour ne pas surchauffer. Schneider est le leader mondial de la gestion de l'énergie et de l'automatisation. C'est le vendeur de "pelles et de pioches" de la ruée vers l'or numérique.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-purple-500">04.</span> La Prochaine Frontière
+                    </h2>
+                    <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-700">
+                        <p class="text-gray-300 text-justify mb-4">
+                            Une fois notre socle "Actifs Réels" consolidé, nous regarderons vers l'Est et le Sud.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-400 space-y-2 ml-4">
+                            <li><strong>Japon :</strong> Des entreprises riches en cash, une gouvernance qui s'améliore, mais un Yen trop faible. Nous attendons le pivot de la Banque du Japon.</li>
+                            <li><strong>Émergents (Inde/Brésil) :</strong> La démographie est là-bas. La croissance aussi. Mais tant que le Dollar est fort, ces marchés souffrent. Nous attendons la baisse des taux US pour entrer.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="dashboard" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+                <div class="mb-8 flex justify-between items-end">
+                    <div>
+                        <h1 class="text-3xl font-bold text-white">Portefeuille Global</h1>
+                        <p class="text-gray-400 mt-1 text-sm font-mono flex items-center gap-2">
+                            <span id="scan-progress" class="hidden text-blue-400 font-bold">...</span>
+                            <span id="last-update">En attente de connexion...</span>
+                        </p>
+                    </div>
+                    <div class="text-right"><div class="text-sm text-gray-400 uppercase">AUM Total</div><div class="text-4xl font-extrabold text-white tabular-nums" id="totalVal">-- €</div></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Plus-Value</p><p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">--</p></div>
+                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Dividendes</p><p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">--</p></div>
+                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">PER Moyen</p><p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p></div>
+                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Top Perf</p><p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p><p class="text-xs font-bold text-green-400 mt-1" id="topStockPerf">--</p></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col">
+                        <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30"><h3 class="text-sm font-bold text-white uppercase">Positions Actives</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm text-gray-400">
+                                <thead class="bg-gray-900/50 uppercase text-xs text-gray-500">
+                                    <tr>
+                                        <th class="px-5 py-3">Société</th>
+                                        <th class="px-5 py-3 text-right">Cours</th>
+                                        <th class="px-5 py-3 text-center">Var. J</th>
+                                        <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
+                                        <th class="px-5 py-3 text-right">Perf</th>
+                                        <th class="px-5 py-3 text-center text-blue-400">PER</th>
+                                        <th class="px-5 py-3 text-center text-purple-400">PSR</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-700/50" id="tableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-card rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col">
+                        <h3 class="text-sm font-bold text-white uppercase mb-4">Allocation</h3>
+                        <div class="flex-1 relative min-h-[250px]"><canvas id="sectorChart"></canvas></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="watchlist" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Liste de Surveillance</h1><p class="text-gray-400 mt-2">Cibles potentielles : Japon & Marchés Émergents.</p></div>
-            <div class="bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30 flex justify-between items-center"><h3 class="text-sm font-bold text-white uppercase">Watchlist</h3><span id="wl-scan-status" class="text-xs text-blue-400 font-mono hidden">Scan...</span></div>
-                <div class="overflow-x-auto"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-gray-900/50 uppercase text-xs text-gray-500"><tr><th class="px-5 py-3">Actif</th><th class="px-5 py-3">Thèse / Objectif</th><th class="px-5 py-3 text-right">Cours Live</th><th class="px-5 py-3 text-center">Var. J</th><th class="px-5 py-3 text-right text-yellow-400">Statut</th></tr></thead><tbody class="divide-y divide-gray-700/50" id="watchlistBody"></tbody></table></div>
+            <div id="watchlist" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+                <div class="mb-8"><h1 class="text-3xl font-bold text-white tracking-tight">Liste de Surveillance</h1><p class="text-gray-400 mt-2">Cibles potentielles : Japon & Marchés Émergents.</p></div>
+                <div class="bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30 flex justify-between items-center"><h3 class="text-sm font-bold text-white uppercase">Watchlist</h3><span id="wl-scan-status" class="text-xs text-blue-400 font-mono hidden">Scan...</span></div>
+                    <div class="overflow-x-auto"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-gray-900/50 uppercase text-xs text-gray-500"><tr><th class="px-5 py-3">Actif</th><th class="px-5 py-3">Thèse / Objectif</th><th class="px-5 py-3 text-right">Cours Live</th><th class="px-5 py-3 text-center">Var. J</th><th class="px-5 py-3 text-right text-yellow-400">Statut</th></tr></thead><tbody class="divide-y divide-gray-700/50" id="watchlistBody"></tbody></table></div>
+                </div>
             </div>
-        </div>
 
-        <div id="simulation" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-            <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection</h1>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="bg-card border border-gray-700 rounded-xl p-6 h-fit"><h3 class="font-bold text-white mb-6 uppercase text-sm">Paramètres</h3><div class="space-y-4"><div><label class="block text-xs font-medium text-gray-400 mb-1">Capital Initial</label><input type="number" id="sim-start" value="10000" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Mensuel</label><input type="number" id="sim-monthly" value="500" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Rendement %</label><input type="number" id="sim-rate" value="8" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Années</label><input type="number" id="sim-years" value="20" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div></div><button onclick="calculateSim()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition">Calculer</button></div>
-                <div class="lg:col-span-2 bg-card border border-gray-700 rounded-xl p-6 flex flex-col"><div class="text-center mb-6"><div class="text-sm text-gray-400 uppercase">Capital Final</div><div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mt-2" id="sim-result">-- €</div></div><div class="flex-1 relative min-h-[300px]"><canvas id="simChart"></canvas></div></div>
+            <div id="simulation" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+                <h1 class="text-3xl font-bold text-white tracking-tight mb-2">Projection</h1>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 h-fit"><h3 class="font-bold text-white mb-6 uppercase text-sm">Paramètres</h3><div class="space-y-4"><div><label class="block text-xs font-medium text-gray-400 mb-1">Capital Initial</label><input type="number" id="sim-start" value="10000" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Mensuel</label><input type="number" id="sim-monthly" value="500" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Rendement %</label><input type="number" id="sim-rate" value="8" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div><div><label class="block text-xs font-medium text-gray-400 mb-1">Années</label><input type="number" id="sim-years" value="20" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-white"></div></div><button onclick="calculateSim()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition">Calculer</button></div>
+                    <div class="lg:col-span-2 bg-card border border-gray-700 rounded-xl p-6 flex flex-col"><div class="text-center mb-6"><div class="text-sm text-gray-400 uppercase">Capital Final</div><div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mt-2" id="sim-result">-- €</div></div><div class="flex-1 relative min-h-[300px]"><canvas id="simChart"></canvas></div></div>
+                </div>
             </div>
-        </div>
 
-    </main>
+        </main>
+    </div> <script>
+        // --- LOGIQUE DE LOGIN ---
+        const PASSWORD_CONFIG = "admin"; // <--- CHANGE LE MOT DE PASSE ICI
 
-    <script>
-        // CONFIG
+        function checkLogin() {
+            const input = document.getElementById('passwordInput');
+            const box = document.querySelector('.login-box');
+            const errorMsg = document.getElementById('loginError');
+
+            if (input.value === PASSWORD_CONFIG) {
+                // Succès
+                document.getElementById('login-screen').style.transition = 'opacity 0.5s ease';
+                document.getElementById('login-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('app-container').style.display = 'flex';
+                    // Lance le code existant une fois connecté
+                    initApp();
+                }, 500);
+            } else {
+                // Erreur
+                errorMsg.classList.remove('hidden');
+                box.classList.remove('shake');
+                void box.offsetWidth; // trigger reflow
+                box.classList.add('shake');
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // --- CODE EXISTANT (ENCAPSULÉ DANS initApp) ---
+        
         let portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, prev: 0, eps: 5.90, sps: 53.5, beta: 0.8 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, prev: 0, eps: 7.50, sps: 63.0, beta: 1.1 },
@@ -406,7 +463,9 @@
             renderWatchlist(); 
             for (let i = 0; i < watchlist.length; i++) {
                 const item = watchlist[i];
-                status.innerText = `Scan: ${item.tick}...`;
+                const status = document.getElementById('wl-scan-status');
+                if(status) { status.classList.remove('hidden'); status.innerText = `Scan: ${item.tick}...`; }
+                
                 const data = await fetchPriceRobust(item.tick);
                 if (data && data.price) {
                     item.price = data.price;
@@ -415,6 +474,8 @@
                 }
                 await new Promise(r => setTimeout(r, 800));
             }
+            const status = document.getElementById('wl-scan-status');
+            if(status) status.classList.add('hidden');
         }
 
         // RENDER DASHBOARD
@@ -607,11 +668,15 @@
             simChartInstance = new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Patrimoine',data:dataCapital,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true,tension:0.4},{label:'Investi',data:dataInvested,borderColor:'#64748b',borderDash:[5,5],tension:0.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{grid:{color:'#1e293b'}}},plugins:{legend:{labels:{color:'#94a3b8'}}}}});
         }
 
-        // START
-        calculateSim(); 
-        renderDashboard(); 
-        setTimeout(startLiveFeed, 1000); 
-        setInterval(startLiveFeed, 120000); 
+        // INIT APP (Triggered after login)
+        function initApp() {
+            calculateSim(); 
+            renderDashboard(); 
+            setTimeout(startLiveFeed, 1000); 
+            setInterval(startLiveFeed, 120000); 
+        }
+
+        // Pas de démarrage automatique ici, on attend le login.
     </script>
 </body>
 </html>
