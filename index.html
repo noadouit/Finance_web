@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noa Capital | V48 Family Office</title>
+    <title>Noa Capital | V49 Pro Feed</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -26,97 +26,25 @@
             }
         }
     </script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #0f172a; 
-            color: white; 
-            overflow-x: hidden; 
-        }
-
-        /* Gestion des Onglets */
-        .tab-content { 
-            display: none; 
-            width: 100%; 
-            animation: fadeIn 0.4s ease-out; 
-        }
-        .tab-content.active { 
-            display: block; 
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; overflow-x: hidden; }
+        .tab-content { display: none; width: 100%; animation: fadeIn 0.4s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        
-        /* Styles Spécifiques Home */
-        #home.active { 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: calc(100vh - 64px); 
-        }
-        
-        .search-glow:focus-within { 
-            box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); 
-            border-color: #3b82f6; 
-        }
+        #home.active { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: calc(100vh - 64px); }
+        .search-glow:focus-within { box-shadow: 0 0 40px rgba(59, 130, 246, 0.25); border-color: #3b82f6; }
+        .loader { border: 3px solid #333; border-top: 3px solid #3b82f6; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display:none; margin: 0 auto; }
+        .flash-update { animation: highlight 0.5s ease-out; background-color: rgba(34, 197, 94, 0.1); }
+        @keyframes highlight { 0% { background-color: rgba(34, 197, 94, 0.3); } 100% { background-color: transparent; } }
 
-        /* Loader Animation */
-        .loader { 
-            border: 3px solid #333; 
-            border-top: 3px solid #3b82f6; 
-            border-radius: 50%; 
-            width: 24px; 
-            height: 24px; 
-            animation: spin 1s linear infinite; 
-            display:none; 
-            margin: 0 auto; 
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Animation Flash lors de la mise à jour des prix */
-        .flash-update { 
-            animation: highlight 0.5s ease-out; 
-            background-color: rgba(34, 197, 94, 0.1); 
-        }
-        @keyframes highlight { 
-            0% { background-color: rgba(34, 197, 94, 0.3); } 
-            100% { background-color: transparent; } 
-        }
-
-        /* Écran de Connexion */
-        #login-screen { 
-            position: fixed; 
-            inset: 0; 
-            z-index: 9999; 
-            background: #0f172a; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-        }
-        .login-box { 
-            width: 100%; 
-            max-width: 400px; 
-            padding: 2rem; 
-            background: #1e293b; 
-            border: 1px solid #334155; 
-            border-radius: 1rem; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
-            text-align: center; 
-        }
+        /* Login */
+        #login-screen { position: fixed; inset: 0; z-index: 9999; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .login-box { width: 100%; max-width: 400px; padding: 2rem; background: #1e293b; border: 1px solid #334155; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); text-align: center; }
         .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-        @keyframes shake { 
-            10%, 90% { transform: translate3d(-1px, 0, 0); } 
-            20%, 80% { transform: translate3d(2px, 0, 0); } 
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 
-            40%, 60% { transform: translate3d(4px, 0, 0); } 
-        }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
     </style>
 </head>
 
@@ -126,7 +54,7 @@
         <div class="mb-8 flex flex-col items-center gap-4">
             <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-16 h-16 rounded-2xl flex items-center justify-center font-black text-3xl text-white shadow-2xl shadow-blue-900/50">N</div>
             <h1 class="text-3xl font-bold tracking-tight text-white">Noa Capital</h1>
-            <p class="text-gray-400 text-sm">V48 • Family Office</p>
+            <p class="text-gray-400 text-sm">V49 Pro • API Key Required</p>
         </div>
         
         <div class="login-box">
@@ -136,12 +64,10 @@
                 <p id="loginError" class="text-red-500 text-xs mt-2 hidden">Mot de passe incorrect.</p>
             </div>
             <button onclick="checkLogin()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-blue-900/20">
-                Accéder au Dashboard
+                Initialiser le Flux
             </button>
         </div>
-        <div class="mt-8 text-gray-600 text-xs font-mono">Secured by NC-Protocol</div>
     </div>
-
 
     <div id="app-container" style="display: none;" class="flex-1 flex flex-col w-full h-full">
 
@@ -151,7 +77,6 @@
                     <div class="bg-gradient-to-r from-blue-600 to-indigo-600 w-9 h-9 rounded-lg flex items-center justify-center font-black text-white shadow-lg">N</div>
                     <span class="text-xl font-bold tracking-tight hidden md:block">Noa Capital</span>
                 </div>
-                
                 <div class="flex items-center gap-4">
                     <div class="flex space-x-1 bg-gray-900/50 p-1 rounded-lg border border-gray-700 overflow-x-auto max-w-[250px] md:max-w-none scrollbar-hide">
                         <button onclick="switchTab('home')" id="btn-home" class="px-3 py-1.5 text-sm font-medium rounded-md bg-blue-600 text-white transition whitespace-nowrap">🔎</button>
@@ -171,18 +96,15 @@
             <div id="home" class="tab-content active">
                 <div class="text-center mb-8 w-full px-4 pt-8">
                     <h1 class="text-5xl font-black text-white mb-4">Market Intelligence.</h1>
-                    <p class="text-gray-400">Analyse Technique & Fondamentale.</p>
+                    <p class="text-gray-400">Flux Professionnel (FMP Data).</p>
                 </div>
-                
                 <div class="w-full max-w-3xl px-4 relative z-10 mb-8">
                     <div class="search-glow bg-[#161b22] border border-gray-600 rounded-2xl p-2 flex items-center transition-all duration-300">
-                        <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA, BRES.PA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
+                        <input type="text" id="mainTickerInput" class="w-full bg-transparent border-none text-white text-xl px-4 py-4 focus:outline-none placeholder-gray-600 font-medium" placeholder="Rechercher (ex: AI.PA, AAPL)..." onkeypress="if(event.key === 'Enter') searchTicker()">
                         <button onclick="searchTicker()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg">GO</button>
                     </div>
                 </div>
-                
                 <div id="searchLoader" class="loader mt-10"></div>
-                
                 <div id="resultCard" class="hidden w-full max-w-5xl px-4 pb-20">
                     <div class="bg-card/90 backdrop-blur border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
                         <div class="p-6 border-b border-gray-700/50 flex justify-between items-center bg-gray-800/20">
@@ -191,19 +113,16 @@
                                     <h2 class="text-3xl font-bold text-white" id="res-name">Nom</h2>
                                     <span class="text-xs px-2 py-1 rounded bg-blue-900/30 text-blue-400 border border-blue-800" id="res-type">EQUITY</span>
                                 </div>
-                                <div class="text-gray-400 text-sm mt-1 font-mono">
-                                    <span id="res-symbol">TICKER</span>
-                                </div>
+                                <div class="text-gray-400 text-sm mt-1 font-mono"><span id="res-symbol">TICKER</span></div>
                             </div>
                             <div class="text-right">
                                 <div class="text-5xl font-black text-white" id="res-price">--</div>
                                 <div class="text-xl font-bold flex items-center justify-end gap-2" id="res-perf">-- %</div>
                             </div>
                         </div>
-
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-700/50">
                             <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Ouverture</div><div class="text-lg font-mono text-white" id="res-open">--</div></div>
-                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Range Jour</div><div class="text-sm font-mono text-white" id="res-range">--</div></div>
+                            <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Haut/Bas</div><div class="text-sm font-mono text-white" id="res-range">--</div></div>
                             <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Volume</div><div class="text-lg font-mono text-blue-300" id="res-vol">--</div></div>
                             <div class="bg-card p-4"><div class="text-[10px] text-gray-500 uppercase font-bold">Cap. Boursière</div><div class="text-lg font-mono text-white" id="res-cap">--</div></div>
                         </div>
@@ -211,447 +130,217 @@
                 </div>
             </div>
 
-
             <div id="dashboard" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
                 <div class="mb-8 flex justify-between items-end">
                     <div>
                         <h1 class="text-3xl font-bold text-white">Portefeuille Global</h1>
                         <p class="text-gray-400 mt-1 text-sm font-mono flex items-center gap-2">
-                            <span id="scan-progress" class="hidden text-blue-400 font-bold">Sync...</span>
-                            <span id="last-update">En attente de connexion...</span>
+                            <button onclick="fetchAllData()" class="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded text-xs border border-gray-600 transition">↻ Actualiser</button>
+                            <span id="last-update">En attente...</span>
                         </p>
                     </div>
-                    <div class="text-right">
-                        <div class="text-sm text-gray-400 uppercase">AUM Total</div>
-                        <div class="text-4xl font-extrabold text-white tabular-nums" id="totalVal">-- €</div>
-                    </div>
+                    <div class="text-right"><div class="text-sm text-gray-400 uppercase">AUM Total</div><div class="text-4xl font-extrabold text-white tabular-nums" id="totalVal">-- €</div></div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
-                        <p class="text-xs font-bold text-gray-400 uppercase">Plus-Value</p>
-                        <p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">--</p>
-                    </div>
-                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
-                        <p class="text-xs font-bold text-gray-400 uppercase">Dividendes (An)</p>
-                        <p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">--</p>
-                    </div>
-                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
-                        <p class="text-xs font-bold text-gray-400 uppercase">PER Moyen</p>
-                        <p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p>
-                    </div>
-                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg">
-                        <p class="text-xs font-bold text-gray-400 uppercase">Top Perf</p>
-                        <p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p>
-                        <p class="text-xs font-bold text-green-400 mt-1" id="topStockPerf">--</p>
-                    </div>
+                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Plus-Value</p><p class="mt-1 text-2xl font-bold tabular-nums" id="totalPv">--</p></div>
+                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Dividendes (An)</p><p class="mt-1 text-2xl font-bold text-indigo-400 tabular-nums" id="totalDiv">--</p></div>
+                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">PER Moyen</p><p class="mt-1 text-2xl font-bold text-white tabular-nums" id="avgPER">--</p></div>
+                    <div class="bg-card rounded-xl p-5 border border-gray-700 shadow-lg"><p class="text-xs font-bold text-gray-400 uppercase">Top Perf</p><p class="mt-1 text-lg font-bold text-white truncate" id="topStock">--</p><p class="text-xs font-bold text-green-400 mt-1" id="topStockPerf">--</p></div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-2 bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col">
-                        <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30">
-                            <h3 class="text-sm font-bold text-white uppercase">Positions Actives</h3>
-                        </div>
+                        <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30"><h3 class="text-sm font-bold text-white uppercase">Positions</h3></div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
-                                <thead class="bg-gray-900/50 uppercase text-xs text-gray-500">
-                                    <tr>
-                                        <th class="px-5 py-3">Société</th>
-                                        <th class="px-5 py-3 text-right">Cours</th>
-                                        <th class="px-5 py-3 text-center">Var. J</th>
-                                        <th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th>
-                                        <th class="px-5 py-3 text-right">Perf</th>
-                                    </tr>
-                                </thead>
+                                <thead class="bg-gray-900/50 uppercase text-xs text-gray-500"><tr><th class="px-5 py-3">Société</th><th class="px-5 py-3 text-right">Cours</th><th class="px-5 py-3 text-center">Var. J</th><th class="px-5 py-3 text-right hidden sm:table-cell">Valo</th><th class="px-5 py-3 text-right">Perf</th></tr></thead>
                                 <tbody class="divide-y divide-gray-700/50" id="tableBody"></tbody>
                             </table>
                         </div>
                     </div>
-                    
                     <div class="bg-card rounded-xl border border-gray-700 shadow-lg p-6 flex flex-col">
                         <h3 class="text-sm font-bold text-white uppercase mb-4">Allocation</h3>
-                        <div class="flex-1 relative min-h-[250px]">
-                            <canvas id="sectorChart"></canvas>
-                        </div>
+                        <div class="flex-1 relative min-h-[250px]"><canvas id="sectorChart"></canvas></div>
                     </div>
                 </div>
             </div>
 
-
             <div id="macro" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-white">Cockpit Macro</h1>
-                    <p class="text-gray-400 mt-2">La vision de Gave : suivre les signes vitaux du système.</p>
-                </div>
+                <div class="mb-8"><h1 class="text-3xl font-bold text-white">Cockpit Macro</h1><p class="text-gray-400 mt-2">Données temps réel (Forex/Commodities).</p></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="bg-card border border-gray-700 rounded-xl p-6 relative overflow-hidden group hover:border-gold transition">
-                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition text-6xl">🧈</div>
-                        <h3 class="text-sm font-bold text-gold uppercase mb-2">Or (Gold)</h3>
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🧈</div>
+                        <h3 class="text-sm font-bold text-gold uppercase mb-2">Or (Spot USD)</h3>
                         <div class="text-3xl font-black text-white" id="macro-gold-price">--</div>
                         <div class="text-sm mt-1" id="macro-gold-var">--</div>
-                        <p class="text-xs text-gray-500 mt-4">Le refuge ultime.</p>
                     </div>
-                    
                     <div class="bg-card border border-gray-700 rounded-xl p-6 relative overflow-hidden group hover:border-gray-500 transition">
-                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition text-6xl">🛢️</div>
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🛢️</div>
                         <h3 class="text-sm font-bold text-gray-400 uppercase mb-2">Pétrole (Brent)</h3>
                         <div class="text-3xl font-black text-white" id="macro-oil-price">--</div>
                         <div class="text-sm mt-1" id="macro-oil-var">--</div>
-                        <p class="text-xs text-gray-500 mt-4">L'énergie du monde réel.</p>
                     </div>
-                    
-                    <div class="bg-card border border-gray-700 rounded-xl p-6 relative overflow-hidden group hover:border-orange-500 transition">
-                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition text-6xl">🔌</div>
-                        <h3 class="text-sm font-bold text-orange-400 uppercase mb-2">Cuivre</h3>
-                        <div class="text-3xl font-black text-white" id="macro-cop-price">--</div>
-                        <div class="text-sm mt-1" id="macro-cop-var">--</div>
-                        <p class="text-xs text-gray-500 mt-4">Baromètre industriel.</p>
-                    </div>
-                    
-                    <div class="bg-card border border-gray-700 rounded-xl p-6 relative overflow-hidden group hover:border-yellow-500 transition">
-                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition text-6xl">₿</div>
-                        <h3 class="text-sm font-bold text-yellow-500 uppercase mb-2">Bitcoin</h3>
-                        <div class="text-3xl font-black text-white" id="macro-btc-price">--</div>
-                        <div class="text-sm mt-1" id="macro-btc-var">--</div>
-                        <p class="text-xs text-gray-500 mt-4">Liquidité mondiale.</p>
-                    </div>
-                    
                     <div class="bg-card border border-gray-700 rounded-xl p-6 relative overflow-hidden group hover:border-blue-500 transition">
-                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition text-6xl">💶</div>
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">💶</div>
                         <h3 class="text-sm font-bold text-blue-400 uppercase mb-2">EUR / USD</h3>
                         <div class="text-3xl font-black text-white" id="macro-eur-price">--</div>
                         <div class="text-sm mt-1" id="macro-eur-var">--</div>
                     </div>
-                    
-                    <div class="bg-card border border-gray-700 rounded-xl p-6 relative overflow-hidden group hover:border-purple-500 transition">
-                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition text-6xl">📈</div>
-                        <h3 class="text-sm font-bold text-purple-400 uppercase mb-2">Taux US 10 Ans</h3>
-                        <div class="text-3xl font-black text-white" id="macro-rate-price">--</div>
-                        <div class="text-sm mt-1" id="macro-rate-var">--</div>
+                    <div class="bg-card border border-gray-700 rounded-xl p-6 relative overflow-hidden group hover:border-yellow-500 transition">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">₿</div>
+                        <h3 class="text-sm font-bold text-yellow-500 uppercase mb-2">Bitcoin</h3>
+                        <div class="text-3xl font-black text-white" id="macro-btc-price">--</div>
+                        <div class="text-sm mt-1" id="macro-btc-var">--</div>
                     </div>
                 </div>
             </div>
-
 
             <div id="rentes" class="tab-content max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-white">Calendrier des Rentes</h1>
-                    <p class="text-gray-400 mt-2">Projection des cash-flows sur 12 mois.</p>
-                </div>
+                <div class="mb-8"><h1 class="text-3xl font-bold text-white">Calendrier des Rentes</h1><p class="text-gray-400 mt-2">Projection des cash-flows.</p></div>
                 <div class="bg-card border border-gray-700 rounded-xl overflow-hidden">
-                    <div class="p-6 bg-gray-800/30 border-b border-gray-700 flex justify-between items-center">
-                        <h3 class="font-bold text-white">Prochains Paiements</h3>
-                        <span class="text-xs bg-indigo-900/50 text-indigo-300 px-2 py-1 rounded border border-indigo-700">Estimations</span>
-                    </div>
-                    <div class="divide-y divide-gray-700/50" id="dividend-list">
-                        <div class="p-8 text-center text-gray-500 animate-pulse">
-                            Attente des données de marché...
-                        </div>
-                    </div>
+                    <div class="p-6 bg-gray-800/30 border-b border-gray-700 flex justify-between items-center"><h3 class="font-bold text-white">Prochains Paiements</h3><span class="text-xs bg-indigo-900/50 text-indigo-300 px-2 py-1 rounded border border-indigo-700">Estimations</span></div>
+                    <div class="divide-y divide-gray-700/50" id="dividend-list"><div class="p-8 text-center text-gray-500 animate-pulse">En attente des prix...</div></div>
                 </div>
             </div>
-
 
             <div id="journal" class="tab-content max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-white">Journal de Bord</h1>
-                    <p class="text-gray-400 mt-2">Note tes décisions pour ne pas oublier ta thèse quand ça tangue.</p>
-                </div>
-                
+                <div class="mb-8"><h1 class="text-3xl font-bold text-white">Journal</h1></div>
                 <div class="bg-card border border-gray-700 rounded-xl p-6 mb-8">
-                    <textarea id="journal-input" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-4 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none h-32" placeholder="Ex: Achat BRES.PA aujourd'hui car je crois au cycle du cuivre..."></textarea>
-                    <div class="flex justify-between items-center mt-4">
-                        <span class="text-xs text-gray-500 italic">Sauvegardé localement dans ton navigateur.</span>
-                        <button onclick="saveNote()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg transition">Enregistrer la note</button>
-                    </div>
+                    <textarea id="journal-input" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-4 text-white placeholder-gray-500 focus:border-blue-500 outline-none h-32" placeholder="Note du jour..."></textarea>
+                    <div class="flex justify-between items-center mt-4"><span class="text-xs text-gray-500">Sauvegardé localement.</span><button onclick="saveNote()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg transition">Enregistrer</button></div>
                 </div>
-
-                <div class="space-y-4" id="journal-entries">
-                    </div>
+                <div class="space-y-4" id="journal-entries"></div>
             </div>
-
 
             <div id="convictions" class="tab-content max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-                <div class="mb-12 border-b border-gray-700 pb-8">
-                    <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-6">Thèse d'Investissement</h1>
-                    <p class="text-xl text-gray-400 leading-relaxed max-w-3xl">
-                        Pourquoi nous quittons la Tech pour revenir au Réel. Analyse structurelle d'un changement de paradigme économique.
-                    </p>
-                </div>
-
-                <div class="mb-16">
-                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span class="text-red-500">01.</span> La Grande Rotation : Fuir la Bulle Tech
-                    </h2>
-                    <div class="prose prose-invert prose-lg max-w-none text-gray-300 space-y-6 text-justify">
-                        <p>
-                            Depuis 2010, les marchés ont été drogués à l'argent gratuit (taux zéro). Cela a favorisé les actifs de "croissance longue" comme la Tech, le SaaS et récemment l'IA. Aujourd'hui, les valorisations de la Tech (Nasdaq) ont atteint des niveaux de perfection qui ne tolèrent aucune erreur.
-                        </p>
-                        <p>
-                            Nous assistons au dégonflement inévitable de cette prime de risque. L'IA est une révolution réelle, mais les gagnants actuels (Nvidia, Microsoft) sont "pricés" pour la perfection. À l'inverse, l'économie réelle a été sous-investie pendant une décennie.
-                        </p>
-                        <div class="bg-red-900/10 border-l-4 border-red-500 p-6 rounded-r-lg my-8">
-                            <h4 class="font-bold text-red-400 mb-2">Notre Décision Radicale</h4>
-                            <p class="text-sm">Nous sortons des actifs immatériels survalorisés pour nous positionner sur des actifs tangibles sous-valorisés. Nous préférons posséder une mine de cuivre (P/E 12) indispensable à l'IA, plutôt qu'un logiciel (P/E 50).</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-16">
-                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span class="text-gold">02.</span> La Croissance Ricardienne
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                        <div class="bg-card p-6 rounded-xl border border-gray-700">
-                            <div class="text-3xl mb-4">⛏️</div>
-                            <h3 class="font-bold text-white mb-2">Rareté Physique</h3>
-                            <p class="text-sm text-gray-400">On ne peut pas "imprimer" du cuivre ou de l'énergie.</p>
-                        </div>
-                        <div class="bg-card p-6 rounded-xl border border-gray-700">
-                            <div class="text-3xl mb-4">🏭</div>
-                            <h3 class="font-bold text-white mb-2">Pricing Power</h3>
-                            <p class="text-sm text-gray-400">Monter les prix sans perdre de clients (ex: Air Liquide).</p>
-                        </div>
-                        <div class="bg-card p-6 rounded-xl border border-gray-700">
-                            <div class="text-3xl mb-4">🛡️</div>
-                            <h3 class="font-bold text-white mb-2">Barrières</h3>
-                            <p class="text-sm text-gray-400">Il faut 15 ans pour ouvrir une mine.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-16">
-                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span class="text-blue-500">03.</span> Stock Picking Stratégique
-                    </h2>
-                    <div class="space-y-6">
-                        <div class="bg-card border border-gray-700 rounded-xl p-6">
-                            <h3 class="text-xl font-bold text-white">Air Liquide (AI.PA)</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed mt-2">
-                                La fondation. Contrats indexés sur l'inflation. Fiabilité absolue, indépendamment des cycles politiques (Trump ou pas).
-                            </p>
-                        </div>
-                        <div class="bg-card border border-gray-700 rounded-xl p-6">
-                            <h3 class="text-xl font-bold text-white">ETF Basic Resources (BRES.PA)</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed mt-2">
-                                Notre conviction forte. Le super-cycle des métaux. Pas de transition énergétique ou numérique sans cuivre et sans acier.
-                            </p>
-                        </div>
-                        <div class="bg-card border border-gray-700 rounded-xl p-6">
-                            <h3 class="text-xl font-bold text-white">TotalEnergies (TTE.PA)</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed mt-2">
-                                La Vache à Lait. Rendement élevé qui finance nos achats futurs.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                <div class="mb-12 border-b border-gray-700 pb-8"><h1 class="text-4xl md:text-5xl font-black text-white tracking-tight mb-6">Thèse d'Investissement</h1><p class="text-xl text-gray-400 leading-relaxed max-w-3xl">La Stratégie du Réel vs Le Virtuel.</p></div>
+                <div class="mb-16"><h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-red-500">01.</span> La Grande Rotation</h2><div class="prose prose-invert prose-lg max-w-none text-gray-300 space-y-6 text-justify"><p>Nous sortons des actifs immatériels survalorisés (Tech) pour nous positionner sur des actifs tangibles sous-valorisés (Mines, Energie).</p></div></div>
+                <div class="mb-16"><h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-gold">02.</span> Rareté Physique</h2><p class="text-gray-300">On ne peut pas imprimer du cuivre. Air Liquide, TotalEnergies et les Mines possèdent ce qui est vital.</p></div>
             </div>
 
-
             <div id="watchlist" class="tab-content max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-white tracking-tight">Liste de Surveillance</h1>
-                    <p class="text-gray-400 mt-2">Cibles potentielles : Japon & Marchés Émergents.</p>
-                </div>
-                <div class="bg-card rounded-xl border border-gray-700 shadow-lg flex flex-col overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/30 flex justify-between items-center">
-                        <h3 class="text-sm font-bold text-white uppercase">Watchlist</h3>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-gray-400">
-                            <thead class="bg-gray-900/50 uppercase text-xs text-gray-500">
-                                <tr>
-                                    <th class="px-5 py-3">Actif</th>
-                                    <th class="px-5 py-3">Thèse / Objectif</th>
-                                    <th class="px-5 py-3 text-right">Cours Live</th>
-                                    <th class="px-5 py-3 text-center">Var. J</th>
-                                    <th class="px-5 py-3 text-right text-yellow-400">Statut</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-700/50" id="watchlistBody"></tbody>
-                        </table>
-                    </div>
+                <div class="mb-8"><h1 class="text-3xl font-bold text-white">Liste de Surveillance</h1></div>
+                <div class="bg-card rounded-xl border border-gray-700 shadow-lg overflow-hidden">
+                    <table class="w-full text-left text-sm text-gray-400"><thead class="bg-gray-900/50 uppercase text-xs text-gray-500"><tr><th class="px-5 py-3">Actif</th><th class="px-5 py-3">Thèse</th><th class="px-5 py-3 text-right">Cours</th><th class="px-5 py-3 text-center">Var. J</th></tr></thead><tbody class="divide-y divide-gray-700/50" id="watchlistBody"></tbody></table>
                 </div>
             </div>
 
         </main>
     </div>
 
-
     <script>
-        // CONFIGURATION
-        const PASSWORD_CONFIG = "admin"; // Mot de passe
+        const PASSWORD_CONFIG = "admin";
+        
+        // !!!!!!! COLLE TA CLÉ ICI !!!!!!!
+        const API_KEY = "wtZ4ar0LfzPrZ7XFZeoXcKTJkARx5mbK"; 
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        // DONNÉES DU PORTEFEUILLE
+        // PORTFOLIO - TICKERS FORMAT FMP (Financial Modeling Prep)
         let portfolio = [
-            { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, price: 0, prev: 0, eps: 5.90 },
-            { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, price: 0, prev: 0, eps: 7.50 },
-            { tick: "TTE.PA", name: "TotalEnergies",      sec: "Energie",    q: 38, pru: 56.97,  div: 0.052, price: 0, prev: 0, eps: 8.00 },
-            { tick: "AIR.PA", name: "Airbus",             sec: "Aéro.",      q: 5,  pru: 212.46, div: 0.012, price: 0, prev: 0, eps: 4.90 },
-            { tick: "SGO.PA", name: "Saint-Gobain",       sec: "Construct.", q: 7,  pru: 88.15,  div: 0.026, price: 0, prev: 0, eps: 5.50 },
-            { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   price: 0, prev: 0, eps: 0    },
+            { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, eps: 5.90 },
+            { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, eps: 7.50 },
+            { tick: "TTE.PA", name: "TotalEnergies",      sec: "Energie",    q: 38, pru: 56.97,  div: 0.052, eps: 8.00 },
+            { tick: "AIR.PA", name: "Airbus",             sec: "Aéro.",      q: 5,  pru: 212.46, div: 0.012, eps: 4.90 },
+            { tick: "SGO.PA", name: "Saint-Gobain",       sec: "Construct.", q: 7,  pru: 88.15,  div: 0.026, eps: 5.50 },
+            { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   eps: 0    },
         ];
 
-        // DONNÉES WATCHLIST
+        // Pour les stats
+        portfolio.forEach(p => { p.price = 0; p.prev = 0; });
+
         let watchlist = [
-            { tick: "CJ1.PA", name: "Amundi MSCI Japan", thesis: "Attente rebond Yen", price: 0, prev: 0 },
-            { tick: "AEEM.PA", name: "Amundi MSCI Emerging", thesis: "Attente point bas cycle", price: 0, prev: 0 }
+            { tick: "CJ1.PA", name: "Amundi Japan", thesis: "Yen", price: 0, prev: 0 },
+            { tick: "AEEM.PA", name: "Amundi Emerging", thesis: "Cycle", price: 0, prev: 0 }
         ];
 
-        // DONNÉES MACRO
         let macro = [
-            { tick: "GC=F", name: "gold", price: 0, prev: 0 },
-            { tick: "BZ=F", name: "oil", price: 0, prev: 0 },
-            { tick: "HG=F", name: "cop", price: 0, prev: 0 }, // Cuivre
-            { tick: "EURUSD=X", name: "eur", price: 0, prev: 0 },
-            { tick: "^TNX", name: "rate", price: 0, prev: 0 },
-            { tick: "BTC-USD", name: "btc", price: 0, prev: 0 }
+            { tick: "XAUUSD", name: "gold", price: 0, prev: 0 }, // Or Spot
+            { tick: "BZUSD",  name: "oil", price: 0, prev: 0 },  // Brent Oil
+            { tick: "EURUSD", name: "eur", price: 0, prev: 0 },  // Euro
+            { tick: "BTCUSD", name: "btc", price: 0, prev: 0 }   // Bitcoin
         ];
 
         // --- NAVIGATION ---
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
-            // Mise à jour des boutons du menu
-            const buttons = ['home','dashboard','watchlist','convictions','macro','rentes','journal'];
-            buttons.forEach(b => {
-                const el = document.getElementById('btn-' + b);
-                if(el) {
-                    if(b === id) {
-                        el.classList.add('bg-blue-600','text-white');
-                        el.classList.remove('text-gray-400','bg-transparent');
-                    } else {
-                        el.classList.remove('bg-blue-600','text-white');
-                        el.classList.add('text-gray-400','bg-transparent');
-                    }
-                }
+            ['home','dashboard','watchlist','convictions','macro','rentes','journal'].forEach(b=>{
+                const el=document.getElementById('btn-'+b);
+                if(el){ if(b===id){el.classList.add('bg-blue-600','text-white');el.classList.remove('text-gray-400','bg-transparent')} else{el.classList.remove('bg-blue-600','text-white');el.classList.add('text-gray-400','bg-transparent')} }
             });
-
-            // Actions spécifiques lors du changement d'onglet
-            if(id !== 'home') document.getElementById('resultCard').classList.add('hidden');
-            if(id === 'rentes') renderCalendar();
-            if(id === 'journal') renderJournal();
+            if(id!=='home') document.getElementById('resultCard').classList.add('hidden');
+            if(id==='rentes') renderCalendar();
+            if(id==='journal') renderJournal();
         }
 
-        // --- MOTEUR DE RÉCUPÉRATION DE DONNÉES (BATCH FETCH) ---
-        // C'est ici que la magie opère : 1 seule requête pour tout le monde.
+        // --- MOTEUR API (FMP) ---
         async function fetchAllData() {
-            // On combine tous les tickers
-            const allTickers = [
-                ...portfolio.map(i => i.tick), 
-                ...watchlist.map(i => i.tick), 
-                ...macro.map(i => i.tick)
-            ].join(',');
+            if(API_KEY === "TA_CLE_ICI" || API_KEY === "") {
+                alert("Attention : Tu dois coller ta clé API dans le code (Ligne 400 environ) !");
+                return;
+            }
 
-            // Indicateur visuel de chargement
-            const progressEl = document.getElementById('scan-progress');
-            progressEl.innerText = "Sync...";
-            progressEl.classList.remove('hidden');
-
-            const proxy = "https://corsproxy.io/?";
-            // API V7 Quote de Yahoo permet de demander plusieurs symboles séparés par des virgules
-            const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${allTickers}&t=${Date.now()}`;
+            const allTickers = [...portfolio.map(i=>i.tick), ...watchlist.map(i=>i.tick), ...macro.map(i=>i.tick)].join(',');
+            document.getElementById('last-update').innerText = "Connexion...";
+            
+            // FMP Quote Endpoint
+            const url = `https://financialmodelingprep.com/api/v3/quote/${allTickers}?apikey=${API_KEY}`;
             
             try {
-                const response = await fetch(proxy + encodeURIComponent(url));
-                if(!response.ok) throw new Error("Erreur API Yahoo");
-                
-                const json = await response.json();
-                const results = json.quoteResponse.result;
+                const r = await fetch(url);
+                if(!r.ok) throw new Error("Erreur API");
+                const data = await r.json();
 
-                // On redistribue les données reçues dans nos tableaux locaux
-                results.forEach(q => {
-                    // 1. Mise à jour Portfolio
+                data.forEach(q => {
                     let pItem = portfolio.find(i => i.tick === q.symbol);
-                    if(pItem) { 
-                        pItem.price = q.regularMarketPrice; 
-                        pItem.prev = q.regularMarketPreviousClose; 
-                    }
+                    if(pItem) { pItem.price = q.price; pItem.prev = q.previousClose; }
                     
-                    // 2. Mise à jour Watchlist
                     let wItem = watchlist.find(i => i.tick === q.symbol);
-                    if(wItem) { 
-                        wItem.price = q.regularMarketPrice; 
-                        wItem.prev = q.regularMarketPreviousClose; 
-                    }
+                    if(wItem) { wItem.price = q.price; wItem.prev = q.previousClose; }
                     
-                    // 3. Mise à jour Macro
                     let mItem = macro.find(i => i.tick === q.symbol);
-                    if(mItem) { 
-                        mItem.price = q.regularMarketPrice; 
-                        mItem.prev = q.regularMarketPreviousClose; 
-                    }
+                    if(mItem) { mItem.price = q.price; mItem.prev = q.previousClose; }
                 });
 
-                // Succès
                 document.getElementById('last-update').innerText = "OK " + new Date().toLocaleTimeString();
                 document.getElementById('last-update').className = "text-green-400 font-mono text-sm";
-                progressEl.classList.add('hidden');
-
-                // On rafraîchit tous les affichages
+                
                 renderDashboard();
                 renderWatchlist();
                 renderMacro();
                 renderCalendar(); 
 
             } catch(e) {
-                console.error("Erreur Fetch:", e);
-                document.getElementById('last-update').innerText = "Erreur Sync";
+                console.error(e);
+                document.getElementById('last-update').innerText = "Erreur (Clé?)";
                 document.getElementById('last-update').className = "text-red-400 font-mono text-sm";
-                progressEl.classList.add('hidden');
             }
         }
 
-        // --- AFFICHAGE DASHBOARD ---
+        // --- RENDERING ---
         function renderDashboard() {
             let totalVal = 0, totalInvest = 0, totalDiv = 0, totalPER = 0, countPER = 0;
             let topStock = { name: '-', perf: -999 };
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
+            const tbody = document.getElementById('tableBody'); tbody.innerHTML = '';
 
             portfolio.forEach((stock) => {
-                // Calculs
                 const valo = stock.price * stock.q;
                 const invest = stock.pru * stock.q;
                 let perfPct = stock.pru > 0 && stock.price > 0 ? ((stock.price - stock.pru) / stock.pru) * 100 : 0;
                 let dayVarPct = stock.price > 0 && stock.prev > 0 ? ((stock.price - stock.prev) / stock.prev) * 100 : 0;
                 let calculatedPER = (stock.price > 0 && stock.eps > 0) ? stock.price / stock.eps : 0;
 
-                // Aggregats
-                totalVal += valo; 
-                totalInvest += invest; 
-                totalDiv += valo * stock.div;
-                
+                totalVal += valo; totalInvest += invest; totalDiv += valo * stock.div;
                 if(calculatedPER > 0) { totalPER += calculatedPER; countPER++; }
                 if(perfPct > topStock.perf) topStock = { name: stock.name, perf: perfPct };
                 
-                // Formatage
                 const dPrice = stock.price > 0 ? stock.price.toFixed(2) + " €" : '...';
                 const dValo = stock.price > 0 ? Math.round(valo).toLocaleString() + " €" : '-';
-                const cDay = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
-                const cPerf = perfPct >= 0 ? 'text-success' : 'text-danger';
-                
-                // HTML Ligne
-                const row = `
-                    <tr class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0">
-                        <td class="px-5 py-4">
-                            <div class="font-bold text-white">${stock.name}</div>
-                            <div class="text-[10px] text-gray-500">${stock.tick}</div>
-                        </td>
-                        <td class="px-5 py-4 text-right text-white font-mono">${dPrice}</td>
-                        <td class="px-5 py-4 text-center font-mono font-bold ${cDay}">
-                            ${dayVarPct > 0 ? '+' : ''}${dayVarPct.toFixed(2)}%
-                        </td>
-                        <td class="px-5 py-4 text-right font-bold text-gray-300 hidden sm:table-cell">${dValo}</td>
-                        <td class="px-5 py-4 text-right ${cPerf} font-mono font-bold">
-                            ${perfPct > 0 ? '+' : ''}${perfPct.toFixed(2)}%
-                        </td>
-                    </tr>`;
+                const row = `<tr class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0"><td class="px-5 py-4"><div class="font-bold text-white">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td><td class="px-5 py-4 text-right text-white font-mono">${dPrice}</td><td class="px-5 py-4 text-center font-mono font-bold ${dayVarPct>=0?'text-green-400':'text-red-400'}">${dayVarPct>0?'+':''}${dayVarPct.toFixed(2)}%</td><td class="px-5 py-4 text-right font-bold text-gray-300 hidden sm:table-cell">${dValo}</td><td class="px-5 py-4 text-right ${perfPct>=0?'text-success':'text-danger'} font-mono font-bold">${perfPct>0?'+':''}${perfPct.toFixed(2)}%</td></tr>`;
                 tbody.innerHTML += row;
             });
 
-            // Mise à jour des KPI en haut
             if(totalVal > 0) {
                 const gpv = totalVal - totalInvest;
                 document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €";
@@ -662,227 +351,90 @@
                 document.getElementById('topStock').innerText = topStock.name;
                 document.getElementById('topStockPerf').innerText = (topStock.perf>0?'+':'') + topStock.perf.toFixed(2) + " %";
             }
-
-            // Graphique Camembert
             if(window.myChart) window.myChart.destroy();
-            const initialData = [20, 15, 30, 10, 10, 15]; // Données dummy pour l'exemple (à dynamiser si besoin)
-            window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { 
-                type: 'doughnut', 
-                data: { 
-                    labels: portfolio.map(s => s.sec), 
-                    datasets: [{ 
-                        data: initialData, 
-                        backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], 
-                        borderWidth: 0 
-                    }] 
-                }, 
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    cutout: '70%', 
-                    plugins: { 
-                        legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, usePointStyle: true } } 
-                    } 
-                } 
-            });
+            const initialData = [20, 15, 30, 10, 10, 15];
+            window.myChart = new Chart(document.getElementById('sectorChart').getContext('2d'), { type: 'doughnut', data: { labels: portfolio.map(s => s.sec), datasets: [{ data: initialData, backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 8, usePointStyle: true } } } } });
         }
 
-        // --- AFFICHAGE WATCHLIST ---
-        function renderWatchlist() {
-            const tbody = document.getElementById('watchlistBody');
-            tbody.innerHTML = '';
-            watchlist.forEach(item => {
-                let dayVarPct = item.price > 0 && item.prev > 0 ? ((item.price - item.prev) / item.prev) * 100 : 0;
-                const dPrice = item.price > 0 ? item.price.toFixed(2) : '...';
-                const cDay = dayVarPct >= 0 ? 'text-green-400' : 'text-red-400';
-
-                const row = `
-                    <tr class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0">
-                        <td class="px-5 py-4">
-                            <div class="font-bold text-white">${item.name}</div>
-                            <div class="text-[10px] text-gray-500">${item.tick}</div>
-                        </td>
-                        <td class="px-5 py-4 text-xs text-blue-300">${item.thesis}</td>
-                        <td class="px-5 py-4 text-right text-white font-mono">${dPrice}</td>
-                        <td class="px-5 py-4 text-center font-mono font-bold ${cDay}">
-                            ${dayVarPct > 0 ? '+' : ''}${dayVarPct.toFixed(2)}%
-                        </td>
-                        <td class="px-5 py-4 text-right">
-                            <span class="bg-yellow-900/30 text-yellow-400 px-2 py-1 rounded text-[10px] uppercase font-bold border border-yellow-700/50">En Attente</span>
-                        </td>
-                    </tr>`;
-                tbody.innerHTML += row;
-            });
-        }
-
-        // --- AFFICHAGE MACRO ---
         function renderMacro() {
             macro.forEach(m => {
                 if(m.price > 0) {
                     const varPct = ((m.price - m.prev) / m.prev) * 100;
                     const elPrice = document.getElementById(`macro-${m.name}-price`);
                     const elVar = document.getElementById(`macro-${m.name}-var`);
-                    
                     if(elPrice) elPrice.innerText = m.price.toFixed(2);
-                    if(elVar) {
-                        elVar.innerText = (varPct > 0 ? '+' : '') + varPct.toFixed(2) + "%";
-                        elVar.className = `text-sm mt-1 font-mono font-bold ${varPct >= 0 ? 'text-green-400' : 'text-red-400'}`;
-                    }
+                    if(elVar) { elVar.innerText = (varPct > 0 ? '+' : '') + varPct.toFixed(2) + "%"; elVar.className = `text-sm mt-1 font-mono font-bold ${varPct >= 0 ? 'text-green-400' : 'text-red-400'}`; }
                 }
             });
-        }
-
-        // --- AFFICHAGE CALENDRIER RENTES ---
-        function renderCalendar() {
-            const container = document.getElementById('dividend-list');
-            container.innerHTML = "";
-            const payments = [];
-            
-            // Logique de simulation des dates de paiement
-            portfolio.forEach(stock => {
-                if(stock.price > 0) {
-                    const annual = stock.q * stock.price * stock.div; // Montant annuel total
-                    if(annual < 1) return;
-                    
-                    if (stock.tick.includes("TTE")) { 
-                        // Total paie trimestriellement
-                        [0, 3, 5, 8].forEach(m => payments.push({ month: m, name: stock.name, amt: annual / 4 })); 
-                    } else if (stock.tick.includes("AI") || stock.tick.includes("SU")) { 
-                        // Paiement en Mai (approx)
-                        payments.push({ month: 4, name: stock.name, amt: annual }); 
-                    } else { 
-                        // Autres en Juin par défaut
-                        payments.push({ month: 5, name: stock.name, amt: annual }); 
-                    }
-                }
-            });
-
-            if(payments.length === 0) { 
-                container.innerHTML = '<div class="p-8 text-center text-gray-500">Données en cours de chargement...</div>'; 
-                return; 
-            }
-            
-            // Tri par mois
-            payments.sort((a, b) => a.month - b.month);
-            const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-            
-            payments.forEach(p => {
-                container.innerHTML += `
-                    <div class="p-4 flex justify-between items-center hover:bg-gray-800/20 transition">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-500 uppercase border border-gray-700">
-                                ${months[p.month].substring(0,3)}
-                            </div>
-                            <div>
-                                <div class="font-bold text-white">${p.name}</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xl font-bold text-indigo-400">+${p.amt.toFixed(2)} €</div>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        // --- FONCTIONS JOURNAL ---
-        function saveNote() {
-            const txt = document.getElementById('journal-input').value; 
-            if(!txt) return;
-            const entry = { date: new Date().toLocaleDateString(), text: txt };
-            let notes = JSON.parse(localStorage.getItem('nc-journal') || "[]");
-            notes.unshift(entry); 
-            localStorage.setItem('nc-journal', JSON.stringify(notes));
-            document.getElementById('journal-input').value = ""; 
-            renderJournal();
         }
         
-        function renderJournal() {
-            const container = document.getElementById('journal-entries'); 
-            const notes = JSON.parse(localStorage.getItem('nc-journal') || "[]");
-            container.innerHTML = ""; 
-            if(notes.length === 0) {
-                container.innerHTML = '<div class="text-center text-gray-600 italic mt-8">Aucune note.</div>';
-                return;
-            }
-            notes.forEach(n => {
-                container.innerHTML += `
-                <div class="bg-gray-800/30 border border-gray-700 rounded-lg p-4">
-                    <div class="text-xs text-blue-400 font-bold mb-2">${n.date}</div>
-                    <p class="text-gray-300 whitespace-pre-wrap">${n.text}</p>
-                </div>`;
+        function renderWatchlist() {
+            const tbody = document.getElementById('watchlistBody'); tbody.innerHTML = '';
+            watchlist.forEach(item => {
+                let dayVarPct = item.price > 0 && item.prev > 0 ? ((item.price - item.prev) / item.prev) * 100 : 0;
+                const dPrice = item.price > 0 ? item.price.toFixed(2) : '...';
+                const row = `<tr class="hover:bg-gray-800/50 border-b border-gray-700/50 last:border-0"><td class="px-5 py-4"><div class="font-bold text-white">${item.name}</div><div class="text-[10px] text-gray-500">${item.tick}</div></td><td class="px-5 py-4 text-xs text-blue-300">${item.thesis}</td><td class="px-5 py-4 text-right text-white font-mono">${dPrice}</td><td class="px-5 py-4 text-center font-mono font-bold ${dayVarPct>=0?'text-green-400':'text-red-400'}">${dayVarPct>0?'+':''}${dayVarPct.toFixed(2)}%</td></tr>`;
+                tbody.innerHTML += row;
             });
         }
 
-        // --- RECHERCHE INDIVIDUELLE (ONE SHOT) ---
-        // Cette fonction reste séparée pour ne pas alourdir la logique Batch
-        let searchChartInstance = null;
-        async function searchTicker() {
-            const t = document.getElementById('mainTickerInput').value.toUpperCase(); 
-            if(!t) return;
-            
-            document.getElementById('resultCard').classList.add('hidden'); 
-            document.getElementById('searchLoader').style.display = 'block';
-            
-            const proxy="https://corsproxy.io/?";
-            // On utilise l'endpoint V8 pour avoir l'historique (chart)
-            const url=`https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=1d`;
-            
-            try {
-                const r = await fetch(proxy + encodeURIComponent(url)); 
-                const j = await r.json();
-                
-                if(!j.chart || !j.chart.result) throw new Error("Pas de données");
-
-                const m = j.chart.result[0].meta;
-                const p = m.regularMarketPrice;
-                const pre = m.chartPreviousClose;
-                
-                // Remplissage Données
-                document.getElementById('res-name').innerText = t; 
-                document.getElementById('res-symbol').innerText = m.symbol; 
-                document.getElementById('res-price').innerText = p.toFixed(2);
-                
-                const perf = ((p - pre) / pre) * 100;
-                const elPerf = document.getElementById('res-perf');
-                elPerf.innerText = (perf > 0 ? '+' : '') + perf.toFixed(2) + " %"; 
-                elPerf.className = perf >= 0 ? "text-xl font-bold flex items-center justify-end gap-2 text-green-400" : "text-xl font-bold flex items-center justify-end gap-2 text-red-400";
-                
-                // Données supplémentaires
-                document.getElementById('res-open').innerText = (m.regularMarketOpen||pre).toFixed(2);
-                document.getElementById('res-range').innerText = (m.regularMarketDayLow || "-") + " - " + (m.regularMarketDayHigh || "-");
-                let vol = m.regularMarketVolume || 0;
-                document.getElementById('res-vol').innerText = vol > 1000000 ? (vol/1000000).toFixed(1) + "M" : (vol/1000).toFixed(1) + "K";
-                
-                // Affichage Chart (Optionnel, si les données existent)
-                // ... (Code chart simplifié pour la lisibilité)
-
-                document.getElementById('searchLoader').style.display = 'none'; 
-                document.getElementById('resultCard').classList.remove('hidden');
-            } catch(e) { 
-                alert("Ticker introuvable ou erreur API"); 
-                document.getElementById('searchLoader').style.display = 'none'; 
-            }
+        function renderCalendar() {
+            const container = document.getElementById('dividend-list'); container.innerHTML = ""; const payments = [];
+            portfolio.forEach(stock => {
+                if(stock.price > 0) {
+                    const annual = stock.q * stock.price * stock.div; if(annual < 1) return;
+                    if (stock.tick.includes("TTE")) { [0, 3, 5, 8].forEach(m => payments.push({ month: m, name: stock.name, amt: annual / 4 })); } 
+                    else if (stock.tick.includes("AI") || stock.tick.includes("SU")) { payments.push({ month: 4, name: stock.name, amt: annual }); } 
+                    else { payments.push({ month: 5, name: stock.name, amt: annual }); }
+                }
+            });
+            if(payments.length === 0) { container.innerHTML = '<div class="p-8 text-center text-gray-500">Données manquantes ou Clé API invalide.</div>'; return; }
+            payments.sort((a, b) => a.month - b.month);
+            const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            payments.forEach(p => {
+                container.innerHTML += `<div class="p-4 flex justify-between items-center hover:bg-gray-800/20 transition"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-500 uppercase border border-gray-700">${months[p.month].substring(0,3)}</div><div><div class="font-bold text-white">${p.name}</div></div></div><div class="text-right"><div class="text-xl font-bold text-indigo-400">+${p.amt.toFixed(2)} €</div></div></div>`;
+            });
         }
 
-        // --- GESTION LOGIN ---
+        // ONE SHOT SEARCH (FMP)
+        async function searchTicker() {
+            const t = document.getElementById('mainTickerInput').value.toUpperCase(); if(!t)return;
+            document.getElementById('resultCard').classList.add('hidden'); document.getElementById('searchLoader').style.display = 'block';
+            const url = `https://financialmodelingprep.com/api/v3/quote/${t}?apikey=${API_KEY}`;
+            try {
+                const r = await fetch(url); const d = await r.json();
+                if(d.length > 0) {
+                    const m = d[0];
+                    document.getElementById('res-name').innerText = m.name; document.getElementById('res-symbol').innerText = m.symbol; document.getElementById('res-price').innerText = m.price.toFixed(2);
+                    document.getElementById('res-perf').innerText = (m.changesPercentage>0?'+':'') + m.changesPercentage.toFixed(2) + " %";
+                    document.getElementById('res-perf').className = m.changesPercentage>=0?"text-xl font-bold flex items-center justify-end gap-2 text-green-400":"text-xl font-bold flex items-center justify-end gap-2 text-red-400";
+                    document.getElementById('res-open').innerText = m.open.toFixed(2); document.getElementById('res-range').innerText = m.dayLow + " - " + m.dayHigh;
+                    let vol = m.volume || 0; document.getElementById('res-vol').innerText = vol > 1000000 ? (vol/1000000).toFixed(1) + "M" : (vol/1000).toFixed(1) + "K";
+                    document.getElementById('res-cap').innerText = m.marketCap > 1000000000 ? (m.marketCap/1000000000).toFixed(2)+"B" : (m.marketCap/1000000).toFixed(2)+"M";
+                    document.getElementById('searchLoader').style.display='none'; document.getElementById('resultCard').classList.remove('hidden');
+                } else { throw new Error(); }
+            } catch(e) { alert("Ticker introuvable ou erreur clé"); document.getElementById('searchLoader').style.display='none'; }
+        }
+
+        function saveNote() {
+            const txt = document.getElementById('journal-input').value; if(!txt)return;
+            const entry = { date: new Date().toLocaleDateString(), text: txt };
+            let notes = JSON.parse(localStorage.getItem('nc-journal') || "[]");
+            notes.unshift(entry); localStorage.setItem('nc-journal', JSON.stringify(notes));
+            document.getElementById('journal-input').value = ""; renderJournal();
+        }
+        function renderJournal() {
+            const c = document.getElementById('journal-entries'); const notes = JSON.parse(localStorage.getItem('nc-journal') || "[]");
+            c.innerHTML = ""; notes.forEach(n => c.innerHTML += `<div class="bg-gray-800/30 border border-gray-700 rounded-lg p-4"><div class="text-xs text-blue-400 font-bold mb-2">${n.date}</div><p class="text-gray-300 whitespace-pre-wrap">${n.text}</p></div>`);
+        }
+
         function checkLogin() {
             if(document.getElementById('passwordInput').value === PASSWORD_CONFIG) {
-                // Animation de sortie
-                document.getElementById('login-screen').style.transition = 'opacity 0.5s';
-                document.getElementById('login-screen').style.opacity = '0';
-                
-                setTimeout(() => {
-                    document.getElementById('login-screen').style.display = 'none'; 
-                    document.getElementById('app-container').style.display = 'flex';
-                    
-                    // Lancement des mises à jour
-                    fetchAllData(); 
-                    setInterval(fetchAllData, 60000); // Mise à jour toutes les minutes
-                    renderJournal(); // Charge le journal depuis le cache
-                }, 500);
-            } else { 
-                document.getElementById('loginError').classList.remove('hidden'); 
-            }
+                document.getElementById('login-screen').style.display='none'; document.getElementById('app-container').style.display='flex';
+                fetchAllData(); renderJournal();
+                // Actualisation auto toutes les 5 minutes pour ne pas griller ton quota gratuit (250 req/jour)
+                setInterval(fetchAllData, 300000); 
+            } else { document.getElementById('loginError').classList.remove('hidden'); }
         }
     </script>
 </body>
