@@ -1,7 +1,7 @@
 // app.js
 const PASSWORD_CONFIG = "admin"; 
 
-// Données
+// --- DONNÉES ---
 let portfolio = [
     { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, eps: 5.90, sps: 53.5 },
     { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, eps: 7.50, sps: 63.0 },
@@ -17,55 +17,72 @@ let watchlist = [
     { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre", price: 0, prev: 0 }
 ];
 
-// --- 1. BOOT SEQUENCE ANIMATION ---
+// --- 1. BOOT SEQUENCE & LOGIN (CORRIGÉ) ---
 function startBootSequence() {
     const input = document.getElementById('passwordInput');
     const errorMsg = document.getElementById('loginError');
+    const loginScreen = document.getElementById('login-screen');
+    const bootOverlay = document.getElementById('boot-overlay');
 
-    if (input.value !== PASSWORD_CONFIG) {
+    // Vérification stricte du mot de passe
+    if (input.value.trim() !== PASSWORD_CONFIG) {
         errorMsg.classList.remove('hidden');
         input.value = '';
+        // Petit effet de secousse si erreur
+        loginScreen.classList.add('shake');
+        setTimeout(() => loginScreen.classList.remove('shake'), 500);
         return;
     }
 
-    // Hide Login
-    document.getElementById('login-screen').style.display = 'none';
+    // 1. Cacher le login immédiatement
+    loginScreen.style.display = 'none';
     
-    // Show Boot Overlay
-    const bootOverlay = document.getElementById('boot-overlay');
+    // 2. Afficher l'écran de boot (Retire la classe hidden + force le flex)
     bootOverlay.classList.remove('hidden');
+    bootOverlay.style.display = 'flex';
     
-    // Logs Animation
+    // 3. Animation des logs (Texte qui défile)
     const logs = [
         "Initializing NC-Protocol v1.2.3...",
-        "Connecting to secure gateway...",
-        "Fetching market data feeds...",
-        "Decrypting user profile...",
+        "Secure Gateway: CONNECTED",
+        "Loading Market Data Feeds...",
+        "Decrypting Portfolio Assets...",
         "System Ready."
     ];
     
     const logContainer = document.getElementById('boot-log');
     let delay = 0;
     
+    // On vide les logs précédents au cas où
+    logContainer.innerHTML = '';
+
     logs.forEach((log, index) => {
         setTimeout(() => {
-            logContainer.innerHTML += `<div>> ${log}</div>`;
+            logContainer.innerHTML += `<div class="opacity-0 animate-in fade-in slide-in-from-left-2 duration-300 fill-mode-forwards">> ${log}</div>`;
+            // Scroll vers le bas automatique
+            logContainer.scrollTop = logContainer.scrollHeight;
         }, delay);
-        delay += 400; // Vitesse des logs
+        delay += 500; // Un log toutes les 500ms
     });
 
-    // Final Reveal
+    // 4. Révélation de l'application
+    const totalBootTime = (logs.length * 500) + 500; // Temps total calculé
+
     setTimeout(() => {
+        // Lance l'effet de disparition du boot screen (zoom + fade out)
         bootOverlay.classList.add('animate-boot-sequence');
         
         setTimeout(() => {
+            // Une fois l'animation finie, on supprime l'écran de boot et on affiche l'app
             bootOverlay.style.display = 'none';
             const app = document.getElementById('app-container');
             app.style.display = 'flex';
             app.classList.add('reveal-app');
+            
+            // On lance le moteur de l'app
             initApp();
-        }, 2000); // Temps avant reveal final
-    }, 2200);
+        }, 1500); // Attend la fin de l'animation CSS
+    }, totalBootTime);
 }
 
 // --- NAVIGATION ---
@@ -84,10 +101,14 @@ function switchTab(id) {
 
 // --- CHARTS & LOGIC ---
 
-// Graphique de Thèse (Statique pour illustrer le cycle)
+// Graphique de Thèse
 function renderThesisChart() {
     const ctx = document.getElementById('thesisChart').getContext('2d');
     if(window.thesisChartInstance) window.thesisChartInstance.destroy();
+
+    const gradientReal = ctx.createLinearGradient(0, 0, 0, 400);
+    gradientReal.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+    gradientReal.addColorStop(1, 'rgba(16, 185, 129, 0)');
 
     window.thesisChartInstance = new Chart(ctx, {
         type: 'line',
@@ -95,21 +116,25 @@ function renderThesisChart() {
             labels: ['2020', '2021', '2022', '2023', '2024', '2025 (Est.)'],
             datasets: [
                 {
-                    label: 'Tech (Nasdaq)',
-                    data: [100, 140, 110, 150, 180, 170],
-                    borderColor: '#ef4444', // Rouge
+                    label: 'Tech Hyperscale (Nasdaq)',
+                    data: [100, 135, 105, 145, 175, 160],
+                    borderColor: '#ef4444', 
                     borderDash: [5, 5],
+                    borderWidth: 2,
                     tension: 0.4,
                     pointRadius: 0
                 },
                 {
                     label: 'Real Assets (Energy/Metals)',
-                    data: [100, 110, 130, 125, 135, 190], // Cross over
-                    borderColor: '#10b981', // Vert
+                    data: [100, 115, 140, 130, 145, 200], 
+                    borderColor: '#10b981', 
                     borderWidth: 3,
                     tension: 0.4,
                     pointRadius: 4,
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    pointBackgroundColor: '#050505',
+                    pointBorderColor: '#10b981',
+                    pointBorderWidth: 2,
+                    backgroundColor: gradientReal,
                     fill: true
                 }
             ]
@@ -117,8 +142,11 @@ function renderThesisChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } },
-            scales: { x: { display: true, grid: {display:false}, ticks: {color:'#666'} }, y: { display: false } }
+            plugins: { legend: { position: 'bottom', labels: { color: '#9ca3af', usePointStyle: true, font: {family: 'Inter'} } } },
+            scales: { 
+                x: { display: true, grid: {display:false, color: '#333'}, ticks: {color:'#555'} }, 
+                y: { display: false } 
+            }
         }
     });
 }
@@ -152,7 +180,7 @@ async function fetchFundamentalsQuote(ticker) {
     } catch(e) { return null; }
 }
 
-// --- FEATURES EXISTANTES ---
+// --- FEATURES ---
 async function updatePortfolio() {
     let totalVal = 0;
     const tbody = document.getElementById('tableBody');
