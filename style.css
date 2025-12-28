@@ -1,4 +1,4 @@
-/* style.css v1.3.3 - VISIBILITY FIX */
+/* style.css v1.3.4 - STABLE */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap');
 
 body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
@@ -22,60 +22,52 @@ body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4
 /* --- BOOT SEQUENCE --- */
 .boot-screen {
     position: fixed; inset: 0; z-index: 10000; background: #000;
-    display: none; 
+    display: none; /* Caché par défaut */
     justify-content: center; align-items: center;
-    pointer-events: none;
+    pointer-events: none; /* Sécurité clic */
 }
 
-.boot-screen.active-flex { display: flex !important; pointer-events: auto !important; }
+.boot-screen.active-flex { 
+    display: flex !important; 
+    pointer-events: auto !important;
+}
 
-/* PHASE 1: LOGS (Style Terminal Hack) */
+/* PHASE 1: LOGS (Vert Matrix, Visible par défaut) */
 .boot-logs-container {
-    position: absolute; 
-    bottom: 10%; 
-    left: 5%; 
-    width: 90%;
-    max-width: 800px;
-    
+    position: absolute; bottom: 15%; left: 5%; 
+    width: 90%; max-width: 800px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 14px; 
-    line-height: 1.5;
-    color: #10b981; /* Vert Matrix */
-    text-shadow: 0 0 5px rgba(16, 185, 129, 0.8); /* Lueur néon */
-    
+    color: #10b981; 
+    text-align: left;
     display: none; /* Géré par JS */
 }
 
-/* Curseur qui clignote à la fin */
-.boot-logs-container::after {
-    content: '_';
-    animation: blink 0.8s infinite;
-    margin-left: 5px;
-    color: white;
+/* PHASE 2: TITRE (Gros et centré) */
+.boot-title-wrapper {
+    display: none; /* Géré par JS */
+    text-align: center;
 }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-/* PHASE 2: TITRE */
-.boot-title-wrapper { display: none; }
 
 .boot-title-static {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 900;
-    font-size: 5rem; 
+    font-size: 4rem; 
     color: white;
-    opacity: 0; 
-    letter-spacing: -1em; 
-    filter: blur(20px);
+    /* On retire l'opacité 0 ici pour éviter l'écran noir si l'anim bug */
     white-space: nowrap;
 }
 
-.animate-douit-sequence { animation: douitSequence 4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+/* L'animation qui se lance */
+.animate-douit-sequence {
+    animation: douitSequence 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 @keyframes douitSequence {
-    0% { opacity: 0; letter-spacing: -1em; filter: blur(20px); transform: scale(0.8); }
-    15% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; }
-    40% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 30px rgba(59,130,246,0.8); }
-    100% { opacity: 0; letter-spacing: 1.5em; filter: blur(30px); transform: scale(1.5); color: #3b82f6; }
+    0% { opacity: 0; letter-spacing: -1em; filter: blur(20px); transform: scale(0.5); }
+    20% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; }
+    50% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 20px rgba(59,130,246,0.5); }
+    100% { opacity: 0; letter-spacing: 1em; filter: blur(20px); transform: scale(1.5); color: #3b82f6; }
 }
 
 .reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
