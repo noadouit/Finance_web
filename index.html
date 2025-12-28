@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | v1.3.9</title>
+    <title>DOUIT CAPITAL | v1.3.10</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -45,39 +45,29 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* --- GOLDEN SCAN (LISERÉ OR) --- */
-        .gold-scan-container {
-            position: relative;
-            display: inline-block;
-            padding-bottom: 4px; /* Espace pour le trait */
+        /* --- NOUVEAU GOLD TEXT SCAN (Le texte lui-même brille) --- */
+        .gold-text-shimmer {
+            /* Le dégradé : Blanc -> OR -> Blanc */
+            background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%);
+            background-size: 200% auto; /* On l'agrandit pour le faire bouger */
+            
+            color: #e4e4e7; /* Couleur de secours */
+            background-clip: text;
+            text-fill-color: transparent;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* L'animation : aller-retour */
+            animation: goldShimmer 3s linear infinite alternate;
+            font-weight: 800; /* Un peu plus gras pour bien voir l'effet */
+            letter-spacing: -0.02em;
         }
 
-        .gold-scan-line {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 2px;
-            width: 100%; /* Le conteneur du trait fait 100% du texte */
+        @keyframes goldShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 100% center; }
         }
 
-        .gold-scan-line::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 30%; /* Le trait fait 30% de la largeur */
-            background: #fbbf24; /* OR */
-            box-shadow: 0 0 10px #fbbf24, 0 0 20px #fbbf24; /* Lueur */
-            border-radius: 2px;
-            /* L'animation d'aller-retour */
-            animation: scanMove 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes scanMove {
-            0% { left: 0%; opacity: 0.5; }
-            100% { left: 70%; opacity: 1; } /* 70% car le trait fait 30% de large */
-        }
 
         /* --- BOOT SEQUENCE --- */
         .boot-screen {
@@ -184,7 +174,7 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.9</p>
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.10</p>
             
             <div class="relative group">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
@@ -209,10 +199,7 @@
             <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
                 <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-black text-lg">D</div>
                 
-                <div class="gold-scan-container">
-                    <span class="text-sm font-bold text-white tracking-tight hidden md:block">Douit Capital</span>
-                    <div class="gold-scan-line"></div>
-                </div>
+                <span class="text-sm gold-text-shimmer tracking-tight hidden md:block">Douit Capital</span>
             </div>
             
             <div class="flex space-x-1 bg-black/50 p-1.5 rounded-xl border border-white/5 backdrop-blur-md overflow-x-auto">
