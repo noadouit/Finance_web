@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | v1.3.10</title>
+    <title>DOUIT CAPITAL | v1.4.0 (Copper Thesis)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,7 +16,7 @@
                     colors: { 
                         dark: '#050505', panel: '#0f1115', 
                         accent: '#3b82f6', success: '#10b981', danger: '#ef4444', 
-                        gold: '#fbbf24'
+                        gold: '#fbbf24', copper: '#b87333' 
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
                 }
@@ -45,36 +45,30 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* --- NOUVEAU GOLD TEXT SCAN (Le texte lui-même brille) --- */
+        /* --- GOLD TEXT SCAN --- */
         .gold-text-shimmer {
-            /* Le dégradé : Blanc -> OR -> Blanc */
             background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%);
-            background-size: 200% auto; /* On l'agrandit pour le faire bouger */
-            
-            color: #e4e4e7; /* Couleur de secours */
+            background-size: 200% auto;
+            color: #e4e4e7;
             background-clip: text;
             text-fill-color: transparent;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            
-            /* L'animation : aller-retour */
             animation: goldShimmer 3s linear infinite alternate;
-            font-weight: 800; /* Un peu plus gras pour bien voir l'effet */
-            letter-spacing: -0.02em;
+            font-weight: 800; letter-spacing: -0.02em;
         }
+        @keyframes goldShimmer { 0% { background-position: 0% center; } 100% { background-position: 100% center; } }
 
-        @keyframes goldShimmer {
-            0% { background-position: 0% center; }
-            100% { background-position: 100% center; }
+        /* --- COPPER TEXT (Nouveau) --- */
+        .copper-text {
+            color: #b87333;
+            text-shadow: 0 0 20px rgba(184, 115, 51, 0.4);
         }
-
 
         /* --- BOOT SEQUENCE --- */
         .boot-screen {
             position: fixed; inset: 0; z-index: 10000; background: #000;
-            display: none; 
-            justify-content: center; align-items: center;
-            pointer-events: none;
+            display: none; justify-content: center; align-items: center; pointer-events: none;
         }
         .boot-screen.active-flex { display: flex !important; pointer-events: auto !important; }
 
@@ -153,17 +147,14 @@
                 <h2 class="text-2xl font-black text-white uppercase tracking-tight">Disclaimer</h2>
                 <p class="text-[10px] text-gray-500 font-mono mt-1 uppercase">Mention Légale & Avertissement</p>
             </div>
-            
             <div class="text-xs text-gray-400 leading-relaxed space-y-4 text-justify mb-8 h-48 overflow-y-auto pr-2 custom-scroll">
                 <p><strong>© 2025 Douit Capital. Tous droits réservés.</strong></p>
                 <p>Cette interface propriétaire est strictement confidentielle et destinée à un usage interne ou éducatif uniquement.</p>
                 <p class="text-white font-bold bg-red-500/10 p-3 rounded border border-red-500/20">
                     ⚠️ Les informations présentées ne constituent en aucun cas une offre de vente, une sollicitation d'achat ou un conseil en investissement financier.
                 </p>
-                <p>L'investissement sur les marchés financiers, et notamment sur les actions, les matières premières et les produits dérivés, comporte des risques importants de perte en capital. Les performances passées ne préjugent pas des performances futures.</p>
-                <p>En accédant à ce terminal, l'utilisateur reconnait avoir pris connaissance de ces risques et dégage Douit Capital de toute responsabilité concernant ses décisions d'investissement.</p>
+                <p>En accédant à ce terminal, l'utilisateur reconnait avoir pris connaissance de ces risques.</p>
             </div>
-
             <button onclick="toggleLegal(false)" class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-blue-900/20">
                 J'accepte et j'accède au Terminal
             </button>
@@ -174,13 +165,11 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.10</p>
-            
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.4.0</p>
             <div class="relative group">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
                 <input type="password" id="passwordInput" class="relative w-full bg-black border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 outline-none focus:border-blue-500 transition font-mono" placeholder="••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
             </div>
-            
             <button onclick="checkLogin()" class="mt-6 w-full py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition relative z-20 cursor-pointer">
                 Initialize
             </button>
@@ -198,7 +187,6 @@
         <nav class="glass-panel sticky top-6 z-50 h-16 mx-6 md:ml-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-6">
             <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
                 <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-black text-lg">D</div>
-                
                 <span class="text-sm gold-text-shimmer tracking-tight hidden md:block">Douit Capital</span>
             </div>
             
@@ -234,17 +222,86 @@
             </div>
 
             <div id="convictions" class="tab-content max-w-7xl mx-auto">
-                <div class="mb-12 relative overflow-hidden rounded-3xl glass-panel p-10 border border-white/10"><div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/20 to-transparent pointer-events-none"></div><span class="text-blue-500 font-mono text-xs tracking-[0.3em] uppercase mb-4 block">Manifesto v1.0</span><h1 class="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-6">La Grande Rotation<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Du Virtuel au Réel.</span></h1><p class="text-xl text-gray-400 max-w-2xl leading-relaxed">Le marché a atteint un point de rupture. Nous pivotons agressivement des actifs de "Croissance Longue" (Tech surévaluée) vers la "Rareté Physique" (Énergie, Matériaux, Industrie).</p></div>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-                    <div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-red-500/20 bg-gradient-to-b from-red-900/10 to-transparent relative overflow-hidden group"><div class="absolute -right-4 -top-4 text-9xl opacity-5 grayscale group-hover:grayscale-0 transition duration-500">📉</div><h3 class="text-2xl font-bold text-white mb-2">Le Risque Tech</h3><div class="h-1 w-12 bg-red-500 mb-6"></div><p class="text-gray-400 text-sm mb-6 text-justify">Le Nasdaq se paie à la perfection (PER > 35x). L'IA est une révolution, mais les prix actuels intègrent déjà 10 ans de succès sans accroc. L'asymétrie est défavorable.</p><div class="bg-black/40 p-4 rounded-xl border border-red-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Nasdaq P/E</span><span class="text-red-400 font-bold">36.5x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-red-500 h-1.5 rounded-full w-[90%]"></div></div></div></div>
-                    <div class="lg:col-span-4 glass-panel p-6 rounded-3xl border border-white/5 flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest text-center mb-4">Cycle Rotation</h3><div class="flex-1 relative min-h-[250px] w-full"><canvas id="thesisChart"></canvas></div><p class="text-center text-[10px] text-gray-600 mt-4 italic">Illustration conceptuelle des cycles de marché</p></div>
-                    <div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-green-500/20 bg-gradient-to-b from-green-900/10 to-transparent relative overflow-hidden group"><div class="absolute -right-4 -top-4 text-9xl opacity-5 grayscale group-hover:grayscale-0 transition duration-500">⛏️</div><h3 class="text-2xl font-bold text-white mb-2">L'Opportunité Réelle</h3><div class="h-1 w-12 bg-green-500 mb-6"></div><p class="text-gray-400 text-sm mb-6 text-justify">Sous-investissement chronique dans les mines et l'énergie depuis 2014. La transition énergétique crée une demande inélastique pour le cuivre et l'industrie lourde.</p><div class="bg-black/40 p-4 rounded-xl border border-green-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Energy P/E</span><span class="text-green-400 font-bold">8.2x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full w-[25%]"></div></div></div></div>
+                <div class="mb-10 relative overflow-hidden rounded-3xl glass-panel p-10 border border-white/10">
+                    <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-orange-900/20 to-transparent pointer-events-none"></div>
+                    <span class="text-orange-500 font-mono text-xs tracking-[0.3em] uppercase mb-4 block">Manifesto v2.0 // Contrarian View</span>
+                    <h1 class="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-6">
+                        Le Super-Cycle<br>
+                        <span class="copper-text">du Cuivre.</span>
+                    </h1>
+                    <p class="text-xl text-gray-400 max-w-3xl leading-relaxed text-justify">
+                        L'électrification du monde est "inélastique". Il n'y a pas d'IA sans Data Center, pas de transition sans réseau. 
+                        Pourtant, l'investissement minier est au plus bas depuis 20 ans. Nous sommes face à un <strong>choc d'offre structurel</strong>.
+                    </p>
                 </div>
-                <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-blue-500">L'implémentation Tactique</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-blue-900/20 flex items-center justify-center text-xl">🛡️</div><span class="px-2 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase rounded border border-blue-500/20">Défensif</span></div><h4 class="text-lg font-bold text-white mb-1">Air Liquide</h4><p class="text-xs text-gray-400 mb-4">Le "Bond Proxy". Contrats indexés sur l'énergie. Protège le portefeuille de l'inflation.</p><div class="text-right text-xs font-mono text-blue-300">Target: Hold Forever</div></div>
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-yellow-900/20 flex items-center justify-center text-xl">⚡</div><span class="px-2 py-1 bg-yellow-500/10 text-gold text-[10px] font-bold uppercase rounded border border-yellow-500/20">Offensif</span></div><h4 class="text-lg font-bold text-white mb-1">Matériaux (Cuivre/Or)</h4><p class="text-xs text-gray-400 mb-4">Il n'y a pas d'IA sans Data Center, ni de Data Center sans Cuivre. L'offre est déficitaire.</p><div class="text-right text-xs font-mono text-gold">Target: +15% CAGR</div></div>
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-red-900/20 flex items-center justify-center text-xl">🛢️</div><span class="px-2 py-1 bg-red-500/10 text-red-400 text-[10px] font-bold uppercase rounded border border-red-500/20">Yield</span></div><h4 class="text-lg font-bold text-white mb-1">TotalEnergies</h4><p class="text-xs text-gray-400 mb-4">Machine à Cash. Finance sa transition verte avec le pétrole. Valorisation ridicule.</p><div class="text-right text-xs font-mono text-red-300">Yield: >5.5%</div></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    
+                    <div class="glass-panel p-6 rounded-3xl border border-white/5 flex flex-col">
+                        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">Le Mur de l'Offre</h3>
+                        <p class="text-xs text-gray-600 mb-4">Demande (Transition) vs Offre (Mines existantes)</p>
+                        <div class="flex-1 relative min-h-[300px] w-full">
+                            <canvas id="copperSupplyChart"></canvas>
+                        </div>
+                        <div class="mt-4 p-4 bg-red-900/10 border border-red-500/20 rounded-xl">
+                            <p class="text-xs text-red-400 font-bold">⚠️ DÉFICIT PRÉVU : 6M de Tonnes d'ici 2030</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl border border-orange-500/20 bg-gradient-to-b from-orange-900/10 to-transparent flex flex-col justify-center">
+                        <div class="mb-6">
+                            <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-2xl mb-4 border border-orange-500/30">⛏️</div>
+                            <h3 class="text-2xl font-bold text-white mb-2">La Rente Ricardienne</h3>
+                            <div class="h-1 w-12 bg-orange-500 mb-4"></div>
+                        </div>
+                        <div class="space-y-4 text-sm text-gray-300 leading-relaxed text-justify">
+                            <p>
+                                Selon David Ricardo, le prix d'une commodité est déterminé par son <strong>coût marginal de production</strong> le plus élevé nécessaire pour satisfaire la demande.
+                            </p>
+                            <p>
+                                Aujourd'hui, les mines à haute teneur s'épuisent (Chili, Pérou). Pour extraire la même quantité de cuivre, il faut creuser plus profond, traiter plus de roche, consommer plus d'énergie.
+                            </p>
+                            <p class="font-bold text-white">
+                                Conclusion : Le prix "plancher" du cuivre doit monter mécaniquement pour justifier l'exploitation des gisements marginaux. C'est une rente de rareté inévitable.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+                    <div class="lg:col-span-8 glass-panel p-6 rounded-3xl border border-white/5">
+                        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">L'Anomalie Historique : Ratio S&P500 / Matières Premières</h3>
+                        <div class="relative min-h-[300px] w-full">
+                            <canvas id="techVsCommoChart"></canvas>
+                        </div>
+                        <p class="text-center text-[10px] text-gray-600 mt-4 italic">Quand la ligne est haute, la Tech est chère et les Matières Premières sont données. Nous sommes à un niveau extrême.</p>
+                    </div>
+
+                    <div class="lg:col-span-4 flex flex-col gap-6">
+                        <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-orange-500/50 transition duration-300 group">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="px-2 py-1 bg-orange-500/10 text-orange-400 text-[10px] font-bold uppercase rounded border border-orange-500/20">Conviction #1</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-1">Freeport-McMoRan</h4>
+                            <p class="text-xs text-gray-400">Le "Pure Player". Actifs aux USA et Indonésie. Levier direct sur le prix du métal.</p>
+                        </div>
+                        
+                        <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-blue-500/50 transition duration-300 group">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="px-2 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase rounded border border-blue-500/20">Conviction #2</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-1">Antofagasta</h4>
+                            <p class="text-xs text-gray-400">Qualité des actifs chiliens. Coûts maîtrisés malgré la baisse des teneurs.</p>
+                        </div>
+
+                        <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-green-500/50 transition duration-300 group">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="px-2 py-1 bg-green-500/10 text-green-400 text-[10px] font-bold uppercase rounded border border-green-500/20">Hedge</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-white mb-1">TotalEnergies</h4>
+                            <p class="text-xs text-gray-400">Le Cash Flow du pétrole finance l'électrification. Valorisation absurdement basse.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -256,7 +313,8 @@
                             <thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500">
                                 <tr>
                                     <th class="px-6 py-4">Actif</th>
-                                    <th class="px-6 py-4 text-right">Qté</th> <th class="px-6 py-4 text-right">Prix</th>
+                                    <th class="px-6 py-4 text-right">Qté</th>
+                                    <th class="px-6 py-4 text-right">Prix</th>
                                     <th class="px-6 py-4 text-right">Perf</th>
                                 </tr>
                             </thead>
@@ -278,7 +336,7 @@
     <script>
         const PASSWORD_CONFIG = "admin"; 
 
-        // ICI TU CHANGES TES QUANTITÉS (q)
+        // PORTFOLIO CONFIG
         let portfolio = [
             { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, eps: 5.90, sps: 53.5 },
             { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, eps: 7.50, sps: 63.0 },
@@ -319,9 +377,12 @@
                 if(logsContent) logsContent.innerHTML = '';
 
                 const logs = [ "INITIALIZING KERNEL V4.2...", "ESTABLISHING ENCRYPTED LINK...", "VERIFYING BIOMETRICS... [OK]", "FETCHING REAL-TIME ASSETS...", "LOADING 'CONVICTION' MODULES...", "> THÈSE: SUPER-CYCLE MATIÈRES 1ÈRE...", "COMPUTING RISK METRICS...", "SYSTEM READY." ];
+                
                 let delay = 0;
                 logs.forEach((log) => {
-                    const speed = Math.random() * 200 + 100; delay += speed;
+                    let speed = Math.random() * 500 + 400; // Ralenti
+                    if(log.includes("LOADING")) speed = 1500; 
+                    delay += speed;
                     setTimeout(() => {
                         const line = document.createElement('div'); line.innerText = `> ${log}`;
                         if(logsContent) { logsContent.appendChild(line); logsContent.scrollTop = logsContent.scrollHeight; }
@@ -355,10 +416,10 @@
             const tickerContainer = document.getElementById('news-ticker-content');
             if (!tickerContainer) return;
             const newsItems = [
-                { text: "BREAKING: LA BCE MAINTIENT SES TAUX À 4.5% - L'INFLATION RESTE LA PRIORITÉ", type: "neutral" },
-                { text: "ALERT: LE CUIVRE TOUCHE UN PLUS HAUT DE 52 SEMAINES SUR DÉFICIT D'OFFRE", type: "up" },
-                { text: "MARKET: LE NASDAQ RECULE DE 1.2% ALORS QUE LES RENDEMENTS OBLIGATAIRES MONTENT", type: "down" },
-                { text: "ENERGY: TOTALENERGIES LANCE UN NOUVEAU PROJET LNG AU QATAR", type: "up" }
+                { text: "BREAKING: RIO TINTO PRÉVOIT UN DÉFICIT MAJEUR DE CUIVRE DÈS 2026", type: "neutral" },
+                { text: "ALERT: LE PRIX DU CUIVRE TOUCHE 10,000$/T SUR LE LME", type: "up" },
+                { text: "MARKET: ROTATION SECTORIELLE : LA TECH RECULE (-2%), L'ÉNERGIE BONDIT (+1.5%)", type: "down" },
+                { text: "MACRO: INFLATION US PERSISTANTE À 3.4% - LES TAUX RESTERONT ÉLEVÉS", type: "neutral" }
             ];
             let htmlContent = "";
             newsItems.forEach(item => {
@@ -379,10 +440,49 @@
             const activeBtn = document.getElementById('btn-' + id); if(activeBtn) activeBtn.classList.add('active');
             if(id === 'simulation') calculateSim();
             if(id === 'watchlist') updateWatchlist();
-            if(id === 'convictions') renderThesisChart();
+            if(id === 'convictions') renderThesisGraphs();
         }
 
-        function renderThesisChart() { const ctxEl=document.getElementById('thesisChart'); if(!ctxEl)return; const ctx=ctxEl.getContext('2d'); if(window.thesisChartInstance)window.thesisChartInstance.destroy(); const gradientReal=ctx.createLinearGradient(0,0,0,400); gradientReal.addColorStop(0,'rgba(16,185,129,0.2)'); gradientReal.addColorStop(1,'rgba(16,185,129,0)'); window.thesisChartInstance=new Chart(ctx,{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025 (Est.)'],datasets:[{label:'Tech Hyperscale',data:[100,135,105,145,175,160],borderColor:'#ef4444',borderDash:[5,5],borderWidth:2,tension:0.4,pointRadius:0},{label:'Real Assets',data:[100,115,140,130,145,200],borderColor:'#10b981',borderWidth:3,tension:0.4,pointRadius:4,backgroundColor:gradientReal,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',usePointStyle:true,font:{family:'Inter'}}}},scales:{x:{display:true,grid:{display:false,color:'#333'},ticks:{color:'#555'}},y:{display:false}}}}); }
+        // --- NOUVEAUX GRAPHIQUES THÈSE CUIVRE ---
+        function renderThesisGraphs() {
+            // GRAPH 1 : SUPPLY CRUNCH
+            const ctx1 = document.getElementById('copperSupplyChart');
+            if(ctx1) {
+                const ctx1Context = ctx1.getContext('2d');
+                if(window.copperChart) window.copperChart.destroy();
+                window.copperChart = new Chart(ctx1Context, {
+                    type: 'line',
+                    data: {
+                        labels: ['2020', '2022', '2024', '2026', '2028', '2030', '2032'],
+                        datasets: [
+                            { label: 'Demande (Transition Ener.)', data: [25, 27, 30, 34, 39, 45, 52], borderColor: '#10b981', borderWidth: 3, tension: 0.4 },
+                            { label: 'Offre (Mines Existantes)', data: [25, 26, 26.5, 26, 25, 24, 23], borderColor: '#ef4444', borderWidth: 2, borderDash: [5,5], tension: 0.4 }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9ca3af' } } }, scales: { y: { grid: { color: '#333' } }, x: { grid: { display: false } } } }
+                });
+            }
+
+            // GRAPH 2 : RATIO TECH / COMMODITIES
+            const ctx2 = document.getElementById('techVsCommoChart');
+            if(ctx2) {
+                const ctx2Context = ctx2.getContext('2d');
+                if(window.ratioChart) window.ratioChart.destroy();
+                window.ratioChart = new Chart(ctx2Context, {
+                    type: 'line',
+                    data: {
+                        labels: ['1970', '1980', '1990', '2000 (Dotcom)', '2010', '2020', '2024 (Bubble)'],
+                        datasets: [{ 
+                            label: 'Ratio S&P500 / GSCI Commodity', 
+                            data: [2, 0.5, 3, 9, 1, 8, 10.5], 
+                            borderColor: '#fbbf24', backgroundColor: 'rgba(251, 191, 36, 0.1)', fill: true, tension: 0.4, pointRadius: 4
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { color: '#333' }, ticks: { color: '#666' } } } }
+                });
+            }
+        }
+
         async function fetchPriceRobust(ticker){ const proxy="https://corsproxy.io/?"; const url=`https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=5d&t=${Date.now()}`; try{const response=await fetch(proxy+encodeURIComponent(url));if(!response.ok)throw new Error("HTTP Error");const json=await response.json();const res=json.chart.result[0];return{price:res.meta.regularMarketPrice,prev:res.meta.chartPreviousClose,meta:res.meta,quotes:res.indicators.quote[0].close,timestamps:res.timestamp};}catch(e){return null;}}
         async function fetchFundamentalsQuote(ticker){ const proxy="https://corsproxy.io/?"; const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${Date.now()}`; try{const response=await fetch(proxy+encodeURIComponent(url));const json=await response.json();return json.quoteResponse.result[0];}catch(e){return null;}}
         
@@ -391,7 +491,6 @@
             for(let stock of portfolio){ 
                 const data=await fetchPriceRobust(stock.tick); if(data){stock.price=data.price;stock.prev=data.prev;} 
                 const valo=stock.price*stock.q; totalVal+=valo; const perf=((stock.price-stock.pru)/stock.pru)*100; 
-                // ICI J'AI AJOUTÉ LA COLONNE QTÉ
                 tbody.innerHTML+=`<tr class="hover:bg-white/5 transition border-b border-white/5"><td class="px-6 py-4"><div class="text-white font-bold">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td><td class="px-6 py-4 text-right font-mono text-gray-400">${stock.q}</td><td class="px-6 py-4 text-right font-mono text-white">${stock.price.toFixed(2)} €</td><td class="px-6 py-4 text-right font-mono font-bold ${perf>=0?'text-green-400':'text-red-400'}">${(perf>0?'+':'')+perf.toFixed(2)}%</td></tr>`; 
             } 
             const totalEl=document.getElementById('totalVal'); if(totalEl)totalEl.innerText=Math.round(totalVal).toLocaleString()+" €"; renderSectorChart(); 
