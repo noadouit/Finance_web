@@ -1,4 +1,4 @@
-// app.js v1.3.3
+// app.js v1.3.4
 const PASSWORD_CONFIG = "admin"; 
 
 // --- DONNÉES ---
@@ -17,7 +17,7 @@ let watchlist = [
     { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre", price: 0, prev: 0 }
 ];
 
-// --- 1. SÉQUENCE CINÉMATIQUE (FIXED) ---
+// --- 1. SÉQUENCE DE BOOT (CHAINED) ---
 function checkLogin() {
     const input = document.getElementById('passwordInput');
     const errorMsg = document.getElementById('loginError');
@@ -34,7 +34,7 @@ function checkLogin() {
         return;
     }
 
-    // 1. Cacher Login
+    // 1. Masquer Login
     if(loginScreen) loginScreen.style.display = 'none';
     
     // 2. Afficher Overlay
@@ -43,62 +43,45 @@ function checkLogin() {
         bootOverlay.classList.add('active-flex');
 
         // --- PHASE 1 : LOGS ---
-        if(logsWrapper) logsWrapper.style.display = 'block'; // Force CSS display
+        if(logsWrapper) logsWrapper.style.display = 'block'; // ON FORCE L'AFFICHAGE
         if(titleWrapper) titleWrapper.style.display = 'none';
         if(logsContent) logsContent.innerHTML = '';
 
         const logs = [
             "INITIALIZING KERNEL V4.2...",
-            "ESTABLISHING ENCRYPTED LINK [PARIS-NY-TOKYO]...",
-            "VERIFYING BIOMETRICS... [ADMIN CONFIRMED]",
-            "ACCESSING DOUIT_CAPITAL_CORE DATABASE...",
-            "------------------------------------------------",
-            "FETCHING REAL-TIME ASSETS [BLOOMBERG API]...",
-            "ANALYZING MACRO TRENDS (INFLATION/RATES)...",
+            "ESTABLISHING ENCRYPTED LINK...",
+            "VERIFYING BIOMETRICS... [OK]",
+            "FETCHING REAL-TIME ASSETS...",
             "LOADING 'CONVICTION' MODULES...",
-            "> CHARGEMENT THÈSE: SUPER-CYCLE MATIÈRES 1ÈRE...",
-            "> CHARGEMENT THÈSE: DÉGLOBALISATION...",
-            "COMPUTING RISK METRICS (VAR/SHARPE)...",
-            "OPTIMIZING PORTFOLIO WEIGHTS...",
-            "------------------------------------------------",
-            "SYSTEM INTEGRITY: 100%",
-            "WELCOME BACK, COMMANDER."
+            "> THÈSE: SUPER-CYCLE MATIÈRES 1ÈRE...",
+            "COMPUTING RISK METRICS...",
+            "SYSTEM READY."
         ];
 
         let delay = 0;
         
         logs.forEach((log) => {
-            let speed = Math.random() * 300 + 150; 
-            if(log.includes("---")) speed = 100;
-            if(log.includes("LOADING")) speed = 800;
-
+            const speed = Math.random() * 200 + 100;
             delay += speed;
             
             setTimeout(() => {
-                // MODIFICATION CRITIQUE : Plus de classes d'animation complexes qui cachent le texte
                 const line = document.createElement('div');
-                line.style.marginBottom = "4px"; // Espacement propre
                 line.innerText = `> ${log}`;
-                
-                // Styling direct pour être sûr que ça s'affiche
-                if(log.includes("THÈSE")) { line.style.color = "#60a5fa"; line.style.fontWeight = "bold"; } // Bleu
-                if(log.includes("WELCOME")) { line.style.color = "white"; line.style.marginTop = "20px"; line.style.fontWeight = "900"; }
-
                 if(logsContent) {
                     logsContent.appendChild(line);
-                    // Scroll automatique vers le bas
-                    window.scrollTo(0, document.body.scrollHeight);
+                    logsContent.scrollTop = logsContent.scrollHeight;
                 }
             }, delay);
         });
 
         // --- PHASE 2 : TITRE ---
-        const phase2Start = delay + 1200; 
+        const phase2Start = delay + 800; // Pause après les logs
         
         setTimeout(() => {
-            if(logsWrapper) logsWrapper.style.display = 'none'; // Bye bye logs
-            if(titleWrapper) titleWrapper.style.display = 'block'; // Hello Title
+            if(logsWrapper) logsWrapper.style.display = 'none'; // On cache les logs
+            if(titleWrapper) titleWrapper.style.display = 'block'; // On affiche le titre
             
+            // On lance l'animation
             setTimeout(() => {
                 if(titleText) titleText.classList.add('animate-douit-sequence');
             }, 50);
@@ -106,7 +89,7 @@ function checkLogin() {
         }, phase2Start);
 
         // --- PHASE 3 : APP ---
-        const phase3Start = phase2Start + 3800; 
+        const phase3Start = phase2Start + 2900; // Durée anim titre
         setTimeout(() => {
             bootOverlay.style.display = 'none';
             bootOverlay.classList.remove('active-flex');
