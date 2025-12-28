@@ -1,4 +1,4 @@
-// app.js v1.2.5
+// app.js v1.3.0
 const PASSWORD_CONFIG = "admin"; 
 
 // --- DONNÉES ---
@@ -17,35 +17,71 @@ let watchlist = [
     { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre", price: 0, prev: 0 }
 ];
 
-// --- 1. LOGIN & ANIMATION ---
+// --- 1. SÉQUENCE DE BOOT EN CHAÎNE ---
 function checkLogin() {
     const input = document.getElementById('passwordInput');
     const errorMsg = document.getElementById('loginError');
     const loginScreen = document.getElementById('login-screen');
     const bootOverlay = document.getElementById('boot-overlay');
-    const bootTitle = document.getElementById('boot-title-text');
+    const logsWrapper = document.getElementById('boot-logs-wrapper');
+    const logsContent = document.getElementById('boot-log-content');
+    const titleWrapper = document.getElementById('boot-title-wrapper');
+    const titleText = document.getElementById('boot-title-text');
 
-    // Vérif MDP
     if (!input || input.value.trim() !== PASSWORD_CONFIG) {
         if(errorMsg) errorMsg.classList.remove('hidden');
         if(input) { input.value = ''; input.focus(); }
         return;
     }
 
-    // 1. Cacher Login
+    // 1. Cacher Login & Afficher Overlay
     if(loginScreen) loginScreen.style.display = 'none';
-    
-    // 2. Afficher Boot Screen
     if(bootOverlay) {
         bootOverlay.classList.remove('hidden');
         bootOverlay.classList.add('active-flex');
-        
-        // 3. Lancer animation texte
-        setTimeout(() => {
-            if(bootTitle) bootTitle.classList.add('animate-douit-sequence');
-        }, 50);
 
-        // 4. Révéler App après 2.8s
+        // --- PHASE 1 : LOGS ---
+        logsWrapper.style.display = 'block';
+        titleWrapper.style.display = 'none';
+        logsContent.innerHTML = '';
+
+        const logs = [
+            "INITIALIZING KERNEL V4.2...",
+            "LOADING SECURITY PROTOCOLS...",
+            "VERIFYING IDENTITY [ADMIN]...",
+            "CONNECTING TO SECURE GATEWAY...",
+            "FETCHING DATA FEEDS [BLOOMBERG API]...",
+            "DOWNLOADING PORTFOLIO ASSETS...",
+            "CALCULATING RISK METRICS...",
+            "SYSTEM READY."
+        ];
+
+        let delay = 0;
+        logs.forEach((log, index) => {
+            const speed = Math.random() * 300 + 100;
+            delay += speed;
+            setTimeout(() => {
+                logsContent.innerHTML += `<div>> ${log}</div>`;
+            }, delay);
+        });
+
+        // --- PHASE 2 : TITRE ---
+        const phase2Start = delay + 600;
+        setTimeout(() => {
+            // On cache les logs et on montre le titre
+            logsWrapper.style.display = 'none';
+            titleWrapper.style.display = 'block';
+            
+            // On lance l'animation du titre
+            setTimeout(() => {
+                titleText.classList.add('animate-douit-sequence');
+            }, 50);
+
+        }, phase2Start);
+
+        // --- PHASE 3 : REVEAL APP ---
+        // Durée animation CSS (3s) + petite marge
+        const phase3Start = phase2Start + 2800; 
         setTimeout(() => {
             bootOverlay.style.display = 'none';
             bootOverlay.classList.remove('active-flex');
@@ -56,9 +92,10 @@ function checkLogin() {
                 app.classList.add('reveal-app');
                 initApp();
             }
-        }, 2800);
+        }, phase3Start);
+
     } else {
-        // Fallback si pas d'overlay
+        // Fallback
         const app = document.getElementById('app-container');
         app.style.display = 'flex';
         initApp();
@@ -68,13 +105,9 @@ function checkLogin() {
 // --- NAVIGATION ---
 function switchTab(id) {
     document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
-    const tab = document.getElementById(id);
-    if(tab) tab.classList.add('active');
-    
+    const tab = document.getElementById(id); if(tab) tab.classList.add('active');
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    const activeBtn = document.getElementById('btn-' + id);
-    if(activeBtn) activeBtn.classList.add('active');
-
+    const activeBtn = document.getElementById('btn-' + id); if(activeBtn) activeBtn.classList.add('active');
     if(id === 'simulation') calculateSim();
     if(id === 'watchlist') updateWatchlist();
     if(id === 'convictions') renderThesisChart();
@@ -82,15 +115,11 @@ function switchTab(id) {
 
 // --- CHARTS & LOGIC ---
 function renderThesisChart() {
-    const ctxEl = document.getElementById('thesisChart');
-    if(!ctxEl) return;
+    const ctxEl = document.getElementById('thesisChart'); if(!ctxEl) return;
     const ctx = ctxEl.getContext('2d');
-    
     if(window.thesisChartInstance) window.thesisChartInstance.destroy();
-    
     const gradientReal = ctx.createLinearGradient(0, 0, 0, 400);
     gradientReal.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); gradientReal.addColorStop(1, 'rgba(16, 185, 129, 0)');
-    
     window.thesisChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -124,9 +153,7 @@ async function fetchFundamentalsQuote(ticker) {
 
 // --- FEATURES ---
 async function updatePortfolio() {
-    let totalVal = 0; const tbody = document.getElementById('tableBody'); 
-    if(!tbody) return; tbody.innerHTML = '';
-
+    let totalVal = 0; const tbody = document.getElementById('tableBody'); if(!tbody) return; tbody.innerHTML = '';
     for (let stock of portfolio) {
         const data = await fetchPriceRobust(stock.tick);
         if (data) { stock.price = data.price; stock.prev = data.prev; }
@@ -136,14 +163,12 @@ async function updatePortfolio() {
     const totalEl = document.getElementById('totalVal'); if(totalEl) totalEl.innerText = Math.round(totalVal).toLocaleString() + " €"; 
     renderSectorChart();
 }
-
 function renderSectorChart() {
     const ctxEl = document.getElementById('sectorChart'); if(!ctxEl) return;
     const ctx = ctxEl.getContext('2d');
     if(window.mySectorChart) window.mySectorChart.destroy();
     window.mySectorChart = new Chart(ctx, { type: 'doughnut', data: { labels: portfolio.map(s => s.sec), datasets: [{ data: portfolio.map(s => s.price * s.q), backgroundColor: ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6', '#64748b'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#9ca3af', usePointStyle: true } } } } });
 }
-
 async function updateWatchlist() {
     const tbody = document.getElementById('watchlistBody'); if(!tbody) return; tbody.innerHTML = '';
     for (let item of watchlist) {
@@ -151,7 +176,6 @@ async function updateWatchlist() {
         tbody.innerHTML += `<tr class="hover:bg-white/5 border-b border-white/5"><td class="px-6 py-4 font-bold text-white">${item.name} <span class="text-xs font-normal text-gray-500 block">${item.tick}</span></td><td class="px-6 py-4 text-xs text-blue-300 italic">${item.thesis}</td><td class="px-6 py-4 text-right font-mono text-white">${price}</td></tr>`;
     }
 }
-
 let searchChartInstance = null;
 async function searchTicker() {
     const t = document.getElementById('mainTickerInput').value.toUpperCase(); if(!t) return;
