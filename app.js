@@ -1,4 +1,4 @@
-// app.js v1.3.7 - FINAL FULL VERSION
+// app.js v1.3.7 - FULL EXPANDED CODE
 const PASSWORD_CONFIG = "admin"; 
 
 // --- DONNÉES DU PORTEFEUILLE ---
