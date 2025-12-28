@@ -1,4 +1,4 @@
-// app.js v1.3.0
+// app.js v1.3.1
 const PASSWORD_CONFIG = "admin"; 
 
 // --- DONNÉES ---
@@ -17,7 +17,7 @@ let watchlist = [
     { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre", price: 0, prev: 0 }
 ];
 
-// --- 1. SÉQUENCE DE BOOT EN CHAÎNE ---
+// --- 1. BOOT SEQUENCE ---
 function checkLogin() {
     const input = document.getElementById('passwordInput');
     const errorMsg = document.getElementById('loginError');
@@ -34,16 +34,18 @@ function checkLogin() {
         return;
     }
 
-    // 1. Cacher Login & Afficher Overlay
+    // 1. Cacher Login
     if(loginScreen) loginScreen.style.display = 'none';
+    
+    // 2. Afficher Overlay
     if(bootOverlay) {
         bootOverlay.classList.remove('hidden');
         bootOverlay.classList.add('active-flex');
 
         // --- PHASE 1 : LOGS ---
-        logsWrapper.style.display = 'block';
-        titleWrapper.style.display = 'none';
-        logsContent.innerHTML = '';
+        if(logsWrapper) logsWrapper.classList.remove('hidden'); // ON AFFICHE LES LOGS
+        if(titleWrapper) titleWrapper.classList.add('hidden'); // ON CACHE LE TITRE
+        if(logsContent) logsContent.innerHTML = '';
 
         const logs = [
             "INITIALIZING KERNEL V4.2...",
@@ -57,30 +59,27 @@ function checkLogin() {
         ];
 
         let delay = 0;
-        logs.forEach((log, index) => {
+        logs.forEach((log) => {
             const speed = Math.random() * 300 + 100;
             delay += speed;
             setTimeout(() => {
-                logsContent.innerHTML += `<div>> ${log}</div>`;
+                if(logsContent) logsContent.innerHTML += `<div>> ${log}</div>`;
             }, delay);
         });
 
         // --- PHASE 2 : TITRE ---
         const phase2Start = delay + 600;
         setTimeout(() => {
-            // On cache les logs et on montre le titre
-            logsWrapper.style.display = 'none';
-            titleWrapper.style.display = 'block';
+            if(logsWrapper) logsWrapper.classList.add('hidden'); // ON CACHE LES LOGS
+            if(titleWrapper) titleWrapper.classList.remove('hidden'); // ON AFFICHE LE TITRE
             
-            // On lance l'animation du titre
             setTimeout(() => {
-                titleText.classList.add('animate-douit-sequence');
+                if(titleText) titleText.classList.add('animate-douit-sequence');
             }, 50);
 
         }, phase2Start);
 
-        // --- PHASE 3 : REVEAL APP ---
-        // Durée animation CSS (3s) + petite marge
+        // --- PHASE 3 : APP ---
         const phase3Start = phase2Start + 2800; 
         setTimeout(() => {
             bootOverlay.style.display = 'none';
@@ -95,7 +94,6 @@ function checkLogin() {
         }, phase3Start);
 
     } else {
-        // Fallback
         const app = document.getElementById('app-container');
         app.style.display = 'flex';
         initApp();
