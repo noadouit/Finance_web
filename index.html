@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | v1.2.4</title>
-    
+    <title>DOUIT CAPITAL | v1.2.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -27,7 +26,7 @@
 
 <body class="antialiased min-h-screen flex flex-col selection:bg-blue-500/30 selection:text-blue-200">
 
-    <div id="boot-overlay" class="boot-screen hidden">
+    <div id="boot-overlay" class="boot-screen">
         <div class="relative z-10 overflow-hidden p-4">
             <h1 id="boot-title-text" class="boot-title-static">DOUIT CAPITAL</h1>
         </div>
@@ -38,14 +37,14 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.2.4</p>
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.2.5</p>
             
             <div class="relative group">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
                 <input type="password" id="passwordInput" class="relative w-full bg-black border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 outline-none focus:border-blue-500 transition font-mono" placeholder="••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
             </div>
             
-            <button onclick="checkLogin()" class="mt-6 w-full py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition">
+            <button onclick="checkLogin()" class="mt-6 w-full py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition relative z-20 cursor-pointer">
                 Initialize
             </button>
             <p id="loginError" class="text-red-500 text-xs mt-4 hidden font-mono">:: ACCESS DENIED ::</p>
