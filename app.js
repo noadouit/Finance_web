@@ -1,4 +1,4 @@
-// app.js v1.2.4
+// app.js v1.2.5
 const PASSWORD_CONFIG = "admin"; 
 
 // --- DONNÉES ---
@@ -17,7 +17,7 @@ let watchlist = [
     { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre", price: 0, prev: 0 }
 ];
 
-// --- 1. NOUVELLE SÉQUENCE DE BOOT ---
+// --- 1. LOGIN & ANIMATION ---
 function checkLogin() {
     const input = document.getElementById('passwordInput');
     const errorMsg = document.getElementById('loginError');
@@ -25,66 +25,86 @@ function checkLogin() {
     const bootOverlay = document.getElementById('boot-overlay');
     const bootTitle = document.getElementById('boot-title-text');
 
-    if (input.value.trim() !== PASSWORD_CONFIG) {
-        errorMsg.classList.remove('hidden');
-        input.value = ''; input.focus(); return;
+    // Vérif MDP
+    if (!input || input.value.trim() !== PASSWORD_CONFIG) {
+        if(errorMsg) errorMsg.classList.remove('hidden');
+        if(input) { input.value = ''; input.focus(); }
+        return;
     }
 
-    // 1. Cacher le login
-    loginScreen.style.display = 'none';
+    // 1. Cacher Login
+    if(loginScreen) loginScreen.style.display = 'none';
     
-    // 2. Afficher l'écran de boot
-    bootOverlay.classList.remove('hidden');
-    bootOverlay.classList.add('active-flex');
-    
-    // 3. Lancer l'animation du texte "DOUIT CAPITAL"
-    // Petit délai pour que la transition soit fluide
-    setTimeout(() => {
-        bootTitle.classList.add('animate-douit-sequence');
-    }, 100);
-
-    // 4. Révéler l'application une fois l'animation terminée (environ 2.8s)
-    setTimeout(() => {
-        bootOverlay.style.display = 'none';
-        bootOverlay.classList.remove('active-flex');
+    // 2. Afficher Boot Screen
+    if(bootOverlay) {
+        bootOverlay.classList.remove('hidden');
+        bootOverlay.classList.add('active-flex');
         
+        // 3. Lancer animation texte
+        setTimeout(() => {
+            if(bootTitle) bootTitle.classList.add('animate-douit-sequence');
+        }, 50);
+
+        // 4. Révéler App après 2.8s
+        setTimeout(() => {
+            bootOverlay.style.display = 'none';
+            bootOverlay.classList.remove('active-flex');
+            
+            const app = document.getElementById('app-container');
+            if(app) {
+                app.style.display = 'flex';
+                app.classList.add('reveal-app');
+                initApp();
+            }
+        }, 2800);
+    } else {
+        // Fallback si pas d'overlay
         const app = document.getElementById('app-container');
         app.style.display = 'flex';
-        app.classList.add('reveal-app');
         initApp();
-    }, 2800); // Synchronisé avec la durée de l'animation CSS
+    }
 }
 
-// --- NAVIGATION (Inchangé) ---
+// --- NAVIGATION ---
 function switchTab(id) {
     document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    const tab = document.getElementById(id);
+    if(tab) tab.classList.add('active');
+    
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     const activeBtn = document.getElementById('btn-' + id);
     if(activeBtn) activeBtn.classList.add('active');
+
     if(id === 'simulation') calculateSim();
     if(id === 'watchlist') updateWatchlist();
     if(id === 'convictions') renderThesisChart();
 }
 
-// --- CHARTS & LOGIC (Inchangé) ---
+// --- CHARTS & LOGIC ---
 function renderThesisChart() {
-    const ctx = document.getElementById('thesisChart').getContext('2d');
+    const ctxEl = document.getElementById('thesisChart');
+    if(!ctxEl) return;
+    const ctx = ctxEl.getContext('2d');
+    
     if(window.thesisChartInstance) window.thesisChartInstance.destroy();
+    
     const gradientReal = ctx.createLinearGradient(0, 0, 0, 400);
     gradientReal.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); gradientReal.addColorStop(1, 'rgba(16, 185, 129, 0)');
+    
     window.thesisChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
             labels: ['2020', '2021', '2022', '2023', '2024', '2025 (Est.)'],
-            datasets: [{ label: 'Tech Hyperscale (Nasdaq)', data: [100, 135, 105, 145, 175, 160], borderColor: '#ef4444', borderDash: [5, 5], borderWidth: 2, tension: 0.4, pointRadius: 0 },
-                       { label: 'Real Assets (Energy/Metals)', data: [100, 115, 140, 130, 145, 200], borderColor: '#10b981', borderWidth: 3, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#050505', pointBorderColor: '#10b981', pointBorderWidth: 2, backgroundColor: gradientReal, fill: true }]
+            datasets: [
+                { label: 'Tech Hyperscale', data: [100, 135, 105, 145, 175, 160], borderColor: '#ef4444', borderDash: [5, 5], borderWidth: 2, tension: 0.4, pointRadius: 0 },
+                { label: 'Real Assets', data: [100, 115, 140, 130, 145, 200], borderColor: '#10b981', borderWidth: 3, tension: 0.4, pointRadius: 4, backgroundColor: gradientReal, fill: true }
+            ]
         },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#9ca3af', usePointStyle: true, font: {family: 'Inter'} } } }, scales: { x: { display: true, grid: {display:false, color: '#333'}, ticks: {color:'#555'} }, y: { display: false } } }
     });
 }
 
-// --- API ENGINE (Inchangé) ---
+// --- API ENGINE ---
 async function fetchPriceRobust(ticker) {
     const proxy = "https://corsproxy.io/?";
     const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=5d&t=${Date.now()}`;
@@ -94,7 +114,7 @@ async function fetchPriceRobust(ticker) {
         const json = await response.json();
         const res = json.chart.result[0];
         return { price: res.meta.regularMarketPrice, prev: res.meta.chartPreviousClose, meta: res.meta, quotes: res.indicators.quote[0].close, timestamps: res.timestamp };
-    } catch (e) { console.error(e); return null; }
+    } catch (e) { return null; }
 }
 async function fetchFundamentalsQuote(ticker) {
     const proxy = "https://corsproxy.io/?";
@@ -102,29 +122,36 @@ async function fetchFundamentalsQuote(ticker) {
     try { const response = await fetch(proxy + encodeURIComponent(url)); const json = await response.json(); return json.quoteResponse.result[0]; } catch(e) { return null; }
 }
 
-// --- FEATURES (Inchangé) ---
+// --- FEATURES ---
 async function updatePortfolio() {
-    let totalVal = 0; const tbody = document.getElementById('tableBody'); tbody.innerHTML = '';
+    let totalVal = 0; const tbody = document.getElementById('tableBody'); 
+    if(!tbody) return; tbody.innerHTML = '';
+
     for (let stock of portfolio) {
         const data = await fetchPriceRobust(stock.tick);
         if (data) { stock.price = data.price; stock.prev = data.prev; }
         const valo = stock.price * stock.q; totalVal += valo; const perf = ((stock.price - stock.pru) / stock.pru) * 100;
         tbody.innerHTML += `<tr class="hover:bg-white/5 transition border-b border-white/5"><td class="px-6 py-4"><div class="text-white font-bold">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td><td class="px-6 py-4 text-right font-mono text-white">${stock.price.toFixed(2)} €</td><td class="px-6 py-4 text-right font-mono font-bold ${perf >= 0 ? 'text-green-400' : 'text-red-400'}">${(perf>0?'+':'')+perf.toFixed(2)}%</td></tr>`;
     }
-    document.getElementById('totalVal').innerText = Math.round(totalVal).toLocaleString() + " €"; renderSectorChart();
+    const totalEl = document.getElementById('totalVal'); if(totalEl) totalEl.innerText = Math.round(totalVal).toLocaleString() + " €"; 
+    renderSectorChart();
 }
+
 function renderSectorChart() {
+    const ctxEl = document.getElementById('sectorChart'); if(!ctxEl) return;
+    const ctx = ctxEl.getContext('2d');
     if(window.mySectorChart) window.mySectorChart.destroy();
-    const ctx = document.getElementById('sectorChart').getContext('2d');
     window.mySectorChart = new Chart(ctx, { type: 'doughnut', data: { labels: portfolio.map(s => s.sec), datasets: [{ data: portfolio.map(s => s.price * s.q), backgroundColor: ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6', '#64748b'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#9ca3af', usePointStyle: true } } } } });
 }
+
 async function updateWatchlist() {
-    const tbody = document.getElementById('watchlistBody'); tbody.innerHTML = '';
+    const tbody = document.getElementById('watchlistBody'); if(!tbody) return; tbody.innerHTML = '';
     for (let item of watchlist) {
         const data = await fetchPriceRobust(item.tick); const price = data ? data.price.toFixed(2) : "...";
         tbody.innerHTML += `<tr class="hover:bg-white/5 border-b border-white/5"><td class="px-6 py-4 font-bold text-white">${item.name} <span class="text-xs font-normal text-gray-500 block">${item.tick}</span></td><td class="px-6 py-4 text-xs text-blue-300 italic">${item.thesis}</td><td class="px-6 py-4 text-right font-mono text-white">${price}</td></tr>`;
     }
 }
+
 let searchChartInstance = null;
 async function searchTicker() {
     const t = document.getElementById('mainTickerInput').value.toUpperCase(); if(!t) return;
