@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | v1.3.10</title>
+    <title>DOUIT CAPITAL | v1.3.11</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -45,36 +45,24 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* --- NOUVEAU GOLD TEXT SCAN (Le texte lui-même brille) --- */
+        /* --- GOLD TEXT SCAN --- */
         .gold-text-shimmer {
-            /* Le dégradé : Blanc -> OR -> Blanc */
             background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%);
-            background-size: 200% auto; /* On l'agrandit pour le faire bouger */
-            
-            color: #e4e4e7; /* Couleur de secours */
+            background-size: 200% auto;
+            color: #e4e4e7;
             background-clip: text;
             text-fill-color: transparent;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            
-            /* L'animation : aller-retour */
             animation: goldShimmer 3s linear infinite alternate;
-            font-weight: 800; /* Un peu plus gras pour bien voir l'effet */
-            letter-spacing: -0.02em;
+            font-weight: 800; letter-spacing: -0.02em;
         }
-
-        @keyframes goldShimmer {
-            0% { background-position: 0% center; }
-            100% { background-position: 100% center; }
-        }
-
+        @keyframes goldShimmer { 0% { background-position: 0% center; } 100% { background-position: 100% center; } }
 
         /* --- BOOT SEQUENCE --- */
         .boot-screen {
             position: fixed; inset: 0; z-index: 10000; background: #000;
-            display: none; 
-            justify-content: center; align-items: center;
-            pointer-events: none;
+            display: none; justify-content: center; align-items: center; pointer-events: none;
         }
         .boot-screen.active-flex { display: flex !important; pointer-events: auto !important; }
 
@@ -174,7 +162,7 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.10</p>
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.11</p>
             
             <div class="relative group">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
@@ -198,7 +186,6 @@
         <nav class="glass-panel sticky top-6 z-50 h-16 mx-6 md:ml-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-6">
             <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
                 <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-black text-lg">D</div>
-                
                 <span class="text-sm gold-text-shimmer tracking-tight hidden md:block">Douit Capital</span>
             </div>
             
@@ -319,9 +306,13 @@
                 if(logsContent) logsContent.innerHTML = '';
 
                 const logs = [ "INITIALIZING KERNEL V4.2...", "ESTABLISHING ENCRYPTED LINK...", "VERIFYING BIOMETRICS... [OK]", "FETCHING REAL-TIME ASSETS...", "LOADING 'CONVICTION' MODULES...", "> THÈSE: SUPER-CYCLE MATIÈRES 1ÈRE...", "COMPUTING RISK METRICS...", "SYSTEM READY." ];
+                
+                // VITESSE RALENTIE ICI (400ms à 900ms par ligne)
                 let delay = 0;
                 logs.forEach((log) => {
-                    const speed = Math.random() * 200 + 100; delay += speed;
+                    let speed = Math.random() * 500 + 400; // Ralenti
+                    if(log.includes("LOADING")) speed = 1500; // Très lent pour loading
+                    delay += speed;
                     setTimeout(() => {
                         const line = document.createElement('div'); line.innerText = `> ${log}`;
                         if(logsContent) { logsContent.appendChild(line); logsContent.scrollTop = logsContent.scrollHeight; }
@@ -391,7 +382,7 @@
             for(let stock of portfolio){ 
                 const data=await fetchPriceRobust(stock.tick); if(data){stock.price=data.price;stock.prev=data.prev;} 
                 const valo=stock.price*stock.q; totalVal+=valo; const perf=((stock.price-stock.pru)/stock.pru)*100; 
-                // ICI J'AI AJOUTÉ LA COLONNE QTÉ
+                // COLONNE QTÉ
                 tbody.innerHTML+=`<tr class="hover:bg-white/5 transition border-b border-white/5"><td class="px-6 py-4"><div class="text-white font-bold">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td><td class="px-6 py-4 text-right font-mono text-gray-400">${stock.q}</td><td class="px-6 py-4 text-right font-mono text-white">${stock.price.toFixed(2)} €</td><td class="px-6 py-4 text-right font-mono font-bold ${perf>=0?'text-green-400':'text-red-400'}">${(perf>0?'+':'')+perf.toFixed(2)}%</td></tr>`; 
             } 
             const totalEl=document.getElementById('totalVal'); if(totalEl)totalEl.innerText=Math.round(totalVal).toLocaleString()+" €"; renderSectorChart(); 
