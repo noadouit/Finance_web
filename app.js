@@ -1,7 +1,7 @@
-// --- CONFIGURATION ---
+// app.js
 const PASSWORD_CONFIG = "admin"; 
 
-// Données du Portefeuille (Ton contenu original)
+// Données
 let portfolio = [
     { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, eps: 5.90, sps: 53.5 },
     { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, eps: 7.50, sps: 63.0 },
@@ -17,30 +17,55 @@ let watchlist = [
     { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre", price: 0, prev: 0 }
 ];
 
-const commos = [
-    { id: 'HG=F', name: 'Cuivre' }, 
-    { id: 'GC=F', name: 'Or' },     
-    { id: 'CL=F', name: 'Pétrole' },
-    { id: 'SI=F', name: 'Argent' }  
-];
-
-// --- LOGIN LOGIC ---
-function checkLogin() {
+// --- 1. BOOT SEQUENCE ANIMATION ---
+function startBootSequence() {
     const input = document.getElementById('passwordInput');
     const errorMsg = document.getElementById('loginError');
 
-    if (input.value === PASSWORD_CONFIG) {
-        document.getElementById('login-screen').style.transition = 'opacity 0.6s ease';
-        document.getElementById('login-screen').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app-container').style.display = 'flex';
-            initApp();
-        }, 600);
-    } else {
+    if (input.value !== PASSWORD_CONFIG) {
         errorMsg.classList.remove('hidden');
         input.value = '';
+        return;
     }
+
+    // Hide Login
+    document.getElementById('login-screen').style.display = 'none';
+    
+    // Show Boot Overlay
+    const bootOverlay = document.getElementById('boot-overlay');
+    bootOverlay.classList.remove('hidden');
+    
+    // Logs Animation
+    const logs = [
+        "Initializing NC-Protocol v1.2.3...",
+        "Connecting to secure gateway...",
+        "Fetching market data feeds...",
+        "Decrypting user profile...",
+        "System Ready."
+    ];
+    
+    const logContainer = document.getElementById('boot-log');
+    let delay = 0;
+    
+    logs.forEach((log, index) => {
+        setTimeout(() => {
+            logContainer.innerHTML += `<div>> ${log}</div>`;
+        }, delay);
+        delay += 400; // Vitesse des logs
+    });
+
+    // Final Reveal
+    setTimeout(() => {
+        bootOverlay.classList.add('animate-boot-sequence');
+        
+        setTimeout(() => {
+            bootOverlay.style.display = 'none';
+            const app = document.getElementById('app-container');
+            app.style.display = 'flex';
+            app.classList.add('reveal-app');
+            initApp();
+        }, 2000); // Temps avant reveal final
+    }, 2200);
 }
 
 // --- NAVIGATION ---
@@ -48,15 +73,54 @@ function switchTab(id) {
     document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     
-    // Gérer les boutons
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     const activeBtn = document.getElementById('btn-' + id);
     if(activeBtn) activeBtn.classList.add('active');
 
-    // Trigger spécifique par page
     if(id === 'simulation') calculateSim();
     if(id === 'watchlist') updateWatchlist();
-    if(id === 'commodities') fetchCommodities();
+    if(id === 'convictions') renderThesisChart();
+}
+
+// --- CHARTS & LOGIC ---
+
+// Graphique de Thèse (Statique pour illustrer le cycle)
+function renderThesisChart() {
+    const ctx = document.getElementById('thesisChart').getContext('2d');
+    if(window.thesisChartInstance) window.thesisChartInstance.destroy();
+
+    window.thesisChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['2020', '2021', '2022', '2023', '2024', '2025 (Est.)'],
+            datasets: [
+                {
+                    label: 'Tech (Nasdaq)',
+                    data: [100, 140, 110, 150, 180, 170],
+                    borderColor: '#ef4444', // Rouge
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    pointRadius: 0
+                },
+                {
+                    label: 'Real Assets (Energy/Metals)',
+                    data: [100, 110, 130, 125, 135, 190], // Cross over
+                    borderColor: '#10b981', // Vert
+                    borderWidth: 3,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } },
+            scales: { x: { display: true, grid: {display:false}, ticks: {color:'#666'} }, y: { display: false } }
+        }
+    });
 }
 
 // --- API ENGINE ---
@@ -88,9 +152,7 @@ async function fetchFundamentalsQuote(ticker) {
     } catch(e) { return null; }
 }
 
-// --- FEATURES ---
-
-// 1. Dashboard Portefeuille
+// --- FEATURES EXISTANTES ---
 async function updatePortfolio() {
     let totalVal = 0;
     const tbody = document.getElementById('tableBody');
@@ -98,10 +160,7 @@ async function updatePortfolio() {
 
     for (let stock of portfolio) {
         const data = await fetchPriceRobust(stock.tick);
-        if (data) {
-            stock.price = data.price;
-            stock.prev = data.prev;
-        }
+        if (data) { stock.price = data.price; stock.prev = data.prev; }
         
         const valo = stock.price * stock.q;
         totalVal += valo;
@@ -122,20 +181,13 @@ async function updatePortfolio() {
 function renderSectorChart() {
     if(window.mySectorChart) window.mySectorChart.destroy();
     const ctx = document.getElementById('sectorChart').getContext('2d');
-    const data = portfolio.map(s => s.price * s.q);
-    const labels = portfolio.map(s => s.sec);
-    
     window.mySectorChart = new Chart(ctx, {
         type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{ data: data, backgroundColor: ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6', '#64748b'], borderWidth: 0 }]
-        },
+        data: { labels: portfolio.map(s => s.sec), datasets: [{ data: portfolio.map(s => s.price * s.q), backgroundColor: ['#3b82f6', '#10b981', '#ef4444', '#f59e0b', '#8b5cf6', '#64748b'], borderWidth: 0 }] },
         options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#9ca3af', usePointStyle: true } } } }
     });
 }
 
-// 2. Watchlist
 async function updateWatchlist() {
     const tbody = document.getElementById('watchlistBody');
     tbody.innerHTML = '';
@@ -152,7 +204,6 @@ async function updateWatchlist() {
     }
 }
 
-// 3. Search Engine
 let searchChartInstance = null;
 async function searchTicker() {
     const t = document.getElementById('mainTickerInput').value.toUpperCase();
@@ -183,89 +234,30 @@ async function searchTicker() {
 
         const ctx = document.getElementById('searchChart').getContext('2d');
         if(searchChartInstance) searchChartInstance.destroy();
-        
         searchChartInstance = new Chart(ctx, {
             type: 'line',
-            data: {
-                labels: data.timestamps.map(t => new Date(t*1000).getHours()+'h'),
-                datasets: [{ 
-                    data: data.quotes, 
-                    borderColor: perf >= 0 ? '#10b981' : '#ef4444', 
-                    backgroundColor: perf >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                    fill: true, pointRadius: 0, tension: 0.3 
-                }]
-            },
+            data: { labels: data.timestamps.map(t => new Date(t*1000).getHours()+'h'), datasets: [{ data: data.quotes, borderColor: perf >= 0 ? '#10b981' : '#ef4444', backgroundColor: perf >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', fill: true, pointRadius: 0, tension: 0.3 }] },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} }, scales: { x: {display: false}, y: {grid: {color: '#333'}} } }
         });
     }
 }
 
-// 4. Commodities Page (NEW)
-async function fetchCommodities() {
-    for(let c of commos) {
-        const data = await fetchPriceRobust(c.id);
-        if(data) {
-            const elP = document.getElementById(`price-${c.id}`);
-            const elV = document.getElementById(`var-${c.id}`);
-            if(elP && elV) {
-                const vari = ((data.price - data.prev)/data.prev)*100;
-                elP.innerText = data.price.toLocaleString();
-                elV.innerText = (vari>0?'+':'') + vari.toFixed(2) + '%';
-                elV.className = `text-xs font-bold mt-1 ${vari>=0 ? 'text-green-400' : 'text-red-400'}`;
-            }
-        }
-    }
-    // Graph comparatif Cuivre vs Or
-    const cu = await fetchPriceRobust('HG=F');
-    const au = await fetchPriceRobust('GC=F');
-    if(cu && au) {
-        const ctx = document.getElementById('commoditiesChart').getContext('2d');
-        if(window.commoChart) window.commoChart.destroy();
-        
-        // Normalisation simple base 0
-        const norm = (arr) => { const start = arr.find(v=>v) || 1; return arr.map(v => v ? (v/start-1)*100 : null); }
-        
-        window.commoChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: cu.timestamps.map(t => new Date(t*1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})),
-                datasets: [
-                    { label: 'Cuivre %', data: norm(cu.quotes), borderColor: '#f97316', borderWidth: 2, pointRadius: 0 },
-                    { label: 'Or %', data: norm(au.quotes), borderColor: '#fbbf24', borderWidth: 2, pointRadius: 0 }
-                ]
-            },
-            options: { responsive: true, maintainAspectRatio: false, interaction: {mode:'index', intersect:false}, scales: {x:{display:false}, y:{grid:{color:'#333'}}}, plugins: {legend:{labels:{color:'white'}}} }
-        });
-    }
-}
-
-// 5. Simulation
-let simChart = null;
 function calculateSim() {
     const start = parseFloat(document.getElementById('sim-start').value);
     const monthly = parseFloat(document.getElementById('sim-monthly').value);
     const years = 20; const rate = 0.08;
-    
     let labels = [], data = [], capital = start;
     for(let i=0; i<=years; i++) {
-        labels.push("An " + i);
-        data.push(capital);
+        labels.push("An " + i); data.push(capital);
         if(i<years) { for(let m=0; m<12; m++) { capital += monthly; capital *= (1+rate/12); } }
     }
-    
     document.getElementById('sim-result').innerText = Math.round(data[data.length-1]).toLocaleString() + " €";
-    
     const ctx = document.getElementById('simChart').getContext('2d');
-    if(simChart) simChart.destroy();
-    simChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels, datasets: [{ label: 'Patrimoine', data, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.2)', fill: true }] },
-        options: { responsive: true, maintainAspectRatio: false, scales: {y:{grid:{color:'#333'}}}, plugins: {legend:{display:false}} }
-    });
+    if(window.simChart) window.simChart.destroy();
+    window.simChart = new Chart(ctx, { type: 'line', data: { labels, datasets: [{ label: 'Patrimoine', data, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.2)', fill: true }] }, options: { responsive: true, maintainAspectRatio: false, scales: {y:{grid:{color:'#333'}}}, plugins: {legend:{display:false}} } });
 }
 
 function initApp() {
-    // Lance les processus de fond une fois connecté
     updatePortfolio();
     setInterval(updatePortfolio, 60000);
 }
