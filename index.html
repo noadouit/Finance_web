@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | v1.3.6</title>
+    <title>DOUIT CAPITAL | v1.3.7</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -22,42 +22,22 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="style.css?v=1.3.6">
+    <link rel="stylesheet" href="style.css?v=1.3.7">
 </head>
 
 <body class="antialiased min-h-screen flex flex-col selection:bg-blue-500/30 selection:text-blue-200">
 
     <div id="boot-overlay" class="boot-screen">
-        <div id="boot-logs-wrapper" class="boot-logs-container">
-            <div id="boot-log-content" class="space-y-1"></div>
-        </div>
-        <div id="boot-title-wrapper" class="boot-title-wrapper relative z-10 p-4">
-            <h1 id="boot-title-text" class="boot-title-static">DOUIT CAPITAL</h1>
-        </div>
+        <div id="boot-logs-wrapper" class="boot-logs-container"><div id="boot-log-content" class="space-y-1"></div></div>
+        <div id="boot-title-wrapper" class="boot-title-wrapper relative z-10 p-4"><h1 id="boot-title-text" class="boot-title-static">DOUIT CAPITAL</h1></div>
         <div class="absolute inset-0 bg-grid opacity-50 z-0 pointer-events-none"></div>
     </div>
 
     <div id="legal-modal" class="fixed inset-0 z-[10001] hidden flex items-center justify-center backdrop-blur-md bg-black/60">
         <div class="legal-modal w-full max-w-lg glass-panel p-8 rounded-3xl border border-white/10 m-4 relative">
-            <div class="text-center mb-6">
-                <div class="w-12 h-12 rounded-full bg-blue-900/20 text-blue-400 flex items-center justify-center mx-auto mb-4 text-2xl border border-blue-500/20">⚖️</div>
-                <h2 class="text-2xl font-black text-white uppercase tracking-tight">Disclaimer</h2>
-                <p class="text-[10px] text-gray-500 font-mono mt-1 uppercase">Mention Légale & Avertissement</p>
-            </div>
-            
-            <div class="text-xs text-gray-400 leading-relaxed space-y-4 text-justify mb-8 h-48 overflow-y-auto pr-2 custom-scroll">
-                <p><strong>© 2025 Douit Capital. Tous droits réservés.</strong></p>
-                <p>Cette interface propriétaire est strictement confidentielle et destinée à un usage interne ou éducatif uniquement.</p>
-                <p class="text-white font-bold bg-red-500/10 p-3 rounded border border-red-500/20">
-                    ⚠️ Les informations présentées ne constituent en aucun cas une offre de vente, une sollicitation d'achat ou un conseil en investissement financier.
-                </p>
-                <p>L'investissement sur les marchés financiers, et notamment sur les actions, les matières premières et les produits dérivés, comporte des risques importants de perte en capital. Les performances passées ne préjugent pas des performances futures.</p>
-                <p>En accédant à ce terminal, l'utilisateur reconnait avoir pris connaissance de ces risques et dégage Douit Capital de toute responsabilité concernant ses décisions d'investissement.</p>
-            </div>
-
-            <button onclick="toggleLegal(false)" class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-blue-900/20">
-                J'accepte et j'accède au Terminal
-            </button>
+            <div class="text-center mb-6"><div class="w-12 h-12 rounded-full bg-blue-900/20 text-blue-400 flex items-center justify-center mx-auto mb-4 text-2xl border border-blue-500/20">⚖️</div><h2 class="text-2xl font-black text-white uppercase tracking-tight">Disclaimer</h2></div>
+            <div class="text-xs text-gray-400 leading-relaxed space-y-4 text-justify mb-8 h-48 overflow-y-auto pr-2 custom-scroll"><p><strong>© 2025 Douit Capital.</strong> Interface confidentielle.</p><p class="text-white font-bold bg-red-500/10 p-3 rounded border border-red-500/20">⚠️ Ceci n'est pas un conseil en investissement.</p><p>Les marchés comportent des risques de perte en capital.</p></div>
+            <button onclick="toggleLegal(false)" class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest transition shadow-lg">J'accepte et j'accède au Terminal</button>
         </div>
     </div>
 
@@ -65,35 +45,20 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.6</p>
-            <div class="relative group">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
-                <input type="password" id="passwordInput" class="relative w-full bg-black border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 outline-none focus:border-blue-500 transition font-mono" placeholder="••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
-            </div>
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.7</p>
+            <div class="relative group"><div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div><input type="password" id="passwordInput" class="relative w-full bg-black border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 outline-none focus:border-blue-500 transition font-mono" placeholder="••••••" onkeypress="if(event.key === 'Enter') checkLogin()"></div>
             <button onclick="checkLogin()" class="mt-6 w-full py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition relative z-20 cursor-pointer">Initialize</button>
             <p id="loginError" class="text-red-500 text-xs mt-4 hidden font-mono">:: ACCESS DENIED ::</p>
         </div>
     </div>
 
-    <div id="app-container" style="display: none;" class="flex-1 flex flex-col w-full h-full relative">
-        <div class="fixed inset-0 bg-grid opacity-20 pointer-events-none z-0"></div>
+    <div id="app-container" style="display: none;" class="flex-1 flex flex-col w-full h-full relative pb-10"> <div class="fixed inset-0 bg-grid opacity-20 pointer-events-none z-0"></div>
 
-        <button onclick="toggleLegal(true)" class="fixed top-4 left-4 z-[9000] w-10 h-10 rounded-full glass-panel border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:border-blue-500 transition group" title="Informations Légales">
-            <span class="font-serif italic font-bold">i</span>
-        </button>
+        <button onclick="toggleLegal(true)" class="fixed top-4 left-4 z-[9000] w-10 h-10 rounded-full glass-panel border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:border-blue-500 transition group" title="Informations Légales"><span class="font-serif italic font-bold">i</span></button>
 
-        <nav class="glass-panel sticky top-6 z-50 h-16 mx-6 md:ml-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-6 transition-all">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
-                <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-black text-lg">D</div>
-                <span class="text-sm font-bold text-white tracking-tight hidden md:block">Douit Capital</span>
-            </div>
-            <div class="flex space-x-1 bg-black/50 p-1.5 rounded-xl border border-white/5 backdrop-blur-md overflow-x-auto">
-                <button onclick="switchTab('home')" id="btn-home" class="nav-btn">Terminal</button>
-                <button onclick="switchTab('convictions')" id="btn-convictions" class="nav-btn">Thèse</button>
-                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn">Portefeuille</button>
-                <button onclick="switchTab('watchlist')" id="btn-watchlist" class="nav-btn">Radar</button>
-                <button onclick="switchTab('simulation')" id="btn-simulation" class="nav-btn">Projection</button>
-            </div>
+        <nav class="glass-panel sticky top-6 z-50 h-16 mx-6 md:ml-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-6">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')"><div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-black text-lg">D</div><span class="text-sm font-bold text-white tracking-tight hidden md:block">Douit Capital</span></div>
+            <div class="flex space-x-1 bg-black/50 p-1.5 rounded-xl border border-white/5 backdrop-blur-md overflow-x-auto"><button onclick="switchTab('home')" id="btn-home" class="nav-btn">Terminal</button><button onclick="switchTab('convictions')" id="btn-convictions" class="nav-btn">Thèse</button><button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn">Portefeuille</button><button onclick="switchTab('watchlist')" id="btn-watchlist" class="nav-btn">Radar</button><button onclick="switchTab('simulation')" id="btn-simulation" class="nav-btn">Projection</button></div>
         </nav>
 
         <main class="flex-1 w-full relative z-10 p-6">
@@ -103,6 +68,12 @@
             <div id="watchlist" class="tab-content max-w-5xl mx-auto p-8"><h1 class="text-3xl font-bold text-white mb-6">Watchlist</h1><div class="glass-panel rounded-2xl border border-white/5 overflow-hidden"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Cible</th><th class="px-6 py-4">Thèse</th><th class="px-6 py-4 text-right">Prix</th></tr></thead><tbody class="divide-y divide-white/5" id="watchlistBody"></tbody></table></div></div>
             <div id="simulation" class="tab-content max-w-4xl mx-auto p-8 text-center"><h1 class="text-3xl font-bold text-white mb-8">Projection</h1><div class="glass-panel p-6 rounded-2xl border border-white/5 mb-6 grid grid-cols-3 gap-4"><input type="number" id="sim-start" value="10000" class="bg-black/50 p-3 rounded-lg text-white border border-white/10" placeholder="Départ"><input type="number" id="sim-monthly" value="500" class="bg-black/50 p-3 rounded-lg text-white border border-white/10" placeholder="Mensuel"><button onclick="calculateSim()" class="bg-blue-600 text-white font-bold rounded-lg">Calculer</button></div><h2 class="text-5xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mb-6" id="sim-result">-- €</h2><div class="h-[300px] w-full"><canvas id="simChart"></canvas></div></div>
         </main>
+
+        <div class="ticker-wrap">
+            <div class="ticker-content" id="news-ticker-content">
+                </div>
+        </div>
+
     </div>
     
     <script src="app.js"></script>
