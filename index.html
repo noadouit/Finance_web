@@ -33,28 +33,29 @@
         .gold-text-shimmer { background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: goldShimmer 3s linear infinite alternate; font-weight: 800; letter-spacing: -0.02em; }
         @keyframes goldShimmer { 0% { background-position: 0% center; } 100% { background-position: 100% center; } }
 
-        .boot-screen { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; justify-content: center; align-items: center; }
+        .boot-screen { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; justify-content: center; align-items: center; opacity: 1; transition: opacity 0.5s ease-in-out; }
         .boot-screen.active-flex { display: flex !important; }
         .boot-title-wrapper { text-align: center; }
         .boot-title-static { font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 6rem; color: white; opacity: 0; letter-spacing: -1em; filter: blur(20px); white-space: nowrap; }
         
-        .animate-douit-sequence { animation: douitSequence 4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        /* Animation plus fluide */
+        .animate-douit-sequence { animation: douitSequence 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         @keyframes douitSequence { 
-            0% { opacity: 0; letter-spacing: -1em; filter: blur(30px); transform: scale(0.8); } 
-            20% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; } 
-            50% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 50px rgba(59,130,246,0.6); } 
-            100% { opacity: 0; letter-spacing: 1.5em; filter: blur(20px); transform: scale(1.2); color: #3b82f6; } 
+            0% { opacity: 0; letter-spacing: -1em; filter: blur(30px); transform: scale(0.9); } 
+            25% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; } 
+            60% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 50px rgba(59,130,246,0.6); } 
+            100% { opacity: 0; letter-spacing: 1.2em; filter: blur(20px); transform: scale(1.1); color: #3b82f6; } 
         }
 
-        .reveal-app { animation: revealApp 1s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
-        @keyframes revealApp { 0% { opacity: 0; transform: scale(0.98) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        .reveal-app { animation: revealApp 0.6s forwards ease-out; opacity: 0; }
+        @keyframes revealApp { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
         
         .thesis-btn { padding: 12px 24px; border-radius: 10px; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s; opacity: 0.6; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); }
         .thesis-btn.active { opacity: 1; transform: translateY(-2px); }
         .thesis-btn-bear.active { background: rgba(239,68,68,0.1); border-color: #ef4444; color: #ef4444; }
         .thesis-btn-bull.active { background: rgba(184,115,51,0.1); border-color: #b87333; color: #b87333; }
 
-        .tab-content { display: none; width: 100%; } .tab-content.active { display: block; animation: fadeIn 0.6s ease-out; }
+        .tab-content { display: none; width: 100%; } .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .nav-btn { padding: 8px 18px; font-size: 12px; font-weight: 600; border-radius: 10px; transition: all 0.3s; color: #71717a; }
@@ -104,7 +105,7 @@
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
             <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">Asset Management Terminal</p>
             <div class="relative group">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
                 <input type="password" id="passwordInput" class="relative w-full bg-black border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 outline-none focus:border-blue-500 transition font-mono" placeholder="••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
             </div>
             <button onclick="checkLogin()" class="mt-6 w-full py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition relative z-20 cursor-pointer">Login</button>
@@ -132,16 +133,7 @@
 
         <main class="flex-1 w-full relative z-10 p-6">
             
-            <div id="home" class="tab-content active">
-                <div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6">Market Intelligence Active</div>
-                    <h1 class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-8 tracking-tighter">Market Insight.</h1>
-                    <div class="w-full max-w-xl relative group">
-                        <input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:border-blue-500 transition outline-none" placeholder="Rechercher un actif..." onkeypress="if(event.key === 'Enter') searchTicker()">
-                    </div>
-                    <div id="resultCard" class="hidden w-full max-w-4xl mt-8 glass-panel rounded-2xl p-6 text-left border border-white/10"><div class="flex justify-between items-start mb-6"><div><h2 id="res-name" class="text-3xl font-bold text-white">Name</h2><p id="res-symbol" class="text-blue-400 font-mono text-sm">TICKER</p></div><div class="text-right"><div id="res-price" class="text-4xl font-mono font-bold text-white">--</div><div id="res-perf" class="text-lg font-bold">--%</div></div></div><div class="h-[300px] w-full bg-black/20 rounded-xl relative"><canvas id="searchChart"></canvas></div></div>
-                </div>
-            </div>
+            <div id="home" class="tab-content active"><div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>Market Intelligence Active</div><h1 class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-8 tracking-tighter">Market Insight.</h1><div class="w-full max-w-xl relative group"><div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div><input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:outline-none focus:border-blue-500 transition placeholder-gray-700" placeholder="Rechercher un actif..." onkeypress="if(event.key === 'Enter') searchTicker()"></div><div id="searchLoader" class="loader mt-8"></div><div id="resultCard" class="hidden w-full max-w-4xl mt-8 glass-panel rounded-2xl p-6 text-left border border-white/10"><div class="flex justify-between items-start mb-6"><div><h2 id="res-name" class="text-3xl font-bold text-white">Name</h2><p id="res-symbol" class="text-blue-400 font-mono text-sm">TICKER</p></div><div class="text-right"><div id="res-price" class="text-4xl font-mono font-bold text-white">--</div><div id="res-perf" class="text-lg font-bold">--%</div></div></div><div class="h-[300px] w-full bg-black/20 rounded-xl relative"><canvas id="searchChart"></canvas></div></div></div></div>
 
             <div id="convictions" class="tab-content max-w-7xl mx-auto">
                 <div class="flex justify-center gap-6 mb-12">
@@ -154,17 +146,17 @@
                         <div class="lg:col-span-7 space-y-8">
                             <div class="glass-panel p-8 rounded-3xl border border-red-500/20 bg-gradient-to-br from-red-900/10 to-transparent">
                                 <h2 class="text-3xl font-black text-white mb-6">L'Illusion Schumpétérienne</h2>
-                                <div class="text-gray-400 leading-relaxed text-justify space-y-4 custom-scroll max-h-[450px] overflow-y-auto pr-4 text-sm">
+                                <div class="text-gray-400 leading-relaxed text-justify space-y-4 custom-scroll max-h-[500px] overflow-y-auto pr-4 text-sm">
                                     <p class="text-white font-bold">1. La Fin de la Croissance Réelle de Productivité :</p>
-                                    <p>Joseph Schumpeter a théorisé l'innovation comme un moteur de "Destruction Créatrice". Aujourd'hui, nous observons une saturation : l'innovation de la Big Tech se concentre sur l'optimisation publicitaire plutôt que sur des gains de productivité pour l'économie réelle. Le gain de productivité marginale de l'IA générative pour l'économie réelle reste à prouver face aux coûts d'infrastructure colossaux.</p>
+                                    <p>Joseph Schumpeter a théorisé l'innovation comme un moteur de "Destruction Créatrice". Aujourd'hui, nous observons une saturation : l'innovation de la Big Tech se concentre sur l'extraction de rente publicitaire et l'optimisation de flux déjà existants. Le gain de productivité marginale de l'IA générative pour l'économie réelle reste à prouver face aux coûts d'infrastructure colossaux.</p>
                                     <p class="text-white font-bold">2. Le Piège des Multiples (PSR/PER) :</p>
                                     <p>Historiquement, un Price-to-Sales (PSR) supérieur à 10x est un signal d'alarme. Aujourd'hui, le secteur "IA" affiche des PSR > 30x. Pour justifier de tels prix, ces entreprises doivent non seulement capturer 100% de leur marché adressable, mais aussi maintenir des marges nettes records sans aucune pression concurrentielle ou régulatoire.</p>
-                                    <p class="text-white font-bold">3. L'Impasse de l'Économie Circulaire :</p>
-                                    <p>Le modèle Software externalise ses coûts physiques. Les régulations ESG forçant le "True Cost Accounting" (coût carbone des Data Centers, recyclage du silicium) va comprimer les marges vers des niveaux industriels.</p>
+                                    <p class="text-white font-bold">3. Le Paradoxe des CAPEX et des Marges :</p>
+                                    <p>L'économie circulaire imposera bientôt le "True Cost Accounting". Actuellement, la tech externalise ses coûts physiques (consommation d'eau massive des data centers, pollution carbone, déchets silicium). L'intégration de ces externalités dans les bilans financiers compressera les marges brutes de 80% vers des niveaux industriels standards (15-20%).</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="lg:col-span-5"><div class="glass-panel p-6 rounded-3xl border border-white/5 h-full flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Tech vs History (PSR)</h3><div class="flex-1"><canvas id="techBubbleChart"></canvas></div></div></div>
+                        <div class="lg:col-span-5"><div class="glass-panel p-6 rounded-3xl border border-white/5 h-full flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Tech PSR Extremes (Institutional View)</h3><div class="flex-1"><canvas id="techBubbleChart"></canvas></div></div></div>
                     </div>
                 </div>
 
@@ -173,13 +165,13 @@
                         <div class="lg:col-span-7 space-y-8">
                             <div class="glass-panel p-8 rounded-3xl border border-orange-500/20 bg-gradient-to-br from-orange-900/10 to-transparent">
                                 <h2 class="text-3xl font-black text-white mb-6">Le Choc d'Offre Ricardien</h2>
-                                <div class="text-gray-300 leading-relaxed text-justify space-y-4 custom-scroll max-h-[450px] overflow-y-auto pr-4 text-sm">
+                                <div class="text-gray-300 leading-relaxed text-justify space-y-4 custom-scroll max-h-[500px] overflow-y-auto pr-4 text-sm">
                                     <p class="text-white font-bold">1. Rente de Rareté et Coût Marginal :</p>
-                                    <p>La théorie de David Ricardo sur la rente différentielle s'applique parfaitement au cuivre. Le prix du marché est fixé par le coût de production du producteur marginal (le moins rentable). Aujourd'hui, les mines à haute teneur s'épuisent au profit de gisements à faible teneur.</p>
+                                    <p>La théorie de David Ricardo sur la rente différentielle s'applique parfaitement au cuivre. Le prix du marché est fixé par le coût de production du producteur marginal (le moins rentable). Aujourd'hui, les mines à haute teneur s'épuisent au profit de gisements à faible teneur (0.4% - 0.6%).</p>
                                     <p class="text-white font-bold">2. L'Inflation Géologique Irréversible :</p>
-                                    <p>Depuis 2000, la teneur moyenne du minerai est passée de 1.2% à 0.5%. Extraire la même tonne de cuivre demande 2x plus d'énergie et de capital. Le prix plancher doit mécaniquement monter.</p>
-                                    <p class="text-white font-bold">3. Le Mur du CAPEX :</p>
-                                    <p>Il faut 16 ans en moyenne entre la découverte d'un gisement et la production. Le sous-investissement massif depuis 2014 crée une pénurie inélastique face à une demande "forcée" par l'électrification mondiale.</p>
+                                    <p>Le déclin des teneurs (Grade Decline) est une reality physique. Pour maintenir la production mondiale, il faut traiter des volumes de roche exponentiels. Le "Incentive Price" (prix nécessaire pour rentabiliser une nouvelle mine) est passé de 6,000$ à 11,000$ la tonne en dix ans.</p>
+                                    <p class="text-white font-bold">3. Le Mur des Permis et des CAPEX :</p>
+                                    <p>Il faut en moyenne 16.5 ans entre la découverte d'un gisement et la première tonne produite (contre 8 ans en 2000). Le sous-investissement massif du secteur minier depuis 2014 crée une falaise d'offre inévitable d'ici 2028 face à une demande "forcée" par l'électrification mondiale.</p>
                                 </div>
                             </div>
                         </div>
@@ -190,7 +182,7 @@
 
             <div id="dashboard" class="tab-content max-w-7xl mx-auto p-6"><div class="flex justify-between items-end mb-8"><h1 class="text-3xl font-bold text-white">Portefeuille Global</h1><div class="text-right"><div class="text-xs text-gray-500 uppercase">Total AUM</div><div class="text-4xl font-mono font-bold text-white" id="totalVal">-- €</div></div></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-8"><div class="lg:col-span-2 glass-panel rounded-2xl border border-white/5 overflow-hidden"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Actif</th><th class="px-6 py-4 text-right">Qté</th><th class="px-6 py-4 text-right">Prix</th><th class="px-6 py-4 text-right">Perf</th></tr></thead><tbody class="divide-y divide-white/5" id="tableBody"></tbody></table></div><div class="glass-panel rounded-2xl p-6 border border-white/5 flex flex-col"><div class="mb-6"><h3 class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-widest">Macro Live</h3><div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1 mb-1"><span>🇺🇸 Fed Rate</span><span class="text-white">5.50%</span></div><div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1"><span>🇪🇺 ECB Rate</span><span class="text-white">4.00%</span></div></div><h3 class="text-xs font-bold text-white uppercase mb-4 tracking-widest">Allocation</h3><div class="flex-1 relative min-h-[200px]"><canvas id="sectorChart"></canvas></div></div></div></div>
             <div id="watchlist" class="tab-content max-w-5xl mx-auto p-8"><h1 class="text-3xl font-bold text-white mb-6">Watchlist</h1><div class="glass-panel rounded-2xl border border-white/5 overflow-hidden"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Cible</th><th class="px-6 py-4">Thèse</th><th class="px-6 py-4 text-right">Prix</th></tr></thead><tbody class="divide-y divide-white/5" id="watchlistBody"></tbody></table></div></div>
-            <div id="simulation" class="tab-content max-w-4xl mx-auto p-8 text-center"><h1 class="text-3xl font-bold text-white mb-8">Projection</h1><div class="glass-panel p-6 rounded-2xl border border-white/5 mb-6 grid grid-cols-3 gap-4"><input type="number" id="sim-start" value="10000" class="bg-black/50 p-3 rounded-lg text-white border border-white/10"><input type="number" id="sim-monthly" value="500" class="bg-black/50 p-3 rounded-lg text-white border border-white/10"><button onclick="calculateSim()" class="bg-blue-600 text-white font-bold rounded-lg">Simuler</button></div><h2 class="text-5xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mb-6" id="sim-result">-- €</h2><div class="h-[300px] w-full"><canvas id="simChart"></canvas></div></div>
+            <div id="simulation" class="tab-content max-w-4xl mx-auto p-8 text-center"><h1 class="text-3xl font-bold text-white mb-8">Projection</h1><div class="glass-panel p-6 rounded-2xl border border-white/5 mb-6 grid grid-cols-3 gap-4"><input type="number" id="sim-start" value="10000" class="bg-black/50 p-3 rounded-lg text-white border border-white/10"><input type="number" id="sim-monthly" value="500" class="bg-black/50 p-3 rounded-lg text-white border border-white/10"><button onclick="calculateSim()" class="bg-blue-600 text-white font-bold rounded-lg px-4">Simuler</button></div><h2 class="text-5xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mb-6" id="sim-result">-- €</h2><div class="h-[300px] w-full"><canvas id="simChart"></canvas></div></div>
         </main>
 
         <div class="ticker-wrap"><div class="ticker-content" id="news-ticker-content"></div></div>
@@ -204,20 +196,29 @@
         function checkLogin() {
             const input = document.getElementById('passwordInput');
             if (!input || input.value.trim() !== PASSWORD_CONFIG) { document.getElementById('loginError').classList.remove('hidden'); input.value = ''; return; }
+            
+            // Login immédiat
             document.getElementById('login-screen').style.display = 'none';
             const bootOverlay = document.getElementById('boot-overlay');
-            bootOverlay.classList.remove('hidden'); bootOverlay.classList.add('active-flex');
+            bootOverlay.classList.add('active-flex');
             
-            setTimeout(() => { document.getElementById('boot-title-text').classList.add('animate-douit-sequence'); }, 500);
+            // Animation Titre fluide
+            setTimeout(() => { 
+                document.getElementById('boot-title-text').classList.add('animate-douit-sequence'); 
+            }, 100);
+
             setTimeout(() => {
-                bootOverlay.style.display = 'none'; bootOverlay.classList.remove('active-flex');
-                const app = document.getElementById('app-container');
-                if(app) { 
-                    app.style.display = 'flex'; app.classList.add('reveal-app'); initApp(); 
-                    // DISCLAIMER TRES TOT (0.3s)
+                bootOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    bootOverlay.style.display = 'none';
+                    const app = document.getElementById('app-container');
+                    app.style.display = 'flex';
+                    app.classList.add('reveal-app');
+                    initApp();
+                    // Disclaimer instantané (0.3s)
                     setTimeout(() => { toggleLegal(true); }, 300);
-                }
-            }, 4500);
+                }, 500);
+            }, 3600);
         }
 
         function switchThesis(type) {
@@ -256,7 +257,8 @@
             const n = [
                 { t: "FLASH MACIF : ANALYSE DES RÉSULTATS TECHNIQUES SUR LE PORTEFEUILLE PROFESSIONNEL", y: "n" }, 
                 { t: "ALERTE : LE DÉFICIT DE CUIVRE S'ACCÉLÈRE FACE À LA DEMANDE DES RÉSEAUX ÉLECTRIQUES", y: "u" }, 
-                { t: "MARCHÉ : LES VALORISATIONS TECH ATTEIGNENT DES EXTRÊMES HISTORIQUES", y: "d" }
+                { t: "MARCHÉ : LES VALORISATIONS TECH ATTEIGNENT DES EXTRÊMES HISTORIQUES", y: "d" },
+                { t: "MACRO : LA BCE MAINTIENT SES TAUX À 4.5% - L'INFLATION RESTE LA PRIORITÉ", y: "n" }
             ]; 
             let h = ""; n.forEach(i => { const now=new Date();const m=Math.floor(Math.random()*59);const ts=`${now.getHours()}:${m<10?'0'+m:m}`; let cl="text-gray-400"; if(i.y==="u")cl="text-green-500 font-bold";if(i.y==="d")cl="text-red-500 font-bold"; h+=`<div class="ticker-item"><span class="text-gray-600 mr-2">[${ts}]</span><span class="${cl}">${i.t}</span></div>`; }); c.innerHTML = h; 
         }
