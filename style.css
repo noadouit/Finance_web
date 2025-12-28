@@ -1,5 +1,5 @@
-/* style.css - CORRECTIF v1.2.3 */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+/* style.css v1.2.4 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap');
 
 body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
 
@@ -19,30 +19,46 @@ body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* --- BOOT SEQUENCE (CORRIGÉ) --- */
+/* --- NOUVELLE BOOT SEQUENCE ANIMATION --- */
 .boot-screen {
     position: fixed; inset: 0; z-index: 10000; background: #000;
-    /* IMPORTANT : display none par défaut pour ne pas bloquer le clic */
-    display: none; 
-    flex-direction: column; justify-content: center; align-items: center;
+    display: none; /* Hidden by default so login is clickable */
+    justify-content: center; align-items: center;
 }
-
-/* On force l'affichage quand JS ajoute la classe .active */
 .boot-screen.active-flex { display: flex !important; }
 
-.boot-text {
+/* État initial du texte avant animation */
+.boot-title-static {
     font-family: 'JetBrains Mono', monospace;
-    color: #3b82f6;
-    font-size: 14px;
+    font-weight: 800;
+    font-size: 4rem; /* Gros texte */
+    color: white;
+    opacity: 0;
+    letter-spacing: -1em; /* Très compressé au début */
+    filter: blur(10px);
+    white-space: nowrap;
 }
 
-.animate-boot-sequence { animation: bootSequence 2s forwards ease-in-out; }
-@keyframes bootSequence {
-    0% { opacity: 1; clip-path: inset(0 0 0 0); }
-    50% { opacity: 1; transform: scale(1); filter: blur(0px); }
-    100% { opacity: 0; transform: scale(1.1); filter: blur(20px); pointer-events: none; }
+/* La classe qui lance l'animation */
+.animate-douit-sequence {
+    animation: douitSequence 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* L'animation clé : À l'endroit, pause, à l'envers et hop */
+@keyframes douitSequence {
+    0% { opacity: 0; letter-spacing: -1em; filter: blur(10px); transform: scale(0.9); }
+    
+    /* Phase 1 : Apparition "à l'endroit" (rapide) */
+    20% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; }
+    
+    /* Phase 2 : Pause / Glitch (le texte devient bleu brièvement) */
+    50% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 20px rgba(59,130,246,0.5); }
+    
+    /* Phase 3 : "À l'envers et hop" (explosion vers l'extérieur) */
+    100% { opacity: 0; letter-spacing: 1em; filter: blur(20px); transform: scale(1.2); color: #3b82f6; }
+}
+
+/* Animation de révélation de l'app (inchangée) */
 .reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
 @keyframes revealApp {
     0% { opacity: 0; transform: scale(0.95) translateY(30px); }
