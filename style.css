@@ -1,4 +1,4 @@
-/* style.css v1.3.1 */
+/* style.css v1.3.2 - BLOCKBUSTER EDITION */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap');
 
 body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
@@ -22,47 +22,61 @@ body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4
 /* --- BOOT SEQUENCE --- */
 .boot-screen {
     position: fixed; inset: 0; z-index: 10000; background: #000;
-    display: none; /* Caché par défaut pour laisser le clic login */
+    display: none; 
     justify-content: center; align-items: center;
     pointer-events: none;
 }
 
-/* Activé par JS */
-.boot-screen.active-flex { 
-    display: flex !important; 
-    pointer-events: auto !important;
-}
+.boot-screen.active-flex { display: flex !important; pointer-events: auto !important; }
 
-/* Phase 1: Les Logs */
+/* PHASE 1: LOGS (Plus gros, plus centré) */
 .boot-logs-container {
-    position: absolute; bottom: 20%; left: 10%;
+    position: absolute; 
+    bottom: 15%; 
+    left: 5%; 
+    right: 5%; /* Prend toute la largeur */
+    max-width: 800px;
+    margin: 0 auto; /* Centré */
+    
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px; color: #10b981;
-    text-align: left;
-    width: 300px;
+    font-size: 16px; /* Texte plus gros */
+    line-height: 1.6;
+    color: #10b981; /* Vert Matrix */
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); /* Lueur verte */
+    
+    display: none;
 }
 
-/* Phase 2: Le Titre */
+/* On ajoute un curseur clignotant à la fin du log */
+.cursor-blink::after {
+    content: '█';
+    animation: blink 1s infinite;
+    margin-left: 5px;
+    color: #10b981;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* PHASE 2: TITRE */
+.boot-title-wrapper { display: none; }
+
 .boot-title-static {
     font-family: 'JetBrains Mono', monospace;
-    font-weight: 800;
-    font-size: 4rem; 
+    font-weight: 900;
+    font-size: 5rem; 
     color: white;
-    opacity: 0; /* Invisible au départ pour laisser l'animation le révéler */
+    opacity: 0; 
     letter-spacing: -1em; 
-    filter: blur(10px);
+    filter: blur(20px);
     white-space: nowrap;
 }
 
-.animate-douit-sequence {
-    animation: douitSequence 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
+.animate-douit-sequence { animation: douitSequence 4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 @keyframes douitSequence {
-    0% { opacity: 0; letter-spacing: -1em; filter: blur(10px); transform: scale(0.9); }
-    20% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; }
-    50% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 20px rgba(59,130,246,0.5); }
-    100% { opacity: 0; letter-spacing: 1em; filter: blur(20px); transform: scale(1.2); color: #3b82f6; }
+    0% { opacity: 0; letter-spacing: -1em; filter: blur(20px); transform: scale(0.8); }
+    15% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; }
+    40% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 30px rgba(59,130,246,0.8); }
+    100% { opacity: 0; letter-spacing: 1.5em; filter: blur(30px); transform: scale(1.5); color: #3b82f6; }
 }
 
 .reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
