@@ -1,9 +1,9 @@
-/* style.css */
+/* style.css - CORRECTIF v1.2.3 */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
 body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
 
-/* --- BACKGROUNDS & TEXTURES --- */
+/* --- BACKGROUNDS --- */
 .bg-grid {
     background-size: 40px 40px;
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
@@ -19,36 +19,39 @@ body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* --- BOOT SEQUENCE ANIMATIONS --- */
+/* --- BOOT SEQUENCE (CORRIGÉ) --- */
 .boot-screen {
     position: fixed; inset: 0; z-index: 10000; background: #000;
-    display: flex; flex-col; justify-content: center; align-items: center;
+    /* IMPORTANT : display none par défaut pour ne pas bloquer le clic */
+    display: none; 
+    flex-direction: column; justify-content: center; align-items: center;
 }
+
+/* On force l'affichage quand JS ajoute la classe .active */
+.boot-screen.active-flex { display: flex !important; }
 
 .boot-text {
     font-family: 'JetBrains Mono', monospace;
     color: #3b82f6;
     font-size: 14px;
-    opacity: 0;
 }
 
-.animate-boot-sequence { animation: bootSequence 2.5s forwards ease-in-out; }
+.animate-boot-sequence { animation: bootSequence 2s forwards ease-in-out; }
 @keyframes bootSequence {
-    0% { opacity: 1; clip-path: inset(0 100% 0 0); }
-    30% { opacity: 1; clip-path: inset(0 0 0 0); }
-    80% { opacity: 1; transform: scale(1); filter: blur(0px); }
-    100% { opacity: 0; transform: scale(1.1); filter: blur(10px); display: none; }
+    0% { opacity: 1; clip-path: inset(0 0 0 0); }
+    50% { opacity: 1; transform: scale(1); filter: blur(0px); }
+    100% { opacity: 0; transform: scale(1.1); filter: blur(20px); pointer-events: none; }
 }
 
-.reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; transform: scale(0.98); }
+.reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
 @keyframes revealApp {
-    0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+    0% { opacity: 0; transform: scale(0.95) translateY(30px); }
     100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 /* --- UTILS --- */
 .tab-content { display: none; width: 100%; }
-.tab-content.active { display: block; animation: fadeIn 0.5s ease-out; }
+.tab-content.active { display: block; animation: fadeIn 0.6s ease-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 .nav-btn {
@@ -58,7 +61,6 @@ body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4
 .nav-btn:hover { color: white; background: rgba(255,255,255,0.05); }
 .nav-btn.active { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #000; }
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
