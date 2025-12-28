@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | v1.3.11</title>
+    <title>DOUIT CAPITAL | v1.3.12</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,11 +13,7 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { 
-                        dark: '#050505', panel: '#0f1115', 
-                        accent: '#3b82f6', success: '#10b981', danger: '#ef4444', 
-                        gold: '#fbbf24'
-                    },
+                    colors: { dark: '#050505', panel: '#0f1115', accent: '#3b82f6', success: '#10b981', danger: '#ef4444', gold: '#fbbf24' },
                     fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
                 }
             }
@@ -28,97 +24,53 @@
 
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
-
-        /* --- BACKGROUNDS --- */
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-        }
-
-        .glass-panel {
-            background: rgba(15, 17, 21, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        /* --- GOLD TEXT SCAN --- */
-        .gold-text-shimmer {
-            background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%);
-            background-size: 200% auto;
-            color: #e4e4e7;
-            background-clip: text;
-            text-fill-color: transparent;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: goldShimmer 3s linear infinite alternate;
-            font-weight: 800; letter-spacing: -0.02em;
-        }
+        .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px); mask-image: radial-gradient(circle at center, black 40%, transparent 100%); }
+        .glass-panel { background: rgba(15, 17, 21, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        
+        /* GOLD TEXT */
+        .gold-text-shimmer { background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%); background-size: 200% auto; color: #e4e4e7; background-clip: text; text-fill-color: transparent; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: goldShimmer 3s linear infinite alternate; font-weight: 800; letter-spacing: -0.02em; }
         @keyframes goldShimmer { 0% { background-position: 0% center; } 100% { background-position: 100% center; } }
 
-        /* --- BOOT SEQUENCE --- */
-        .boot-screen {
-            position: fixed; inset: 0; z-index: 10000; background: #000;
-            display: none; justify-content: center; align-items: center; pointer-events: none;
-        }
+        /* --- BOOT SEQUENCE (MODIFIÉE POUR REMPLIR L'ÉCRAN) --- */
+        .boot-screen { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; justify-content: center; align-items: center; pointer-events: none; }
         .boot-screen.active-flex { display: flex !important; pointer-events: auto !important; }
 
         .boot-logs-container {
-            position: absolute; bottom: 15%; left: 5%; width: 90%; max-width: 800px;
-            font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #10b981; text-align: left; display: none;
+            position: absolute; 
+            top: 5%; left: 5%; /* Commence plus haut */
+            width: 90%; height: 90%; /* Prend tout l'écran */
+            max-width: none; /* Pas de limite de largeur */
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 11px; /* Police plus petite pour en mettre plus */
+            line-height: 1.2;
+            color: #10b981; 
+            text-align: left; 
+            overflow-y: hidden; /* Cache la barre de défilement pendant le dump */
+            display: none;
+            mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%); /* Effet de fondu en haut et bas */
         }
 
-        .boot-title-wrapper { display: none; text-align: center; }
-        .boot-title-static {
-            font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 4rem; 
-            color: white; opacity: 0; letter-spacing: -1em; filter: blur(10px); white-space: nowrap;
-        }
-
-        .animate-douit-sequence { animation: douitSequence 3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .boot-title-wrapper { display: none; text-align: center; z-index: 20; }
+        .boot-title-static { font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 4rem; color: white; opacity: 0; letter-spacing: -1em; filter: blur(10px); white-space: nowrap; }
+        .animate-douit-sequence { animation: douitSequence 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; } /* Un peu plus rapide */
         @keyframes douitSequence {
             0% { opacity: 0; letter-spacing: -1em; filter: blur(20px); transform: scale(0.5); }
             20% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; }
             50% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 20px rgba(59,130,246,0.5); }
             100% { opacity: 0; letter-spacing: 1em; filter: blur(20px); transform: scale(1.5); color: #3b82f6; }
         }
-
         .reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
-        @keyframes revealApp {
-            0% { opacity: 0; transform: scale(0.95) translateY(30px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        @keyframes revealApp { 0% { opacity: 0; transform: scale(0.95) translateY(30px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 
-        /* --- UTILS --- */
-        .tab-content { display: none; width: 100%; }
-        .tab-content.active { display: block; animation: fadeIn 0.6s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .nav-btn {
-            padding: 8px 18px; font-size: 12px; font-weight: 600; border-radius: 10px; transition: all 0.3s;
-            color: #71717a; letter-spacing: 0.02em;
-        }
-        .nav-btn:hover { color: white; background: rgba(255,255,255,0.05); }
-        .nav-btn.active { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
-
-        /* --- MODAL & TICKER --- */
-        .legal-modal { animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-
-        .ticker-wrap {
-            position: fixed; bottom: 0; width: 100%; height: 40px; background-color: #0f1115;
-            border-top: 1px solid rgba(255, 255, 255, 0.1); z-index: 9000; overflow: hidden; display: flex; align-items: center;
-        }
+        /* UTILS */
+        .tab-content { display: none; width: 100%; } .tab-content.active { display: block; animation: fadeIn 0.6s ease-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-btn { padding: 8px 18px; font-size: 12px; font-weight: 600; border-radius: 10px; transition: all 0.3s; color: #71717a; letter-spacing: 0.02em; } .nav-btn:hover { color: white; background: rgba(255,255,255,0.05); } .nav-btn.active { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+        .legal-modal { animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; } @keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        .ticker-wrap { position: fixed; bottom: 0; width: 100%; height: 40px; background-color: #0f1115; border-top: 1px solid rgba(255, 255, 255, 0.1); z-index: 9000; overflow: hidden; display: flex; align-items: center; }
         .ticker-content { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
         .ticker-item { display: inline-block; padding: 0 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9ca3af; text-transform: uppercase; }
-        .ticker-up { color: #10b981; } .ticker-down { color: #ef4444; }
-        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .ticker-up { color: #10b981; } .ticker-down { color: #ef4444; } @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #000; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
     </style>
 </head>
 
@@ -162,7 +114,7 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.11</p>
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.12 (Hyper-Speed)</p>
             
             <div class="relative group">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
@@ -199,199 +151,77 @@
         </nav>
 
         <main class="flex-1 w-full relative z-10 p-6">
-            
-            <div id="home" class="tab-content active">
-                <div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6">
-                        <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
-                        Market Intelligence Active
-                    </div>
-                    <h1 class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-8 tracking-tighter">Market Insight.</h1>
-                    <div class="w-full max-w-xl relative group">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-                        <input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:outline-none focus:border-blue-500 transition placeholder-gray-700" placeholder="Rechercher (ex: AI.PA, NVDA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
-                    </div>
-                    <div id="searchLoader" class="loader mt-8"></div>
-                    <div id="resultCard" class="hidden w-full max-w-4xl mt-8 glass-panel rounded-2xl p-6 text-left border border-white/10">
-                        <div class="flex justify-between items-start mb-6"><div><h2 id="res-name" class="text-3xl font-bold text-white">Name</h2><p id="res-symbol" class="text-blue-400 font-mono text-sm">TICKER</p></div><div class="text-right"><div id="res-price" class="text-4xl font-mono font-bold text-white">--</div><div id="res-perf" class="text-lg font-bold">--%</div></div></div>
-                        <div class="h-[300px] w-full bg-black/20 rounded-xl relative"><canvas id="searchChart"></canvas></div>
-                        <div class="grid grid-cols-4 gap-4 mt-6 text-center text-sm"><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">PER</div><div id="res-pe" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Cap.</div><div id="res-cap" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Vol.</div><div id="res-vol" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Avis</div><div id="res-rating" class="text-blue-400 font-bold">--</div></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="convictions" class="tab-content max-w-7xl mx-auto">
-                <div class="mb-12 relative overflow-hidden rounded-3xl glass-panel p-10 border border-white/10"><div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/20 to-transparent pointer-events-none"></div><span class="text-blue-500 font-mono text-xs tracking-[0.3em] uppercase mb-4 block">Manifesto v1.0</span><h1 class="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-6">La Grande Rotation<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Du Virtuel au Réel.</span></h1><p class="text-xl text-gray-400 max-w-2xl leading-relaxed">Le marché a atteint un point de rupture. Nous pivotons agressivement des actifs de "Croissance Longue" (Tech surévaluée) vers la "Rareté Physique" (Énergie, Matériaux, Industrie).</p></div>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-                    <div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-red-500/20 bg-gradient-to-b from-red-900/10 to-transparent relative overflow-hidden group"><div class="absolute -right-4 -top-4 text-9xl opacity-5 grayscale group-hover:grayscale-0 transition duration-500">📉</div><h3 class="text-2xl font-bold text-white mb-2">Le Risque Tech</h3><div class="h-1 w-12 bg-red-500 mb-6"></div><p class="text-gray-400 text-sm mb-6 text-justify">Le Nasdaq se paie à la perfection (PER > 35x). L'IA est une révolution, mais les prix actuels intègrent déjà 10 ans de succès sans accroc. L'asymétrie est défavorable.</p><div class="bg-black/40 p-4 rounded-xl border border-red-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Nasdaq P/E</span><span class="text-red-400 font-bold">36.5x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-red-500 h-1.5 rounded-full w-[90%]"></div></div></div></div>
-                    <div class="lg:col-span-4 glass-panel p-6 rounded-3xl border border-white/5 flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest text-center mb-4">Cycle Rotation</h3><div class="flex-1 relative min-h-[250px] w-full"><canvas id="thesisChart"></canvas></div><p class="text-center text-[10px] text-gray-600 mt-4 italic">Illustration conceptuelle des cycles de marché</p></div>
-                    <div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-green-500/20 bg-gradient-to-b from-green-900/10 to-transparent relative overflow-hidden group"><div class="absolute -right-4 -top-4 text-9xl opacity-5 grayscale group-hover:grayscale-0 transition duration-500">⛏️</div><h3 class="text-2xl font-bold text-white mb-2">L'Opportunité Réelle</h3><div class="h-1 w-12 bg-green-500 mb-6"></div><p class="text-gray-400 text-sm mb-6 text-justify">Sous-investissement chronique dans les mines et l'énergie depuis 2014. La transition énergétique crée une demande inélastique pour le cuivre et l'industrie lourde.</p><div class="bg-black/40 p-4 rounded-xl border border-green-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Energy P/E</span><span class="text-green-400 font-bold">8.2x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full w-[25%]"></div></div></div></div>
-                </div>
-                <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-blue-500">L'implémentation Tactique</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-blue-900/20 flex items-center justify-center text-xl">🛡️</div><span class="px-2 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase rounded border border-blue-500/20">Défensif</span></div><h4 class="text-lg font-bold text-white mb-1">Air Liquide</h4><p class="text-xs text-gray-400 mb-4">Le "Bond Proxy". Contrats indexés sur l'énergie. Protège le portefeuille de l'inflation.</p><div class="text-right text-xs font-mono text-blue-300">Target: Hold Forever</div></div>
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-yellow-900/20 flex items-center justify-center text-xl">⚡</div><span class="px-2 py-1 bg-yellow-500/10 text-gold text-[10px] font-bold uppercase rounded border border-yellow-500/20">Offensif</span></div><h4 class="text-lg font-bold text-white mb-1">Matériaux (Cuivre/Or)</h4><p class="text-xs text-gray-400 mb-4">Il n'y a pas d'IA sans Data Center, ni de Data Center sans Cuivre. L'offre est déficitaire.</p><div class="text-right text-xs font-mono text-gold">Target: +15% CAGR</div></div>
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-red-900/20 flex items-center justify-center text-xl">🛢️</div><span class="px-2 py-1 bg-red-500/10 text-red-400 text-[10px] font-bold uppercase rounded border border-red-500/20">Yield</span></div><h4 class="text-lg font-bold text-white mb-1">TotalEnergies</h4><p class="text-xs text-gray-400 mb-4">Machine à Cash. Finance sa transition verte avec le pétrole. Valorisation ridicule.</p><div class="text-right text-xs font-mono text-red-300">Yield: >5.5%</div></div>
-                </div>
-            </div>
-
-            <div id="dashboard" class="tab-content max-w-7xl mx-auto p-6">
-                <div class="flex justify-between items-end mb-8"><h1 class="text-3xl font-bold text-white">Portefeuille Global</h1><div class="text-right"><div class="text-xs text-gray-500 uppercase">Total AUM</div><div class="text-4xl font-mono font-bold text-white" id="totalVal">-- €</div></div></div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 glass-panel rounded-2xl border border-white/5 overflow-hidden">
-                        <table class="w-full text-left text-sm text-gray-400">
-                            <thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500">
-                                <tr>
-                                    <th class="px-6 py-4">Actif</th>
-                                    <th class="px-6 py-4 text-right">Qté</th> <th class="px-6 py-4 text-right">Prix</th>
-                                    <th class="px-6 py-4 text-right">Perf</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-white/5" id="tableBody"></tbody>
-                        </table>
-                    </div>
-                    <div class="glass-panel rounded-2xl p-6 border border-white/5 flex flex-col"><h3 class="text-xs font-bold text-white uppercase mb-4">Allocation</h3><div class="flex-1 relative min-h-[200px]"><canvas id="sectorChart"></canvas></div></div>
-                </div>
-            </div>
-
+            <div id="home" class="tab-content active"><div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>Market Intelligence Active</div><h1 class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-8 tracking-tighter">Market Insight.</h1><div class="w-full max-w-xl relative group"><div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div><input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:outline-none focus:border-blue-500 transition placeholder-gray-700" placeholder="Rechercher (ex: AI.PA, NVDA)..." onkeypress="if(event.key === 'Enter') searchTicker()"></div><div id="searchLoader" class="loader mt-8"></div><div id="resultCard" class="hidden w-full max-w-4xl mt-8 glass-panel rounded-2xl p-6 text-left border border-white/10"><div class="flex justify-between items-start mb-6"><div><h2 id="res-name" class="text-3xl font-bold text-white">Name</h2><p id="res-symbol" class="text-blue-400 font-mono text-sm">TICKER</p></div><div class="text-right"><div id="res-price" class="text-4xl font-mono font-bold text-white">--</div><div id="res-perf" class="text-lg font-bold">--%</div></div></div><div class="h-[300px] w-full bg-black/20 rounded-xl relative"><canvas id="searchChart"></canvas></div><div class="grid grid-cols-4 gap-4 mt-6 text-center text-sm"><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">PER</div><div id="res-pe" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Cap.</div><div id="res-cap" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Vol.</div><div id="res-vol" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Avis</div><div id="res-rating" class="text-blue-400 font-bold">--</div></div></div></div></div>
+            <div id="convictions" class="tab-content max-w-7xl mx-auto"><div class="mb-12 relative overflow-hidden rounded-3xl glass-panel p-10 border border-white/10"><div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/20 to-transparent pointer-events-none"></div><span class="text-blue-500 font-mono text-xs tracking-[0.3em] uppercase mb-4 block">Manifesto v1.0</span><h1 class="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-6">La Grande Rotation<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Du Virtuel au Réel.</span></h1><p class="text-xl text-gray-400 max-w-2xl leading-relaxed">Le marché a atteint un point de rupture. Nous pivotons agressivement des actifs de "Croissance Longue" (Tech surévaluée) vers la "Rareté Physique" (Énergie, Matériaux, Industrie).</p></div><div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12"><div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-red-500/20 bg-gradient-to-b from-red-900/10 to-transparent relative overflow-hidden group"><div class="absolute -right-4 -top-4 text-9xl opacity-5 grayscale group-hover:grayscale-0 transition duration-500">📉</div><h3 class="text-2xl font-bold text-white mb-2">Le Risque Tech</h3><div class="h-1 w-12 bg-red-500 mb-6"></div><p class="text-gray-400 text-sm mb-6 text-justify">Le Nasdaq se paie à la perfection (PER > 35x). L'IA est une révolution, mais les prix actuels intègrent déjà 10 ans de succès sans accroc. L'asymétrie est défavorable.</p><div class="bg-black/40 p-4 rounded-xl border border-red-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Nasdaq P/E</span><span class="text-red-400 font-bold">36.5x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-red-500 h-1.5 rounded-full w-[90%]"></div></div></div></div><div class="lg:col-span-4 glass-panel p-6 rounded-3xl border border-white/5 flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest text-center mb-4">Cycle Rotation</h3><div class="flex-1 relative min-h-[250px] w-full"><canvas id="thesisChart"></canvas></div><p class="text-center text-[10px] text-gray-600 mt-4 italic">Illustration conceptuelle des cycles de marché</p></div><div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-green-500/20 bg-gradient-to-b from-green-900/10 to-transparent relative overflow-hidden group"><div class="absolute -right-4 -top-4 text-9xl opacity-5 grayscale group-hover:grayscale-0 transition duration-500">⛏️</div><h3 class="text-2xl font-bold text-white mb-2">L'Opportunité Réelle</h3><div class="h-1 w-12 bg-green-500 mb-6"></div><p class="text-gray-400 text-sm mb-6 text-justify">Sous-investissement chronique dans les mines et l'énergie depuis 2014. La transition énergétique crée une demande inélastique pour le cuivre et l'industrie lourde.</p><div class="bg-black/40 p-4 rounded-xl border border-green-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Energy P/E</span><span class="text-green-400 font-bold">8.2x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full w-[25%]"></div></div></div></div></div><h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-blue-500">L'implémentation Tactique</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-blue-900/20 flex items-center justify-center text-xl">🛡️</div><span class="px-2 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase rounded border border-blue-500/20">Défensif</span></div><h4 class="text-lg font-bold text-white mb-1">Air Liquide</h4><p class="text-xs text-gray-400 mb-4">Le "Bond Proxy". Contrats indexés sur l'énergie. Protège le portefeuille de l'inflation.</p><div class="text-right text-xs font-mono text-blue-300">Target: Hold Forever</div></div><div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-yellow-900/20 flex items-center justify-center text-xl">⚡</div><span class="px-2 py-1 bg-yellow-500/10 text-gold text-[10px] font-bold uppercase rounded border border-yellow-500/20">Offensif</span></div><h4 class="text-lg font-bold text-white mb-1">Matériaux (Cuivre/Or)</h4><p class="text-xs text-gray-400 mb-4">Il n'y a pas d'IA sans Data Center, ni de Data Center sans Cuivre. L'offre est déficitaire.</p><div class="text-right text-xs font-mono text-gold">Target: +15% CAGR</div></div><div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-red-900/20 flex items-center justify-center text-xl">🛢️</div><span class="px-2 py-1 bg-red-500/10 text-red-400 text-[10px] font-bold uppercase rounded border border-red-500/20">Yield</span></div><h4 class="text-lg font-bold text-white mb-1">TotalEnergies</h4><p class="text-xs text-gray-400 mb-4">Machine à Cash. Finance sa transition verte avec le pétrole. Valorisation ridicule.</p><div class="text-right text-xs font-mono text-red-300">Yield: >5.5%</div></div></div></div>
+            <div id="dashboard" class="tab-content max-w-7xl mx-auto p-6"><div class="flex justify-between items-end mb-8"><h1 class="text-3xl font-bold text-white">Portefeuille Global</h1><div class="text-right"><div class="text-xs text-gray-500 uppercase">Total AUM</div><div class="text-4xl font-mono font-bold text-white" id="totalVal">-- €</div></div></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-8"><div class="lg:col-span-2 glass-panel rounded-2xl border border-white/5 overflow-hidden"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Actif</th><th class="px-6 py-4 text-right">Qté</th><th class="px-6 py-4 text-right">Prix</th><th class="px-6 py-4 text-right">Perf</th></tr></thead><tbody class="divide-y divide-white/5" id="tableBody"></tbody></table></div><div class="glass-panel rounded-2xl p-6 border border-white/5 flex flex-col"><h3 class="text-xs font-bold text-white uppercase mb-4">Allocation</h3><div class="flex-1 relative min-h-[200px]"><canvas id="sectorChart"></canvas></div></div></div></div>
             <div id="watchlist" class="tab-content max-w-5xl mx-auto p-8"><h1 class="text-3xl font-bold text-white mb-6">Watchlist</h1><div class="glass-panel rounded-2xl border border-white/5 overflow-hidden"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Cible</th><th class="px-6 py-4">Thèse</th><th class="px-6 py-4 text-right">Prix</th></tr></thead><tbody class="divide-y divide-white/5" id="watchlistBody"></tbody></table></div></div>
-
             <div id="simulation" class="tab-content max-w-4xl mx-auto p-8 text-center"><h1 class="text-3xl font-bold text-white mb-8">Projection</h1><div class="glass-panel p-6 rounded-2xl border border-white/5 mb-6 grid grid-cols-3 gap-4"><input type="number" id="sim-start" value="10000" class="bg-black/50 p-3 rounded-lg text-white border border-white/10" placeholder="Départ"><input type="number" id="sim-monthly" value="500" class="bg-black/50 p-3 rounded-lg text-white border border-white/10" placeholder="Mensuel"><button onclick="calculateSim()" class="bg-blue-600 text-white font-bold rounded-lg">Calculer</button></div><h2 class="text-5xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mb-6" id="sim-result">-- €</h2><div class="h-[300px] w-full"><canvas id="simChart"></canvas></div></div>
         </main>
-
         <div class="ticker-wrap"><div class="ticker-content" id="news-ticker-content"></div></div>
     </div>
     
     <script>
         const PASSWORD_CONFIG = "admin"; 
-
-        // ICI TU CHANGES TES QUANTITÉS (q)
-        let portfolio = [
-            { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, eps: 5.90, sps: 53.5 },
-            { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, eps: 7.50, sps: 63.0 },
-            { tick: "TTE.PA", name: "TotalEnergies",      sec: "Energie",    q: 38, pru: 56.97,  div: 0.052, eps: 8.00, sps: 70.0 },
-            { tick: "AIR.PA", name: "Airbus",             sec: "Aéro.",      q: 5,  pru: 212.46, div: 0.012, eps: 4.90, sps: 88.0 },
-            { tick: "SGO.PA", name: "Saint-Gobain",       sec: "Construct.", q: 7,  pru: 88.15,  div: 0.026, eps: 5.50, sps: 96.0 },
-            { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   eps: 0,    sps: 0    },
-        ];
-
-        let watchlist = [
-            { tick: "CJ1.PA", name: "Amundi MSCI Japan", thesis: "Rebond Yen", price: 0, prev: 0 },
-            { tick: "AEEM.PA", name: "Amundi Emerging", thesis: "Cycle Bas", price: 0, prev: 0 },
-            { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre", price: 0, prev: 0 }
-        ];
+        let portfolio = [{ tick: "AI.PA", name: "Air Liquide", sec: "Chimie", q: 20, pru: 171.18 }, { tick: "SU.PA", name: "Schneider Electric", sec: "Industrie", q: 10, pru: 236.99 }, { tick: "TTE.PA", name: "TotalEnergies", sec: "Energie", q: 38, pru: 56.97 }, { tick: "AIR.PA", name: "Airbus", sec: "Aéro.", q: 5, pru: 212.46 }, { tick: "SGO.PA", name: "Saint-Gobain", sec: "Construct.", q: 7, pru: 88.15 }, { tick: "BRES.PA", name: "ETF Basic Res.", sec: "Matériaux", q: 6, pru: 104.84 }];
+        let watchlist = [{ tick: "CJ1.PA", name: "Amundi MSCI Japan", thesis: "Rebond Yen" }, { tick: "AEEM.PA", name: "Amundi Emerging", thesis: "Cycle Bas" }, { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre" }];
 
         function checkLogin() {
             const input = document.getElementById('passwordInput');
-            const errorMsg = document.getElementById('loginError');
-            const loginScreen = document.getElementById('login-screen');
+            if (!input || input.value.trim() !== PASSWORD_CONFIG) { document.getElementById('loginError').classList.remove('hidden'); input.value = ''; return; }
+            document.getElementById('login-screen').style.display = 'none';
             const bootOverlay = document.getElementById('boot-overlay');
-            const logsWrapper = document.getElementById('boot-logs-wrapper');
-            const logsContent = document.getElementById('boot-log-content');
-            const titleWrapper = document.getElementById('boot-title-wrapper');
-            const titleText = document.getElementById('boot-title-text');
+            bootOverlay.classList.remove('hidden'); bootOverlay.classList.add('active-flex');
+            const logsWrapper = document.getElementById('boot-logs-wrapper'); logsWrapper.style.display = 'block';
+            const logsContent = document.getElementById('boot-log-content'); logsContent.innerHTML = '';
+            
+            // --- FAST BOOT SEQUENCE ---
+            let dumpCount = 0;
+            const dumpInterval = setInterval(() => {
+                for(let i=0; i<5; i++) { // Ajoute 5 lignes d'un coup
+                    const line = document.createElement('div');
+                    line.innerText = `> [${Math.floor(Math.random()*9999).toString().padStart(4,'0')}] KERNEL_MEM_DUMP :: ${Math.random().toString(36).substring(2, 15).toUpperCase()}... LOAD`;
+                    if(Math.random()>0.95) line.style.color = '#fbbf24'; // Flash Or
+                    if(Math.random()>0.98) line.style.color = '#3b82f6'; // Flash Bleu
+                    logsContent.appendChild(line);
+                }
+                logsContent.scrollTop = logsContent.scrollHeight;
+                dumpCount++;
+                if(dumpCount > 40) { // Stop après ~1.2s
+                    clearInterval(dumpInterval);
+                    finalizeBoot();
+                }
+            }, 30); // Très rapide (30ms)
 
-            if (!input || input.value.trim() !== PASSWORD_CONFIG) {
-                if(errorMsg) errorMsg.classList.remove('hidden');
-                if(input) { input.value = ''; input.focus(); }
-                return;
-            }
-
-            if(loginScreen) loginScreen.style.display = 'none';
-            if(bootOverlay) {
-                bootOverlay.classList.remove('hidden');
-                bootOverlay.classList.add('active-flex');
-                if(logsWrapper) logsWrapper.style.display = 'block';
-                if(titleWrapper) titleWrapper.style.display = 'none';
-                if(logsContent) logsContent.innerHTML = '';
-
-                const logs = [ "INITIALIZING KERNEL V4.2...", "ESTABLISHING ENCRYPTED LINK...", "VERIFYING BIOMETRICS... [OK]", "FETCHING REAL-TIME ASSETS...", "LOADING 'CONVICTION' MODULES...", "> THÈSE: SUPER-CYCLE MATIÈRES 1ÈRE...", "COMPUTING RISK METRICS...", "SYSTEM READY." ];
-                
-                // VITESSE RALENTIE ICI (400ms à 900ms par ligne)
-                let delay = 0;
-                logs.forEach((log) => {
-                    let speed = Math.random() * 500 + 400; // Ralenti
-                    if(log.includes("LOADING")) speed = 1500; // Très lent pour loading
-                    delay += speed;
-                    setTimeout(() => {
-                        const line = document.createElement('div'); line.innerText = `> ${log}`;
-                        if(logsContent) { logsContent.appendChild(line); logsContent.scrollTop = logsContent.scrollHeight; }
-                    }, delay);
-                });
-
-                const phase2Start = delay + 800;
-                setTimeout(() => {
-                    if(logsWrapper) logsWrapper.style.display = 'none';
-                    if(titleWrapper) titleWrapper.style.display = 'block';
-                    setTimeout(() => { if(titleText) titleText.classList.add('animate-douit-sequence'); }, 50);
-                }, phase2Start);
-
-                const phase3Start = phase2Start + 2900; 
-                setTimeout(() => {
+            function finalizeBoot() {
+                 const finalLogs = ["--------------------", "DATA STREAM COMPLETE.", "DECRYPTING PRIMARY UI...", "SYSTEM READY."];
+                 finalLogs.forEach((log, i) => {
+                      setTimeout(() => {
+                          const line = document.createElement('div'); line.innerText = `> ${log}`; line.style.color = '#fff'; line.style.fontWeight = 'bold';
+                          logsContent.appendChild(line); logsContent.scrollTop = logsContent.scrollHeight;
+                      }, i * 150);
+                 });
+                 setTimeout(() => {
+                    logsWrapper.style.display = 'none'; document.getElementById('boot-title-wrapper').style.display = 'block';
+                    setTimeout(() => { document.getElementById('boot-title-text').classList.add('animate-douit-sequence'); }, 50);
+                 }, finalLogs.length * 150 + 300);
+                 setTimeout(() => {
                     bootOverlay.style.display = 'none'; bootOverlay.classList.remove('active-flex');
-                    const app = document.getElementById('app-container');
-                    if(app) { app.style.display = 'flex'; app.classList.add('reveal-app'); initApp(); toggleLegal(true); }
-                }, phase3Start);
-            } else {
-                const app = document.getElementById('app-container'); app.style.display = 'flex'; initApp(); toggleLegal(true);
+                    document.getElementById('app-container').style.display = 'flex'; document.getElementById('app-container').classList.add('reveal-app');
+                    initApp(); toggleLegal(true);
+                }, finalLogs.length * 150 + 3000);
             }
         }
 
-        function toggleLegal(show) {
-            const modal = document.getElementById('legal-modal');
-            if(show) modal.classList.remove('hidden'); else modal.classList.add('hidden');
-        }
-
-        function startNewsTicker() {
-            const tickerContainer = document.getElementById('news-ticker-content');
-            if (!tickerContainer) return;
-            const newsItems = [
-                { text: "BREAKING: LA BCE MAINTIENT SES TAUX À 4.5% - L'INFLATION RESTE LA PRIORITÉ", type: "neutral" },
-                { text: "ALERT: LE CUIVRE TOUCHE UN PLUS HAUT DE 52 SEMAINES SUR DÉFICIT D'OFFRE", type: "up" },
-                { text: "MARKET: LE NASDAQ RECULE DE 1.2% ALORS QUE LES RENDEMENTS OBLIGATAIRES MONTENT", type: "down" },
-                { text: "ENERGY: TOTALENERGIES LANCE UN NOUVEAU PROJET LNG AU QATAR", type: "up" }
-            ];
-            let htmlContent = "";
-            newsItems.forEach(item => {
-                const now = new Date(); const mins = Math.floor(Math.random() * 59);
-                const timeStr = `${now.getHours()}:${mins < 10 ? '0'+mins : mins}`;
-                let colorClass = "text-gray-400";
-                if (item.type === "up") colorClass = "text-green-500 font-bold";
-                if (item.type === "down") colorClass = "text-red-500 font-bold";
-                htmlContent += `<div class="ticker-item"><span class="text-gray-600 mr-2">[${timeStr}]</span><span class="${colorClass}">${item.text}</span></div>`;
-            });
-            tickerContainer.innerHTML = htmlContent;
-        }
-
-        function switchTab(id) {
-            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
-            const tab = document.getElementById(id); if(tab) tab.classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            const activeBtn = document.getElementById('btn-' + id); if(activeBtn) activeBtn.classList.add('active');
-            if(id === 'simulation') calculateSim();
-            if(id === 'watchlist') updateWatchlist();
-            if(id === 'convictions') renderThesisChart();
-        }
-
+        function toggleLegal(show) { const modal = document.getElementById('legal-modal'); if(show) modal.classList.remove('hidden'); else modal.classList.add('hidden'); }
+        function startNewsTicker() { const c = document.getElementById('news-ticker-content'); if (!c) return; const n = [{ t: "BREAKING: LA BCE MAINTIENT SES TAUX À 4.5%", y: "n" }, { t: "ALERT: LE CUIVRE TOUCHE UN PLUS HAUT HISTORIQUE", y: "u" }, { t: "MARKET: LE NASDAQ RECULE DE 1.2%", y: "d" }, { t: "ENERGY: TOTALENERGIES LANCE UN PROJET LNG", y: "u" }]; let h = ""; n.forEach(i => { const now=new Date();const m=Math.floor(Math.random()*59);const ts=`${now.getHours()}:${m<10?'0'+m:m}`; let cl="text-gray-400"; if(i.y==="u")cl="text-green-500 font-bold";if(i.y==="d")cl="text-red-500 font-bold"; h+=`<div class="ticker-item"><span class="text-gray-600 mr-2">[${ts}]</span><span class="${cl}">${i.t}</span></div>`; }); c.innerHTML = h; }
+        function switchTab(id) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); document.getElementById('btn-' + id).classList.add('active'); if(id==='simulation') calculateSim(); if(id==='watchlist') updateWatchlist(); if(id==='convictions') renderThesisChart(); }
         function renderThesisChart() { const ctxEl=document.getElementById('thesisChart'); if(!ctxEl)return; const ctx=ctxEl.getContext('2d'); if(window.thesisChartInstance)window.thesisChartInstance.destroy(); const gradientReal=ctx.createLinearGradient(0,0,0,400); gradientReal.addColorStop(0,'rgba(16,185,129,0.2)'); gradientReal.addColorStop(1,'rgba(16,185,129,0)'); window.thesisChartInstance=new Chart(ctx,{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025 (Est.)'],datasets:[{label:'Tech Hyperscale',data:[100,135,105,145,175,160],borderColor:'#ef4444',borderDash:[5,5],borderWidth:2,tension:0.4,pointRadius:0},{label:'Real Assets',data:[100,115,140,130,145,200],borderColor:'#10b981',borderWidth:3,tension:0.4,pointRadius:4,backgroundColor:gradientReal,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',usePointStyle:true,font:{family:'Inter'}}}},scales:{x:{display:true,grid:{display:false,color:'#333'},ticks:{color:'#555'}},y:{display:false}}}}); }
-        async function fetchPriceRobust(ticker){ const proxy="https://corsproxy.io/?"; const url=`https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=5d&t=${Date.now()}`; try{const response=await fetch(proxy+encodeURIComponent(url));if(!response.ok)throw new Error("HTTP Error");const json=await response.json();const res=json.chart.result[0];return{price:res.meta.regularMarketPrice,prev:res.meta.chartPreviousClose,meta:res.meta,quotes:res.indicators.quote[0].close,timestamps:res.timestamp};}catch(e){return null;}}
-        async function fetchFundamentalsQuote(ticker){ const proxy="https://corsproxy.io/?"; const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${Date.now()}`; try{const response=await fetch(proxy+encodeURIComponent(url));const json=await response.json();return json.quoteResponse.result[0];}catch(e){return null;}}
-        
-        async function updatePortfolio(){ 
-            let totalVal=0; const tbody=document.getElementById('tableBody'); if(!tbody)return; tbody.innerHTML=''; 
-            for(let stock of portfolio){ 
-                const data=await fetchPriceRobust(stock.tick); if(data){stock.price=data.price;stock.prev=data.prev;} 
-                const valo=stock.price*stock.q; totalVal+=valo; const perf=((stock.price-stock.pru)/stock.pru)*100; 
-                // COLONNE QTÉ
-                tbody.innerHTML+=`<tr class="hover:bg-white/5 transition border-b border-white/5"><td class="px-6 py-4"><div class="text-white font-bold">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td><td class="px-6 py-4 text-right font-mono text-gray-400">${stock.q}</td><td class="px-6 py-4 text-right font-mono text-white">${stock.price.toFixed(2)} €</td><td class="px-6 py-4 text-right font-mono font-bold ${perf>=0?'text-green-400':'text-red-400'}">${(perf>0?'+':'')+perf.toFixed(2)}%</td></tr>`; 
-            } 
-            const totalEl=document.getElementById('totalVal'); if(totalEl)totalEl.innerText=Math.round(totalVal).toLocaleString()+" €"; renderSectorChart(); 
-        }
-        
+        async function fetchPriceRobust(t){ const p="https://corsproxy.io/?",u=`https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=5d&t=${Date.now()}`; try{const r=await fetch(p+encodeURIComponent(u));if(!r.ok)throw new Error;const j=await r.json(),res=j.chart.result[0];return{price:res.meta.regularMarketPrice,prev:res.meta.chartPreviousClose,quotes:res.indicators.quote[0].close,timestamps:res.timestamp};}catch(e){return null;}}
+        async function updatePortfolio(){ let tv=0; const tb=document.getElementById('tableBody'); if(!tb)return; tb.innerHTML=''; for(let s of portfolio){ const d=await fetchPriceRobust(s.tick); if(d){s.price=d.price;s.prev=d.prev;} const v=s.price*s.q; tv+=v; const p=((s.price-s.pru)/s.pru)*100; tb.innerHTML+=`<tr class="hover:bg-white/5 transition border-b border-white/5"><td class="px-6 py-4"><div class="text-white font-bold">${s.name}</div><div class="text-[10px] text-gray-500">${s.tick}</div></td><td class="px-6 py-4 text-right font-mono text-gray-400">${s.q}</td><td class="px-6 py-4 text-right font-mono text-white">${s.price.toFixed(2)} €</td><td class="px-6 py-4 text-right font-mono font-bold ${p>=0?'text-green-400':'text-red-400'}">${(p>0?'+':'')+p.toFixed(2)}%</td></tr>`; } document.getElementById('totalVal').innerText=Math.round(tv).toLocaleString()+" €"; renderSectorChart(); }
         function renderSectorChart(){ const ctxEl=document.getElementById('sectorChart'); if(!ctxEl)return; const ctx=ctxEl.getContext('2d'); if(window.mySectorChart)window.mySectorChart.destroy(); window.mySectorChart=new Chart(ctx,{type:'doughnut',data:{labels:portfolio.map(s=>s.sec),datasets:[{data:portfolio.map(s=>s.price*s.q),backgroundColor:['#3b82f6','#10b981','#ef4444','#f59e0b','#8b5cf6','#64748b'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',usePointStyle:true}}}}}); }
-        async function updateWatchlist(){ const tbody=document.getElementById('watchlistBody'); if(!tbody)return; tbody.innerHTML=''; for(let item of watchlist){ const data=await fetchPriceRobust(item.tick); const price=data?data.price.toFixed(2):"..."; tbody.innerHTML+=`<tr class="hover:bg-white/5 border-b border-white/5"><td class="px-6 py-4 font-bold text-white">${item.name} <span class="text-xs font-normal text-gray-500 block">${item.tick}</span></td><td class="px-6 py-4 text-xs text-blue-300 italic">${item.thesis}</td><td class="px-6 py-4 text-right font-mono text-white">${price}</td></tr>`; } }
-        let searchChartInstance=null; async function searchTicker(){ const t=document.getElementById('mainTickerInput').value.toUpperCase(); if(!t)return; document.getElementById('searchLoader').style.display='block'; document.getElementById('resultCard').classList.add('hidden'); const data=await fetchPriceRobust(t); const fund=await fetchFundamentalsQuote(t); document.getElementById('searchLoader').style.display='none'; if(data){ document.getElementById('resultCard').classList.remove('hidden'); document.getElementById('res-name').innerText=t; document.getElementById('res-symbol').innerText=data.meta.symbol; document.getElementById('res-price').innerText=data.price.toFixed(2); const perf=((data.price-data.prev)/data.prev)*100; document.getElementById('res-perf').innerText=(perf>0?'+':'')+perf.toFixed(2)+"%"; document.getElementById('res-perf').className=`text-lg font-bold ${perf>=0?'text-green-400':'text-red-400'}`; if(fund){document.getElementById('res-pe').innerText=fund.trailingPE?fund.trailingPE.toFixed(1):"-"; document.getElementById('res-cap').innerText=fund.marketCap?(fund.marketCap/1000000000).toFixed(1)+"B":"-"; document.getElementById('res-vol').innerText=fund.regularMarketVolume?(fund.regularMarketVolume/1000000).toFixed(1)+"M":"-"; document.getElementById('res-rating').innerText=fund.averageAnalystRating?fund.averageAnalystRating.replace('-',' ').toUpperCase():"NEUTRE";} const ctx=document.getElementById('searchChart').getContext('2d'); if(searchChartInstance)searchChartInstance.destroy(); searchChartInstance=new Chart(ctx,{type:'line',data:{labels:data.timestamps.map(t=>new Date(t*1000).getHours()+'h'),datasets:[{data:data.quotes,borderColor:perf>=0?'#10b981':'#ef4444',backgroundColor:perf>=0?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)',fill:true,pointRadius:0,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#333'}}}}}); } }
-        function calculateSim(){ const start=parseFloat(document.getElementById('sim-start').value); const monthly=parseFloat(document.getElementById('sim-monthly').value); const years=20; const rate=0.08; let labels=[],data=[],capital=start; for(let i=0;i<=years;i++){ labels.push("An "+i); data.push(capital); if(i<years){for(let m=0;m<12;m++){capital+=monthly;capital*=(1+rate/12);}}} document.getElementById('sim-result').innerText=Math.round(data[data.length-1]).toLocaleString()+" €"; const ctx=document.getElementById('simChart').getContext('2d'); if(window.simChart)window.simChart.destroy(); window.simChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Patrimoine',data,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.2)',fill:true}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:{color:'#333'}}},plugins:{legend:{display:false}}}}); }
+        async function updateWatchlist(){ const tb=document.getElementById('watchlistBody'); if(!tb)return; tb.innerHTML=''; for(let i of watchlist){ const d=await fetchPriceRobust(i.tick); const p=d?d.price.toFixed(2):"..."; tb.innerHTML+=`<tr class="hover:bg-white/5 border-b border-white/5"><td class="px-6 py-4 font-bold text-white">${i.name} <span class="text-xs font-normal text-gray-500 block">${i.tick}</span></td><td class="px-6 py-4 text-xs text-blue-300 italic">${i.thesis}</td><td class="px-6 py-4 text-right font-mono text-white">${p}</td></tr>`; } }
+        let searchChartInstance=null; async function searchTicker(){ const t=document.getElementById('mainTickerInput').value.toUpperCase(); if(!t)return; document.getElementById('searchLoader').style.display='block'; document.getElementById('resultCard').classList.add('hidden'); const d=await fetchPriceRobust(t); document.getElementById('searchLoader').style.display='none'; if(d){ document.getElementById('resultCard').classList.remove('hidden'); document.getElementById('res-name').innerText=t; document.getElementById('res-symbol').innerText=t; document.getElementById('res-price').innerText=d.price.toFixed(2); const p=((d.price-d.prev)/d.prev)*100; document.getElementById('res-perf').innerText=(p>0?'+':'')+p.toFixed(2)+"%"; document.getElementById('res-perf').className=`text-lg font-bold ${p>=0?'text-green-400':'text-red-400'}`; const ctx=document.getElementById('searchChart').getContext('2d'); if(searchChartInstance)searchChartInstance.destroy(); searchChartInstance=new Chart(ctx,{type:'line',data:{labels:d.timestamps.map(t=>new Date(t*1000).getHours()+'h'),datasets:[{data:d.quotes,borderColor:p>=0?'#10b981':'#ef4444',backgroundColor:p>=0?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)',fill:true,pointRadius:0,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#333'}}}}}); } }
+        function calculateSim(){ const s=parseFloat(document.getElementById('sim-start').value),m=parseFloat(document.getElementById('sim-monthly').value); let l=[],d=[],c=s; for(let i=0;i<=20;i++){ l.push("An "+i); d.push(c); if(i<20){for(let j=0;j<12;j++){c+=m;c*=(1+0.08/12);}}} document.getElementById('sim-result').innerText=Math.round(d[d.length-1]).toLocaleString()+" €"; const ctx=document.getElementById('simChart').getContext('2d'); if(window.simChart)window.simChart.destroy(); window.simChart=new Chart(ctx,{type:'line',data:{labels:l,datasets:[{label:'Patrimoine',data:d,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.2)',fill:true}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:{color:'#333'}}},plugins:{legend:{display:false}}}}); }
         function initApp(){ updatePortfolio(); startNewsTicker(); setInterval(updatePortfolio,60000); }
     </script>
 </body>
