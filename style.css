@@ -1,4 +1,4 @@
-/* style.css v1.3.2 - BLOCKBUSTER EDITION */
+/* style.css v1.3.3 - VISIBILITY FIX */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap');
 
 body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
@@ -29,30 +29,29 @@ body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4
 
 .boot-screen.active-flex { display: flex !important; pointer-events: auto !important; }
 
-/* PHASE 1: LOGS (Plus gros, plus centré) */
+/* PHASE 1: LOGS (Style Terminal Hack) */
 .boot-logs-container {
     position: absolute; 
-    bottom: 15%; 
+    bottom: 10%; 
     left: 5%; 
-    right: 5%; /* Prend toute la largeur */
+    width: 90%;
     max-width: 800px;
-    margin: 0 auto; /* Centré */
     
     font-family: 'JetBrains Mono', monospace;
-    font-size: 16px; /* Texte plus gros */
-    line-height: 1.6;
+    font-size: 14px; 
+    line-height: 1.5;
     color: #10b981; /* Vert Matrix */
-    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); /* Lueur verte */
+    text-shadow: 0 0 5px rgba(16, 185, 129, 0.8); /* Lueur néon */
     
-    display: none;
+    display: none; /* Géré par JS */
 }
 
-/* On ajoute un curseur clignotant à la fin du log */
-.cursor-blink::after {
-    content: '█';
-    animation: blink 1s infinite;
+/* Curseur qui clignote à la fin */
+.boot-logs-container::after {
+    content: '_';
+    animation: blink 0.8s infinite;
     margin-left: 5px;
-    color: #10b981;
+    color: white;
 }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
