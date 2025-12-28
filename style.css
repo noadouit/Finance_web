@@ -1,41 +1,92 @@
-/* --- NEWS TICKER (BANDEAU DÉFILANT) --- */
-.ticker-wrap {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 40px; /* Hauteur fine */
-    background-color: #0f1115; /* Couleur sombre panel */
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 9000; /* Au-dessus de tout sauf les modales */
-    overflow: hidden;
-    display: flex;
-    align-items: center;
+/* style.css v1.3.7 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap');
+
+body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
+
+/* --- BACKGROUNDS --- */
+.bg-grid {
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
 }
 
-.ticker-content {
-    display: inline-block;
-    white-space: nowrap;
-    padding-left: 100%; /* Commence hors écran */
-    animation: ticker 40s linear infinite; /* Vitesse du défilement */
+.glass-panel {
+    background: rgba(15, 17, 21, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-.ticker-item {
-    display: inline-block;
-    padding: 0 2rem;
+/* --- BOOT SEQUENCE --- */
+.boot-screen {
+    position: fixed; inset: 0; z-index: 10000; background: #000;
+    display: none; 
+    justify-content: center; align-items: center;
+    pointer-events: none;
+}
+
+.boot-screen.active-flex { display: flex !important; pointer-events: auto !important; }
+
+.boot-logs-container {
+    position: absolute; bottom: 15%; left: 5%; 
+    width: 90%; max-width: 800px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: #9ca3af;
-    text-transform: uppercase;
+    font-size: 14px; color: #10b981; 
+    text-align: left; display: none;
 }
 
-.ticker-item strong { color: white; font-weight: 800; }
-.ticker-up { color: #10b981; } /* Vert */
-.ticker-down { color: #ef4444; } /* Rouge */
+.boot-title-wrapper { display: none; text-align: center; }
 
-@keyframes ticker {
-    0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(-100%, 0, 0); }
+.boot-title-static {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 900; font-size: 4rem; 
+    color: white; white-space: nowrap;
 }
 
-/* On remonte un peu le disclaimer pour pas qu'il soit caché par le ticker */
-footer { padding-bottom: 60px !important; }
+.animate-douit-sequence { animation: douitSequence 3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+@keyframes douitSequence {
+    0% { opacity: 0; letter-spacing: -1em; filter: blur(20px); transform: scale(0.5); }
+    20% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; }
+    50% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 20px rgba(59,130,246,0.5); }
+    100% { opacity: 0; letter-spacing: 1em; filter: blur(20px); transform: scale(1.5); color: #3b82f6; }
+}
+
+.reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
+@keyframes revealApp {
+    0% { opacity: 0; transform: scale(0.95) translateY(30px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* --- UTILS --- */
+.tab-content { display: none; width: 100%; }
+.tab-content.active { display: block; animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.nav-btn {
+    padding: 8px 18px; font-size: 12px; font-weight: 600; border-radius: 10px; transition: all 0.3s;
+    color: #71717a; letter-spacing: 0.02em;
+}
+.nav-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+.nav-btn.active { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+
+/* --- MODAL ANIM --- */
+.legal-modal { animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+
+/* --- TICKER --- */
+.ticker-wrap {
+    position: fixed; bottom: 0; width: 100%; height: 40px; background-color: #0f1115;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); z-index: 9000; overflow: hidden; display: flex; align-items: center;
+}
+.ticker-content { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
+.ticker-item { display: inline-block; padding: 0 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9ca3af; text-transform: uppercase; }
+.ticker-up { color: #10b981; } 
+.ticker-down { color: #ef4444; }
+@keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
