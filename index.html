@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | Terminal v1.9.0</title>
+    <title>DOUIT CAPITAL | Terminal v1.8.2</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -33,47 +33,69 @@
         .gold-text-shimmer { background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: goldShimmer 3s linear infinite alternate; font-weight: 800; letter-spacing: -0.02em; }
         @keyframes goldShimmer { 0% { background-position: 0% center; } 100% { background-position: 100% center; } }
 
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
-        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        /* BOOT SCREEN (TITRE SEUL) */
+        .boot-screen { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; justify-content: center; align-items: center; }
+        .boot-screen.active-flex { display: flex !important; }
+        .boot-title-wrapper { text-align: center; }
+        .boot-title-static { font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 6rem; color: white; opacity: 0; letter-spacing: -1em; filter: blur(20px); white-space: nowrap; }
+        
+        .animate-douit-sequence { animation: douitSequence 4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes douitSequence { 
+            0% { opacity: 0; letter-spacing: -1em; filter: blur(30px); transform: scale(0.8); } 
+            20% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: white; } 
+            50% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 50px rgba(59,130,246,0.6); } 
+            100% { opacity: 0; letter-spacing: 1.5em; filter: blur(20px); transform: scale(1.2); color: #3b82f6; } 
+        }
 
-        .reveal-app { animation: revealApp 0.8s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
-        @keyframes revealApp { 0% { opacity: 0; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1); } }
+        .reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
+        @keyframes revealApp { 0% { opacity: 0; transform: scale(0.98) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
         
         .thesis-btn { padding: 12px 24px; border-radius: 10px; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s; opacity: 0.6; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); }
         .thesis-btn.active { opacity: 1; transform: translateY(-2px); }
         .thesis-btn-bear.active { background: rgba(239,68,68,0.1); border-color: #ef4444; color: #ef4444; }
         .thesis-btn-bull.active { background: rgba(184,115,51,0.1); border-color: #b87333; color: #b87333; }
 
-        .tab-content { display: none; width: 100%; } .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        .tab-content { display: none; width: 100%; } .tab-content.active { display: block; animation: fadeIn 0.6s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .nav-btn { padding: 8px 18px; font-size: 12px; font-weight: 600; border-radius: 10px; transition: all 0.3s; color: #71717a; }
         .nav-btn.active { background: #fff; color: #000; }
         
         .ticker-wrap { position: fixed; bottom: 0; width: 100%; height: 40px; background-color: #0f1115; border-top: 1px solid rgba(255, 255, 255, 0.1); z-index: 9000; overflow: hidden; display: flex; align-items: center; }
-        .ticker-content { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 45s linear infinite; }
+        .ticker-content { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
         .ticker-item { display: inline-block; padding: 0 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9ca3af; text-transform: uppercase; }
 
         .legal-modal { animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; } 
-        @keyframes modalPop { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
 </head>
 
 <body class="antialiased min-h-screen flex flex-col selection:bg-blue-500/30 selection:text-blue-200">
 
+    <div id="boot-overlay" class="boot-screen">
+        <div class="boot-title-wrapper">
+            <h1 id="boot-title-text" class="boot-title-static">DOUIT CAPITAL</h1>
+        </div>
+        <div class="absolute inset-0 bg-grid opacity-50 z-0 pointer-events-none"></div>
+    </div>
+
     <div id="legal-modal" class="fixed inset-0 z-[10001] hidden flex items-center justify-center backdrop-blur-md bg-black/60">
         <div class="legal-modal w-full max-w-lg glass-panel p-8 rounded-3xl border border-white/10 m-4 relative text-center">
             <div class="w-12 h-12 rounded-full bg-blue-900/20 text-blue-400 flex items-center justify-center mx-auto mb-4 text-2xl border border-blue-500/20">⚖️</div>
             <h2 class="text-2xl font-black text-white uppercase tracking-tight">Disclaimer Compliance</h2>
-            <p class="text-[10px] text-gray-500 font-mono mt-1 uppercase mb-6">Cadre Éducatif & Informatif</p>
-            <div class="text-xs text-gray-400 leading-relaxed space-y-4 text-justify mb-8 h-40 overflow-y-auto pr-2 custom-scroll">
-                <p><strong>© 2025 Douit Capital.</strong> Cette interface est un projet de démonstration analytique pour le Master.</p>
-                <p class="text-white font-bold bg-red-500/10 p-3 rounded border border-red-500/20">⚠️ AVERTISSEMENT : Les analyses présentées ne constituent en aucun cas un conseil en investissement ou une incitation à opérer sur les marchés financiers.</p>
-                <p>Les performances passées ne préjugent pas des performances futures. L'utilisateur est seul responsable de ses décisions financières.</p>
+            <p class="text-[10px] text-gray-500 font-mono mt-1 uppercase mb-6">Mention Légale & Avertissement</p>
+            <div class="text-xs text-gray-400 leading-relaxed space-y-4 text-justify mb-8 h-48 overflow-y-auto pr-2 custom-scroll">
+                <p><strong>© 2025 Douit Capital. Tous droits réservés.</strong></p>
+                <p>Cette interface propriétaire est strictement confidentielle et destinée à un usage interne ou éducatif uniquement.</p>
+                <p class="text-white font-bold bg-red-500/10 p-3 rounded border border-red-500/20">⚠️ AVERTISSEMENT : Les informations présentées ne constituent en aucun cas une offre de vente, une sollicitation d'achat ou un conseil en investissement financier.</p>
+                <p>L'investissement sur les marchés financiers comporte des risques importants de perte en capital. Les performances passées ne préjugent pas des performances futures.</p>
             </div>
-            <button onclick="toggleLegal(false)" class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest transition shadow-lg">Confirmer & Accéder</button>
+            <button onclick="toggleLegal(false)" class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-blue-900/20">J'accepte et j'accède au Terminal</button>
         </div>
     </div>
 
@@ -81,19 +103,20 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">Asset Management Terminal</p>
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.8.2</p>
             <div class="relative group">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
                 <input type="password" id="passwordInput" class="relative w-full bg-black border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 outline-none focus:border-blue-500 transition font-mono" placeholder="••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
             </div>
             <button onclick="checkLogin()" class="mt-6 w-full py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition relative z-20 cursor-pointer">Login</button>
-            <p id="loginError" class="text-red-500 text-xs mt-4 hidden font-mono">:: IDENTIFIANT INCORRECT ::</p>
+            <p id="loginError" class="text-red-500 text-xs mt-4 hidden font-mono">:: ACCÈS REFUSÉ ::</p>
         </div>
     </div>
 
     <div id="app-container" style="display: none;" class="flex-1 flex flex-col w-full h-full relative pb-10">
         <div class="fixed inset-0 bg-grid opacity-20 pointer-events-none z-0"></div>
-        
+        <button onclick="toggleLegal(true)" class="fixed top-4 left-4 z-[9000] w-10 h-10 rounded-full glass-panel border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:border-blue-500 transition group" title="Infos"><span class="font-serif italic font-bold">i</span></button>
+
         <nav class="glass-panel sticky top-6 z-50 h-16 mx-6 md:ml-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-6">
             <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
                 <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-black text-lg">D</div>
@@ -109,20 +132,7 @@
         </nav>
 
         <main class="flex-1 w-full relative z-10 p-6">
-            <div id="home" class="tab-content active">
-                <div class="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6">Market Intelligence Active</div>
-                    <h1 class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-8 tracking-tighter">Market Insight.</h1>
-                    <div class="w-full max-w-xl relative group">
-                        <input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:border-blue-500 transition outline-none" placeholder="Rechercher un actif..." onkeypress="if(event.key === 'Enter') searchTicker()">
-                    </div>
-                    <div id="searchLoader" class="hidden mt-8 border-2 border-white/10 border-t-blue-500 w-8 h-8 rounded-full animate-spin"></div>
-                    <div id="resultCard" class="hidden w-full max-w-4xl mt-8 glass-panel rounded-2xl p-6 text-left border border-white/10 animate-in fade-in slide-in-from-bottom-4">
-                        <div class="flex justify-between items-start mb-6"><div><h2 id="res-name" class="text-3xl font-bold text-white">Name</h2><p id="res-symbol" class="text-blue-400 font-mono text-sm">TICKER</p></div><div class="text-right"><div id="res-price" class="text-4xl font-mono font-bold text-white">--</div><div id="res-perf" class="text-lg font-bold">--%</div></div></div>
-                        <div class="h-[300px] w-full bg-black/20 rounded-xl relative"><canvas id="searchChart"></canvas></div>
-                    </div>
-                </div>
-            </div>
+            <div id="home" class="tab-content active"><div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>Market Intelligence Active</div><h1 class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-8 tracking-tighter">Market Insight.</h1><div class="w-full max-w-xl relative group"><div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div><input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:outline-none focus:border-blue-500 transition placeholder-gray-700" placeholder="Rechercher un actif..." onkeypress="if(event.key === 'Enter') searchTicker()"></div><div id="searchLoader" class="loader mt-8"></div><div id="resultCard" class="hidden w-full max-w-4xl mt-8 glass-panel rounded-2xl p-6 text-left border border-white/10"><div class="flex justify-between items-start mb-6"><div><h2 id="res-name" class="text-3xl font-bold text-white">Name</h2><p id="res-symbol" class="text-blue-400 font-mono text-sm">TICKER</p></div><div class="text-right"><div id="res-price" class="text-4xl font-mono font-bold text-white">--</div><div id="res-perf" class="text-lg font-bold">--%</div></div></div><div class="h-[300px] w-full bg-black/20 rounded-xl relative"><canvas id="searchChart"></canvas></div></div></div></div>
 
             <div id="convictions" class="tab-content max-w-7xl mx-auto">
                 <div class="flex justify-center gap-6 mb-12">
@@ -137,15 +147,15 @@
                                 <h2 class="text-3xl font-black text-white mb-6">L'Illusion Schumpétérienne</h2>
                                 <div class="text-gray-400 leading-relaxed text-justify space-y-4 custom-scroll max-h-[450px] overflow-y-auto pr-4 text-sm">
                                     <p class="text-white font-bold">1. La Fin de la Croissance Réelle :</p>
-                                    <p>Joseph Schumpeter a défini l'innovation comme un moteur de "Destruction Créatrice". Aujourd'hui, nous observons une saturation : l'innovation marginale de la Big Tech se concentre sur l'optimisation publicitaire et la rétention d'attention plutôt que sur des gains de productivité massifs pour l'économie réelle.</p>
+                                    <p>Joseph Schumpeter a défini l'innovation comme un moteur de "Destruction Créatrice". Aujourd'hui, nous observons une saturation : l'innovation de la Big Tech se concentre sur l'optimisation publicitaire plutôt que sur des gains de productivité pour l'économie réelle.</p>
                                     <p class="text-white font-bold">2. Le Piège des Multiples (PSR/PER) :</p>
-                                    <p>Avec des Price-to-Sales (PSR) dépassant 40x pour certains leaders de l'IA, le marché valorise une perfection mathématique sur 20 ans. Historiquement, aucun cycle n'a survécu à une telle déconnexion entre le CAPEX (investissements massifs en puces) et le Revenue marginal réel généré par les clients finaux.</p>
+                                    <p>Avec des Price-to-Sales (PSR) dépassant 40x, le marché valorise une perfection mathématique insoutenable. Historiquement, aucun cycle n'a survécu à une telle déconnexion entre le CAPEX et le revenu marginal réel généré.</p>
                                     <p class="text-white font-bold">3. L'Impasse de l'Économie Circulaire :</p>
-                                    <p>Le modèle "Software" externalise ses coûts physiques. L'arrivée imminente de régulations forçant le "True Cost Accounting" (coût carbone des Data Centers, recyclage du silicium) va comprimer des marges de 80% vers des niveaux industriels standards.</p>
+                                    <p>Le modèle Software externalise ses coûts physiques. Les régulations ESG forçant le "True Cost Accounting" compresseront les marges vers des niveaux industriels.</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="lg:col-span-5"><div class="glass-panel p-6 rounded-3xl border border-white/5 h-full flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Tech vs History (PSR)</h3><div class="flex-1"><canvas id="techBubbleChart"></canvas></div><p class="text-[10px] text-red-400 mt-4 font-bold tracking-tighter">NIVEAU D'ALERTE : MAXIMAL</p></div></div>
+                        <div class="lg:col-span-5"><div class="glass-panel p-6 rounded-3xl border border-white/5 h-full flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Tech vs History (PSR)</h3><div class="flex-1"><canvas id="techBubbleChart"></canvas></div></div></div>
                     </div>
                 </div>
 
@@ -156,23 +166,22 @@
                                 <h2 class="text-3xl font-black text-white mb-6">Le Choc d'Offre Ricardien</h2>
                                 <div class="text-gray-300 leading-relaxed text-justify space-y-4 custom-scroll max-h-[450px] overflow-y-auto pr-4 text-sm">
                                     <p class="text-white font-bold">1. Rente de Rareté et Coût Marginal :</p>
-                                    <p>La théorie de David Ricardo sur la rente différentielle s'applique parfaitement au cuivre. Le prix du marché est fixé par le coût de production de la mine la moins rentable nécessaire pour satisfaire la demande. Or, les mines à haute teneur (grades > 1%) s'épuisent.</p>
+                                    <p>David Ricardo a théorisé que le prix d'une commodité est fixé par le coût de production de la mine la moins rentable nécessaire. Les mines à haute teneur s'épuisent.</p>
                                     <p class="text-white font-bold">2. L'Inflation Géologique :</p>
-                                    <p>Depuis 2000, la teneur moyenne du minerai est passée de 1.2% à 0.5%. Extraire la même tonne de cuivre demande aujourd'hui 2x plus d'énergie, 3x plus d'eau et génère 2x plus de déchets. Le prix "plancher" doit mécaniquement monter pour maintenir l'incitation à produire.</p>
+                                    <p>Depuis 2000, la teneur moyenne du minerai est passée de 1.2% à 0.5%. Extraire la même tonne de cuivre demande 2x plus d'énergie et de capital. Le prix plancher doit mécaniquement monter.</p>
                                     <p class="text-white font-bold">3. Le Mur du CAPEX :</p>
-                                    <p>Il faut en moyenne 16.5 ans entre la découverte d'un gisement et la première tonne produite. Le sous-investissement massif depuis 2014 crée un tunnel de pénurie inélastique qui ne peut être résolu à court terme, quel que soit le prix.</p>
+                                    <p>Il faut 16 ans en moyenne entre la découverte d'un gisement et la production. Le sous-investissement massif depuis 2014 crée une pénurie inélastique.</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="lg:col-span-5"><div class="glass-panel p-6 rounded-3xl border border-white/5 h-full flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Supply Cliff (Cuivre)</h3><div class="flex-1"><canvas id="copperSupplyChart"></canvas></div><p class="text-[10px] text-orange-400 mt-4 font-bold tracking-tighter">DÉFICIT STRUCTUREL : 6.5MT (2030)</p></div></div>
+                        <div class="lg:col-span-5"><div class="glass-panel p-6 rounded-3xl border border-white/5 h-full flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Supply Cliff (Cuivre)</h3><div class="flex-1"><canvas id="copperSupplyChart"></canvas></div></div></div>
                     </div>
                 </div>
             </div>
 
             <div id="dashboard" class="tab-content max-w-7xl mx-auto p-6"><div class="flex justify-between items-end mb-8"><h1 class="text-3xl font-bold text-white">Portefeuille Global</h1><div class="text-right"><div class="text-xs text-gray-500 uppercase">Total AUM</div><div class="text-4xl font-mono font-bold text-white" id="totalVal">-- €</div></div></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-8"><div class="lg:col-span-2 glass-panel rounded-2xl border border-white/5 overflow-hidden"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Actif</th><th class="px-6 py-4 text-right">Qté</th><th class="px-6 py-4 text-right">Prix</th><th class="px-6 py-4 text-right">Perf</th></tr></thead><tbody class="divide-y divide-white/5" id="tableBody"></tbody></table></div><div class="glass-panel rounded-2xl p-6 border border-white/5 flex flex-col"><div class="mb-6"><h3 class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-widest">Macro Live</h3><div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1 mb-1"><span>🇺🇸 Fed Rate</span><span class="text-white">5.50%</span></div><div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1"><span>🇪🇺 ECB Rate</span><span class="text-white">4.00%</span></div></div><h3 class="text-xs font-bold text-white uppercase mb-4 tracking-widest">Allocation</h3><div class="flex-1 relative min-h-[200px]"><canvas id="sectorChart"></canvas></div></div></div></div>
-            
             <div id="watchlist" class="tab-content max-w-5xl mx-auto p-8"><h1 class="text-3xl font-bold text-white mb-6">Watchlist</h1><div class="glass-panel rounded-2xl border border-white/5 overflow-hidden"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Cible</th><th class="px-6 py-4">Thèse</th><th class="px-6 py-4 text-right">Prix</th></tr></thead><tbody class="divide-y divide-white/5" id="watchlistBody"></tbody></table></div></div>
-            <div id="simulation" class="tab-content max-w-4xl mx-auto p-8 text-center"><h1 class="text-3xl font-bold text-white mb-8">Projection de Patrimoine</h1><div class="glass-panel p-6 rounded-2xl border border-white/5 mb-6 grid grid-cols-3 gap-4"><input type="number" id="sim-start" value="10000" class="bg-black/50 p-3 rounded-lg text-white border border-white/10" placeholder="Capital"><input type="number" id="sim-monthly" value="500" class="bg-black/50 p-3 rounded-lg text-white border border-white/10" placeholder="Mensuel"><button onclick="calculateSim()" class="bg-blue-600 text-white font-bold rounded-lg">Simuler</button></div><h2 class="text-5xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mb-6" id="sim-result">-- €</h2><div class="h-[300px] w-full"><canvas id="simChart"></canvas></div></div>
+            <div id="simulation" class="tab-content max-w-4xl mx-auto p-8 text-center"><h1 class="text-3xl font-bold text-white mb-8">Projection</h1><div class="glass-panel p-6 rounded-2xl border border-white/5 mb-6 grid grid-cols-3 gap-4"><input type="number" id="sim-start" value="10000" class="bg-black/50 p-3 rounded-lg text-white border border-white/10"><input type="number" id="sim-monthly" value="500" class="bg-black/50 p-3 rounded-lg text-white border border-white/10"><button onclick="calculateSim()" class="bg-blue-600 text-white font-bold rounded-lg">Simuler</button></div><h2 class="text-5xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mb-6" id="sim-result">-- €</h2><div class="h-[300px] w-full"><canvas id="simChart"></canvas></div></div>
         </main>
 
         <div class="ticker-wrap"><div class="ticker-content" id="news-ticker-content"></div></div>
@@ -181,16 +190,21 @@
     <script>
         const PASSWORD_CONFIG = "admin"; 
         let portfolio = [{ tick: "AI.PA", name: "Air Liquide", sec: "Chimie", q: 20, pru: 171.18 }, { tick: "SU.PA", name: "Schneider Electric", sec: "Industrie", q: 10, pru: 236.99 }, { tick: "TTE.PA", name: "TotalEnergies", sec: "Energie", q: 38, pru: 56.97 }, { tick: "AIR.PA", name: "Airbus", sec: "Aéro.", q: 5, pru: 212.46 }, { tick: "SGO.PA", name: "Saint-Gobain", sec: "Construct.", q: 7, pru: 88.15 }, { tick: "BRES.PA", name: "ETF Basic Res.", sec: "Matériaux", q: 6, pru: 104.84 }];
-        let watchlist = [{ tick: "CJ1.PA", name: "Japan MSCI", thesis: "Yen Rebound" }, { tick: "AEEM.PA", name: "Emerging Markets", thesis: "Cycle Low" }, { tick: "FCX", name: "Freeport-McMoRan", thesis: "Copper Pure Player" }];
+        let watchlist = [{ tick: "CJ1.PA", name: "Amundi MSCI Japan", thesis: "Rebond Yen" }, { tick: "AEEM.PA", name: "Amundi Emerging", thesis: "Cycle Bas" }, { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre" }];
 
         function checkLogin() {
             const input = document.getElementById('passwordInput');
             if (!input || input.value.trim() !== PASSWORD_CONFIG) { document.getElementById('loginError').classList.remove('hidden'); input.value = ''; return; }
             document.getElementById('login-screen').style.display = 'none';
-            initApp();
-            document.getElementById('app-container').style.display = 'flex';
-            document.getElementById('app-container').classList.add('reveal-app');
-            toggleLegal(true);
+            const bootOverlay = document.getElementById('boot-overlay');
+            bootOverlay.classList.remove('hidden'); bootOverlay.classList.add('active-flex');
+            
+            setTimeout(() => { document.getElementById('boot-title-text').classList.add('animate-douit-sequence'); }, 500);
+            setTimeout(() => {
+                bootOverlay.style.display = 'none'; bootOverlay.classList.remove('active-flex');
+                const app = document.getElementById('app-container');
+                if(app) { app.style.display = 'flex'; app.classList.add('reveal-app'); initApp(); toggleLegal(true); }
+            }, 4500);
         }
 
         function switchThesis(type) {
@@ -207,8 +221,8 @@
             if(window.techChartInstance) window.techChartInstance.destroy();
             window.techChartInstance = new Chart(ctx.getContext('2d'), {
                 type: 'line',
-                data: { labels: ['1998', '1999', '2000', '2001', '...', '2022', '2023', '2024'], datasets: [{ label: 'Cisco 2000 (PSR)', data: [10, 40, 100, 30, null, null, null, null], borderColor: '#6b7280', borderDash: [5,5], tension: 0.4 }, { label: 'Nvidia 2024 (PSR)', data: [null, null, null, null, 20, 120, 450, 950], borderColor: '#ef4444', borderWidth: 3, tension: 0.4 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#9ca3af', font: { size: 10 } } } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                data: { labels: ['1998', '1999', '2000', '2001', '...', '2022', '2023', '2024'], datasets: [{ label: 'Cisco (2000 PSR)', data: [10, 40, 100, 30, null, null, null, null], borderColor: '#6b7280', borderDash: [5,5], tension: 0.4 }, { label: 'Nvidia (2024 PSR)', data: [null, null, null, null, 20, 120, 450, 950], borderColor: '#ef4444', borderWidth: 3, tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#9ca3af' } } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
             });
         }
 
@@ -218,26 +232,24 @@
             window.copperChartInstance = new Chart(ctx.getContext('2d'), {
                 type: 'line',
                 data: { labels: ['2020', '2024', '2028', '2032'], datasets: [{ label: 'Demande', data: [25, 30, 39, 52], borderColor: '#10b981', borderWidth: 3 }, { label: 'Offre Minière', data: [25, 26.5, 25, 23], borderColor: '#ef4444', borderWidth: 2, borderDash: [5,5] }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#9ca3af', font: { size: 10 } } } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#9ca3af' } } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
             });
         }
 
         function toggleLegal(show) { const modal = document.getElementById('legal-modal'); if(show) modal.classList.remove('hidden'); else modal.classList.add('hidden'); }
-        function startNewsTicker() { const c = document.getElementById('news-ticker-content'); if (!c) return; const n = [{ t: "MACIF ANALYST: RATIO CLAIMS/REVENUE STABLE ON PRO PORTFOLIO", y: "u" }, { t: "ALERT: COPPER DEFICIT ACCELERATES AS PERMIT DELAYS HIT 16 YEARS", y: "u" }, { t: "MARKET: TECH VALUATIONS REACH HISTORIC Z-SCORE EXTREMES", y: "d" }]; let h = ""; n.forEach(i => { const now=new Date();const m=Math.floor(Math.random()*59);const ts=`${now.getHours()}:${m<10?'0'+m:m}`; let cl="text-gray-400"; if(i.y==="u")cl="text-green-500 font-bold";if(i.y==="d")cl="text-red-500 font-bold"; h+=`<div class="ticker-item"><span class="text-gray-600 mr-2">[${ts}]</span><span class="${cl}">${i.t}</span></div>`; }); c.innerHTML = h; }
+        function startNewsTicker() { const c = document.getElementById('news-ticker-content'); if (!c) return; const n = [{ t: "MACIF: RATIO CLAIMS/REVENUE STABLE", y: "u" }, { t: "COPPER DEFICIT ACCELERATES", y: "u" }, { t: "TECH VALUATIONS AT EXTREME LEVELS", y: "d" }]; let h = ""; n.forEach(i => { const now=new Date();const m=Math.floor(Math.random()*59);const ts=`${now.getHours()}:${m<10?'0'+m:m}`; let cl="text-gray-400"; if(i.y==="u")cl="text-green-500 font-bold";if(i.y==="d")cl="text-red-500 font-bold"; h+=`<div class="ticker-item"><span class="text-gray-600 mr-2">[${ts}]</span><span class="${cl}">${i.t}</span></div>`; }); c.innerHTML = h; }
         
         function switchTab(id) { 
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); 
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); document.getElementById('btn-' + id).classList.add('active'); 
-            if(id==='simulation') calculateSim(); 
-            if(id==='watchlist') updateWatchlist(); 
-            if(id==='convictions') switchThesis('bear');
+            if(id==='simulation') calculateSim(); if(id==='watchlist') updateWatchlist(); if(id==='convictions') switchThesis('bear');
         }
 
         async function fetchPriceRobust(t){ const p="https://corsproxy.io/?",u=`https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=5d&t=${Date.now()}`; try{const r=await fetch(p+encodeURIComponent(u));if(!r.ok)throw new Error;const j=await r.json(),res=j.chart.result[0];return{price:res.meta.regularMarketPrice,prev:res.meta.chartPreviousClose,quotes:res.indicators.quote[0].close,timestamps:res.timestamp};}catch(e){return null;}}
         async function updatePortfolio(){ let tv=0; const tb=document.getElementById('tableBody'); if(!tb)return; tb.innerHTML=''; for(let s of portfolio){ const d=await fetchPriceRobust(s.tick); if(d){s.price=d.price;s.prev=d.prev;} const v=s.price*s.q; tv+=v; const p=((s.price-s.pru)/s.pru)*100; tb.innerHTML+=`<tr class="hover:bg-white/5 border-b border-white/5"><td class="px-6 py-4"><div class="text-white font-bold">${s.name}</div><div class="text-[10px] text-gray-500">${s.tick}</div></td><td class="px-6 py-4 text-right font-mono text-gray-400">${s.q}</td><td class="px-6 py-4 text-right font-mono text-white">${s.price.toFixed(2)} €</td><td class="px-6 py-4 text-right font-mono font-bold ${p>=0?'text-green-400':'text-red-400'}">${(p>0?'+':'')+p.toFixed(2)}%</td></tr>`; } document.getElementById('totalVal').innerText=Math.round(tv).toLocaleString()+" €"; renderSectorChart(); }
-        function renderSectorChart(){ const ctxEl=document.getElementById('sectorChart'); if(!ctxEl)return; const ctx=ctxEl.getContext('2d'); if(window.mySectorChart)window.mySectorChart.destroy(); window.mySectorChart=new Chart(ctx,{type:'doughnut',data:{labels:portfolio.map(s=>s.sec),datasets:[{data:portfolio.map(s=>s.price*s.q),backgroundColor:['#3b82f6','#10b981','#ef4444','#f59e0b','#8b5cf6','#64748b'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',usePointStyle:true,font:{size:9}}}}}}); }
+        function renderSectorChart(){ const ctxEl=document.getElementById('sectorChart'); if(!ctxEl)return; const ctx=ctxEl.getContext('2d'); if(window.mySectorChart)window.mySectorChart.destroy(); window.mySectorChart=new Chart(ctx,{type:'doughnut',data:{labels:portfolio.map(s=>s.sec),datasets:[{data:portfolio.map(s=>s.price*s.q),backgroundColor:['#3b82f6','#10b981','#ef4444','#f59e0b','#8b5cf6','#64748b'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',usePointStyle:true}}}}}); }
         async function updateWatchlist(){ const tb=document.getElementById('watchlistBody'); if(!tb)return; tb.innerHTML=''; for(let i of watchlist){ const d=await fetchPriceRobust(i.tick); const p=d?d.price.toFixed(2):"..."; tb.innerHTML+=`<tr class="hover:bg-white/5 border-b border-white/5"><td class="px-6 py-4 font-bold text-white">${i.name} <span class="text-xs font-normal text-gray-500 block">${i.tick}</span></td><td class="px-6 py-4 text-xs text-blue-300 italic">${i.thesis}</td><td class="px-6 py-4 text-right font-mono text-white">${p}</td></tr>`; } }
-        let searchChartInstance=null; async function searchTicker(){ const t=document.getElementById('mainTickerInput').value.toUpperCase(); if(!t)return; document.getElementById('searchLoader').classList.remove('hidden'); document.getElementById('resultCard').classList.add('hidden'); const d=await fetchPriceRobust(t); document.getElementById('searchLoader').classList.add('hidden'); if(d){ document.getElementById('resultCard').classList.remove('hidden'); document.getElementById('res-name').innerText=t; document.getElementById('res-symbol').innerText=t; document.getElementById('res-price').innerText=d.price.toFixed(2); const p=((d.price-d.prev)/d.prev)*100; document.getElementById('res-perf').innerText=(p>0?'+':'')+p.toFixed(2)+"%"; document.getElementById('res-perf').className=`text-lg font-bold ${p>=0?'text-green-400':'text-red-400'}`; const ctx=document.getElementById('searchChart').getContext('2d'); if(searchChartInstance)searchChartInstance.destroy(); searchChartInstance=new Chart(ctx,{type:'line',data:{labels:d.timestamps.map(t=>new Date(t*1000).getHours()+'h'),datasets:[{data:d.quotes,borderColor:p>=0?'#10b981':'#ef4444',backgroundColor:p>=0?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)',fill:true,pointRadius:0,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#333'}}}}}); } }
+        async function searchTicker(){ const t=document.getElementById('mainTickerInput').value.toUpperCase(); if(!t)return; document.getElementById('searchLoader').classList.remove('hidden'); document.getElementById('resultCard').classList.add('hidden'); const d=await fetchPriceRobust(t); document.getElementById('searchLoader').classList.add('hidden'); if(d){ document.getElementById('resultCard').classList.remove('hidden'); document.getElementById('res-name').innerText=t; document.getElementById('res-symbol').innerText=t; document.getElementById('res-price').innerText=d.price.toFixed(2); const p=((d.price-d.prev)/d.prev)*100; document.getElementById('res-perf').innerText=(p>0?'+':'')+p.toFixed(2)+"%"; document.getElementById('res-perf').className=`text-lg font-bold ${p>=0?'text-green-400':'text-red-400'}`; const ctx=document.getElementById('searchChart').getContext('2d'); if(window.searchChartInstance)window.searchChartInstance.destroy(); window.searchChartInstance=new Chart(ctx,{type:'line',data:{labels:d.timestamps.map(t=>new Date(t*1000).getHours()+'h'),datasets:[{data:d.quotes,borderColor:p>=0?'#10b981':'#ef4444',backgroundColor:p>=0?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)',fill:true,pointRadius:0,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#333'}}}}}); } }
         function calculateSim(){ const s=parseFloat(document.getElementById('sim-start').value),m=parseFloat(document.getElementById('sim-monthly').value); let l=[],d=[],c=s; for(let i=0; i<=20; i++){ l.push("An "+i); d.push(c); if(i<20){for(let j=0; j<12; j++){c+=m; c*=(1+0.08/12);}}} document.getElementById('sim-result').innerText=Math.round(d[d.length-1]).toLocaleString()+" €"; const ctx=document.getElementById('simChart').getContext('2d'); if(window.simChart)window.simChart.destroy(); window.simChart=new Chart(ctx,{type:'line',data:{labels:l,datasets:[{label:'Capital',data:d,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.2)',fill:true}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:{color:'#333'}},x:{grid:{display:false}}},plugins:{legend:{display:false}}}}); }
         function initApp(){ updatePortfolio(); startNewsTicker(); setInterval(updatePortfolio,60000); }
     </script>
