@@ -1,4 +1,4 @@
-// app.js
+// app.js - CORRECTIF v1.2.3
 const PASSWORD_CONFIG = "admin"; 
 
 // --- DONNÉES ---
@@ -17,72 +17,68 @@ let watchlist = [
     { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre", price: 0, prev: 0 }
 ];
 
-// --- 1. BOOT SEQUENCE & LOGIN (CORRIGÉ) ---
+// --- 1. BOOT SEQUENCE & LOGIN ---
+// J'ai remis le nom "checkLogin" pour être sûr que ton bouton HTML le trouve
+function checkLogin() {
+    startBootSequence();
+}
+
+// Pour compatibilité si tu as mis à jour le HTML avec l'autre nom
 function startBootSequence() {
     const input = document.getElementById('passwordInput');
     const errorMsg = document.getElementById('loginError');
     const loginScreen = document.getElementById('login-screen');
     const bootOverlay = document.getElementById('boot-overlay');
 
-    // Vérification stricte du mot de passe
     if (input.value.trim() !== PASSWORD_CONFIG) {
         errorMsg.classList.remove('hidden');
         input.value = '';
-        // Petit effet de secousse si erreur
-        loginScreen.classList.add('shake');
-        setTimeout(() => loginScreen.classList.remove('shake'), 500);
+        input.focus();
         return;
     }
 
-    // 1. Cacher le login immédiatement
+    // 1. Cacher le login
     loginScreen.style.display = 'none';
     
-    // 2. Afficher l'écran de boot (Retire la classe hidden + force le flex)
+    // 2. Afficher le Boot Screen (On force le display flex via la classe CSS ajoutée)
     bootOverlay.classList.remove('hidden');
-    bootOverlay.style.display = 'flex';
+    bootOverlay.classList.add('active-flex'); // IMPORTANT : correspond au nouveau CSS
     
-    // 3. Animation des logs (Texte qui défile)
+    // 3. Animation Logs
+    const logContainer = document.getElementById('boot-log');
+    logContainer.innerHTML = ''; // Reset
+    
     const logs = [
         "Initializing NC-Protocol v1.2.3...",
         "Secure Gateway: CONNECTED",
         "Loading Market Data Feeds...",
-        "Decrypting Portfolio Assets...",
+        "Applying Macro Strategy...",
         "System Ready."
     ];
     
-    const logContainer = document.getElementById('boot-log');
     let delay = 0;
-    
-    // On vide les logs précédents au cas où
-    logContainer.innerHTML = '';
-
-    logs.forEach((log, index) => {
+    logs.forEach((log) => {
         setTimeout(() => {
-            logContainer.innerHTML += `<div class="opacity-0 animate-in fade-in slide-in-from-left-2 duration-300 fill-mode-forwards">> ${log}</div>`;
-            // Scroll vers le bas automatique
+            logContainer.innerHTML += `<div class="text-blue-400 opacity-80">> ${log}</div>`;
             logContainer.scrollTop = logContainer.scrollHeight;
         }, delay);
-        delay += 500; // Un log toutes les 500ms
+        delay += 350;
     });
 
-    // 4. Révélation de l'application
-    const totalBootTime = (logs.length * 500) + 500; // Temps total calculé
-
+    // 4. Reveal App
     setTimeout(() => {
-        // Lance l'effet de disparition du boot screen (zoom + fade out)
         bootOverlay.classList.add('animate-boot-sequence');
         
         setTimeout(() => {
-            // Une fois l'animation finie, on supprime l'écran de boot et on affiche l'app
-            bootOverlay.style.display = 'none';
+            bootOverlay.style.display = 'none'; // On cache définitivement le boot
+            bootOverlay.classList.remove('active-flex');
+            
             const app = document.getElementById('app-container');
             app.style.display = 'flex';
             app.classList.add('reveal-app');
-            
-            // On lance le moteur de l'app
             initApp();
-        }, 1500); // Attend la fin de l'animation CSS
-    }, totalBootTime);
+        }, 1800);
+    }, delay + 500);
 }
 
 // --- NAVIGATION ---
@@ -100,8 +96,6 @@ function switchTab(id) {
 }
 
 // --- CHARTS & LOGIC ---
-
-// Graphique de Thèse
 function renderThesisChart() {
     const ctx = document.getElementById('thesisChart').getContext('2d');
     if(window.thesisChartInstance) window.thesisChartInstance.destroy();
@@ -131,9 +125,6 @@ function renderThesisChart() {
                     borderWidth: 3,
                     tension: 0.4,
                     pointRadius: 4,
-                    pointBackgroundColor: '#050505',
-                    pointBorderColor: '#10b981',
-                    pointBorderWidth: 2,
                     backgroundColor: gradientReal,
                     fill: true
                 }
@@ -142,11 +133,8 @@ function renderThesisChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { color: '#9ca3af', usePointStyle: true, font: {family: 'Inter'} } } },
-            scales: { 
-                x: { display: true, grid: {display:false, color: '#333'}, ticks: {color:'#555'} }, 
-                y: { display: false } 
-            }
+            plugins: { legend: { position: 'bottom', labels: { color: '#9ca3af', usePointStyle: true } } },
+            scales: { x: { display: true, grid: {display:false, color: '#333'}, ticks: {color:'#555'} }, y: { display: false } }
         }
     });
 }
