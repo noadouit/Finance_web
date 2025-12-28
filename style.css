@@ -1,4 +1,4 @@
-/* style.css v1.3.0 - ULTIMATE BOOT */
+/* style.css v1.3.1 */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap');
 
 body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
@@ -22,9 +22,9 @@ body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4
 /* --- BOOT SEQUENCE --- */
 .boot-screen {
     position: fixed; inset: 0; z-index: 10000; background: #000;
-    display: none; 
+    display: none; /* Caché par défaut pour laisser le clic login */
     justify-content: center; align-items: center;
-    pointer-events: none; /* Sécurité anti-bug bouton */
+    pointer-events: none;
 }
 
 /* Activé par JS */
@@ -35,24 +35,20 @@ body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4
 
 /* Phase 1: Les Logs */
 .boot-logs-container {
-    position: absolute; bottom: 10%; left: 5%;
+    position: absolute; bottom: 20%; left: 10%;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 14px; color: #10b981; /* Vert Hacker */
+    font-size: 13px; color: #10b981;
     text-align: left;
-    display: none; /* Caché par défaut */
+    width: 300px;
 }
 
 /* Phase 2: Le Titre */
-.boot-title-wrapper {
-    display: none; /* Caché par défaut */
-}
-
 .boot-title-static {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 800;
     font-size: 4rem; 
     color: white;
-    opacity: 0;
+    opacity: 0; /* Invisible au départ pour laisser l'animation le révéler */
     letter-spacing: -1em; 
     filter: blur(10px);
     white-space: nowrap;
