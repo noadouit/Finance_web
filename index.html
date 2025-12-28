@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | v1.3.13</title>
+    <title>DOUIT CAPITAL | v1.3.10</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,45 +13,82 @@
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { dark: '#050505', panel: '#0f1115', accent: '#3b82f6', success: '#10b981', danger: '#ef4444', gold: '#fbbf24' },
+                    colors: { 
+                        dark: '#050505', panel: '#0f1115', 
+                        accent: '#3b82f6', success: '#10b981', danger: '#ef4444', 
+                        gold: '#fbbf24'
+                    },
                     fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
                 }
             }
         }
     </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
 
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e4e4e7; overflow-x: hidden; }
-        .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px); mask-image: radial-gradient(circle at center, black 40%, transparent 100%); }
-        .glass-panel { background: rgba(15, 17, 21, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-        
-        /* GOLD TEXT SHIMMER */
-        .gold-text-shimmer { background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%); background-size: 200% auto; color: #e4e4e7; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: goldShimmer 3s linear infinite alternate; font-weight: 800; letter-spacing: -0.02em; }
-        @keyframes goldShimmer { 0% { background-position: 0% center; } 100% { background-position: 100% center; } }
 
-        /* --- BOOT SCREEN PLEIN ÉCRAN --- */
-        .boot-screen { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; justify-content: center; align-items: center; }
-        .boot-screen.active-flex { display: flex !important; }
-
-        /* C'EST ICI QUE JE RÈGLE LE PROBLÈME DE COLONNE */
-        .boot-logs-container {
-            position: absolute; inset: 0; padding: 20px;
-            font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #10b981; 
-            line-height: 1.1;
-            /* MAGIE : On divise l'écran en colonnes pour que ça remplisse tout */
-            column-count: 1; 
-            display: none;
-            overflow: hidden;
+        /* --- BACKGROUNDS --- */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
         }
-        @media (min-width: 768px) { .boot-logs-container { column-count: 2; } } /* 2 colonnes sur tablette */
-        @media (min-width: 1024px) { .boot-logs-container { column-count: 3; } } /* 3 colonnes sur PC */
 
-        .boot-title-wrapper { display: none; text-align: center; position: absolute; z-index: 20; inset: 0; display: flex; align-items: center; justify-content: center; background: black; }
-        .boot-title-wrapper.hidden { display: none !important; } /* Force hide */
-        .boot-title-wrapper.flex { display: flex !important; } /* Force show */
+        .glass-panel {
+            background: rgba(15, 17, 21, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
 
-        .boot-title-static { font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 5rem; color: white; opacity: 0; letter-spacing: -1em; filter: blur(20px); white-space: nowrap; }
+        /* --- NOUVEAU GOLD TEXT SCAN (Le texte lui-même brille) --- */
+        .gold-text-shimmer {
+            /* Le dégradé : Blanc -> OR -> Blanc */
+            background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%);
+            background-size: 200% auto; /* On l'agrandit pour le faire bouger */
+            
+            color: #e4e4e7; /* Couleur de secours */
+            background-clip: text;
+            text-fill-color: transparent;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* L'animation : aller-retour */
+            animation: goldShimmer 3s linear infinite alternate;
+            font-weight: 800; /* Un peu plus gras pour bien voir l'effet */
+            letter-spacing: -0.02em;
+        }
+
+        @keyframes goldShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 100% center; }
+        }
+
+
+        /* --- BOOT SEQUENCE --- */
+        .boot-screen {
+            position: fixed; inset: 0; z-index: 10000; background: #000;
+            display: none; 
+            justify-content: center; align-items: center;
+            pointer-events: none;
+        }
+        .boot-screen.active-flex { display: flex !important; pointer-events: auto !important; }
+
+        .boot-logs-container {
+            position: absolute; bottom: 15%; left: 5%; width: 90%; max-width: 800px;
+            font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #10b981; text-align: left; display: none;
+        }
+
+        .boot-title-wrapper { display: none; text-align: center; }
+        .boot-title-static {
+            font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 4rem; 
+            color: white; opacity: 0; letter-spacing: -1em; filter: blur(10px); white-space: nowrap;
+        }
+
         .animate-douit-sequence { animation: douitSequence 3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes douitSequence {
             0% { opacity: 0; letter-spacing: -1em; filter: blur(20px); transform: scale(0.5); }
@@ -59,18 +96,41 @@
             50% { opacity: 1; letter-spacing: -0.05em; filter: blur(0px); transform: scale(1); color: #3b82f6; text-shadow: 0 0 20px rgba(59,130,246,0.5); }
             100% { opacity: 0; letter-spacing: 1em; filter: blur(20px); transform: scale(1.5); color: #3b82f6; }
         }
-        .reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
-        @keyframes revealApp { 0% { opacity: 0; transform: scale(0.95) translateY(30px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 
-        /* UTILS */
-        .tab-content { display: none; width: 100%; } .tab-content.active { display: block; animation: fadeIn 0.6s ease-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-btn { padding: 8px 18px; font-size: 12px; font-weight: 600; border-radius: 10px; transition: all 0.3s; color: #71717a; letter-spacing: 0.02em; } .nav-btn:hover { color: white; background: rgba(255,255,255,0.05); } .nav-btn.active { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
-        .legal-modal { animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; } @keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-        .ticker-wrap { position: fixed; bottom: 0; width: 100%; height: 40px; background-color: #0f1115; border-top: 1px solid rgba(255, 255, 255, 0.1); z-index: 9000; overflow: hidden; display: flex; align-items: center; }
+        .reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
+        @keyframes revealApp {
+            0% { opacity: 0; transform: scale(0.95) translateY(30px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* --- UTILS --- */
+        .tab-content { display: none; width: 100%; }
+        .tab-content.active { display: block; animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .nav-btn {
+            padding: 8px 18px; font-size: 12px; font-weight: 600; border-radius: 10px; transition: all 0.3s;
+            color: #71717a; letter-spacing: 0.02em;
+        }
+        .nav-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+        .nav-btn.active { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+
+        /* --- MODAL & TICKER --- */
+        .legal-modal { animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes modalPop { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+
+        .ticker-wrap {
+            position: fixed; bottom: 0; width: 100%; height: 40px; background-color: #0f1115;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); z-index: 9000; overflow: hidden; display: flex; align-items: center;
+        }
         .ticker-content { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 40s linear infinite; }
         .ticker-item { display: inline-block; padding: 0 2rem; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #9ca3af; text-transform: uppercase; }
-        .ticker-up { color: #10b981; } .ticker-down { color: #ef4444; } @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #000; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .ticker-up { color: #10b981; } .ticker-down { color: #ef4444; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
     </style>
 </head>
 
@@ -78,9 +138,9 @@
 
     <div id="boot-overlay" class="boot-screen">
         <div id="boot-logs-wrapper" class="boot-logs-container">
-            <div id="boot-log-content"></div>
+            <div id="boot-log-content" class="space-y-1"></div>
         </div>
-        <div id="boot-title-wrapper" class="boot-title-wrapper hidden">
+        <div id="boot-title-wrapper" class="boot-title-wrapper relative z-10 p-4">
             <h1 id="boot-title-text" class="boot-title-static">DOUIT CAPITAL</h1>
         </div>
         <div class="absolute inset-0 bg-grid opacity-50 z-0 pointer-events-none"></div>
@@ -91,13 +151,22 @@
             <div class="text-center mb-6">
                 <div class="w-12 h-12 rounded-full bg-blue-900/20 text-blue-400 flex items-center justify-center mx-auto mb-4 text-2xl border border-blue-500/20">⚖️</div>
                 <h2 class="text-2xl font-black text-white uppercase tracking-tight">Disclaimer</h2>
+                <p class="text-[10px] text-gray-500 font-mono mt-1 uppercase">Mention Légale & Avertissement</p>
             </div>
+            
             <div class="text-xs text-gray-400 leading-relaxed space-y-4 text-justify mb-8 h-48 overflow-y-auto pr-2 custom-scroll">
                 <p><strong>© 2025 Douit Capital. Tous droits réservés.</strong></p>
-                <p>Cette interface propriétaire est strictement confidentielle. L'investissement comporte des risques.</p>
-                <p class="text-white font-bold bg-red-500/10 p-3 rounded border border-red-500/20">⚠️ Ceci n'est pas un conseil en investissement.</p>
+                <p>Cette interface propriétaire est strictement confidentielle et destinée à un usage interne ou éducatif uniquement.</p>
+                <p class="text-white font-bold bg-red-500/10 p-3 rounded border border-red-500/20">
+                    ⚠️ Les informations présentées ne constituent en aucun cas une offre de vente, une sollicitation d'achat ou un conseil en investissement financier.
+                </p>
+                <p>L'investissement sur les marchés financiers, et notamment sur les actions, les matières premières et les produits dérivés, comporte des risques importants de perte en capital. Les performances passées ne préjugent pas des performances futures.</p>
+                <p>En accédant à ce terminal, l'utilisateur reconnait avoir pris connaissance de ces risques et dégage Douit Capital de toute responsabilité concernant ses décisions d'investissement.</p>
             </div>
-            <button onclick="toggleLegal(false)" class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest transition shadow-lg">J'accepte et j'accède</button>
+
+            <button onclick="toggleLegal(false)" class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-blue-900/20">
+                J'accepte et j'accède au Terminal
+            </button>
         </div>
     </div>
 
@@ -105,25 +174,34 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.13</p>
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.3.10</p>
+            
             <div class="relative group">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
                 <input type="password" id="passwordInput" class="relative w-full bg-black border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 outline-none focus:border-blue-500 transition font-mono" placeholder="••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
             </div>
-            <button onclick="checkLogin()" class="mt-6 w-full py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition relative z-20 cursor-pointer">Initialize</button>
+            
+            <button onclick="checkLogin()" class="mt-6 w-full py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition relative z-20 cursor-pointer">
+                Initialize
+            </button>
             <p id="loginError" class="text-red-500 text-xs mt-4 hidden font-mono">:: ACCESS DENIED ::</p>
         </div>
     </div>
 
     <div id="app-container" style="display: none;" class="flex-1 flex flex-col w-full h-full relative pb-10">
         <div class="fixed inset-0 bg-grid opacity-20 pointer-events-none z-0"></div>
-        <button onclick="toggleLegal(true)" class="fixed top-4 left-4 z-[9000] w-10 h-10 rounded-full glass-panel border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:border-blue-500 transition group" title="Infos"><span class="font-serif italic font-bold">i</span></button>
+
+        <button onclick="toggleLegal(true)" class="fixed top-4 left-4 z-[9000] w-10 h-10 rounded-full glass-panel border border-white/10 flex items-center justify-center text-gray-500 hover:text-white hover:border-blue-500 transition group" title="Informations Légales">
+            <span class="font-serif italic font-bold">i</span>
+        </button>
 
         <nav class="glass-panel sticky top-6 z-50 h-16 mx-6 md:ml-20 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between px-6">
             <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
                 <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black font-black text-lg">D</div>
+                
                 <span class="text-sm gold-text-shimmer tracking-tight hidden md:block">Douit Capital</span>
             </div>
+            
             <div class="flex space-x-1 bg-black/50 p-1.5 rounded-xl border border-white/5 backdrop-blur-md overflow-x-auto">
                 <button onclick="switchTab('home')" id="btn-home" class="nav-btn">Terminal</button>
                 <button onclick="switchTab('convictions')" id="btn-convictions" class="nav-btn">Thèse</button>
@@ -137,9 +215,15 @@
             
             <div id="home" class="tab-content active">
                 <div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>Market Intelligence Active</div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6">
+                        <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
+                        Market Intelligence Active
+                    </div>
                     <h1 class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-8 tracking-tighter">Market Insight.</h1>
-                    <div class="w-full max-w-xl relative group"><div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div><input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:outline-none focus:border-blue-500 transition placeholder-gray-700" placeholder="Rechercher (ex: AI.PA, NVDA)..." onkeypress="if(event.key === 'Enter') searchTicker()"></div>
+                    <div class="w-full max-w-xl relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                        <input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:outline-none focus:border-blue-500 transition placeholder-gray-700" placeholder="Rechercher (ex: AI.PA, NVDA)..." onkeypress="if(event.key === 'Enter') searchTicker()">
+                    </div>
                     <div id="searchLoader" class="loader mt-8"></div>
                     <div id="resultCard" class="hidden w-full max-w-4xl mt-8 glass-panel rounded-2xl p-6 text-left border border-white/10">
                         <div class="flex justify-between items-start mb-6"><div><h2 id="res-name" class="text-3xl font-bold text-white">Name</h2><p id="res-symbol" class="text-blue-400 font-mono text-sm">TICKER</p></div><div class="text-right"><div id="res-price" class="text-4xl font-mono font-bold text-white">--</div><div id="res-perf" class="text-lg font-bold">--%</div></div></div>
@@ -150,17 +234,17 @@
             </div>
 
             <div id="convictions" class="tab-content max-w-7xl mx-auto">
-                <div class="mb-12 relative overflow-hidden rounded-3xl glass-panel p-10 border border-white/10"><div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/20 to-transparent pointer-events-none"></div><span class="text-blue-500 font-mono text-xs tracking-[0.3em] uppercase mb-4 block">Manifesto v1.0</span><h1 class="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-6">La Grande Rotation<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Du Virtuel au Réel.</span></h1><p class="text-xl text-gray-400 max-w-2xl leading-relaxed">Le marché a atteint un point de rupture. Nous pivotons agressivement des actifs de "Croissance Longue" vers la "Rareté Physique".</p></div>
+                <div class="mb-12 relative overflow-hidden rounded-3xl glass-panel p-10 border border-white/10"><div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/20 to-transparent pointer-events-none"></div><span class="text-blue-500 font-mono text-xs tracking-[0.3em] uppercase mb-4 block">Manifesto v1.0</span><h1 class="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-6">La Grande Rotation<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Du Virtuel au Réel.</span></h1><p class="text-xl text-gray-400 max-w-2xl leading-relaxed">Le marché a atteint un point de rupture. Nous pivotons agressivement des actifs de "Croissance Longue" (Tech surévaluée) vers la "Rareté Physique" (Énergie, Matériaux, Industrie).</p></div>
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-                    <div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-red-500/20 bg-gradient-to-b from-red-900/10 to-transparent group"><h3 class="text-2xl font-bold text-white mb-2">Le Risque Tech</h3><p class="text-gray-400 text-sm mb-6 text-justify">Le Nasdaq se paie à la perfection. L'asymétrie est défavorable.</p><div class="bg-black/40 p-4 rounded-xl border border-red-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Nasdaq P/E</span><span class="text-red-400 font-bold">36.5x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-red-500 h-1.5 rounded-full w-[90%]"></div></div></div></div>
-                    <div class="lg:col-span-4 glass-panel p-6 rounded-3xl border border-white/5 flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest text-center mb-4">Cycle Rotation</h3><div class="flex-1 relative min-h-[250px] w-full"><canvas id="thesisChart"></canvas></div></div>
-                    <div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-green-500/20 bg-gradient-to-b from-green-900/10 to-transparent group"><h3 class="text-2xl font-bold text-white mb-2">L'Opportunité Réelle</h3><p class="text-gray-400 text-sm mb-6 text-justify">Sous-investissement chronique dans les mines et l'énergie.</p><div class="bg-black/40 p-4 rounded-xl border border-green-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Energy P/E</span><span class="text-green-400 font-bold">8.2x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full w-[25%]"></div></div></div></div>
+                    <div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-red-500/20 bg-gradient-to-b from-red-900/10 to-transparent relative overflow-hidden group"><div class="absolute -right-4 -top-4 text-9xl opacity-5 grayscale group-hover:grayscale-0 transition duration-500">📉</div><h3 class="text-2xl font-bold text-white mb-2">Le Risque Tech</h3><div class="h-1 w-12 bg-red-500 mb-6"></div><p class="text-gray-400 text-sm mb-6 text-justify">Le Nasdaq se paie à la perfection (PER > 35x). L'IA est une révolution, mais les prix actuels intègrent déjà 10 ans de succès sans accroc. L'asymétrie est défavorable.</p><div class="bg-black/40 p-4 rounded-xl border border-red-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Nasdaq P/E</span><span class="text-red-400 font-bold">36.5x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-red-500 h-1.5 rounded-full w-[90%]"></div></div></div></div>
+                    <div class="lg:col-span-4 glass-panel p-6 rounded-3xl border border-white/5 flex flex-col"><h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest text-center mb-4">Cycle Rotation</h3><div class="flex-1 relative min-h-[250px] w-full"><canvas id="thesisChart"></canvas></div><p class="text-center text-[10px] text-gray-600 mt-4 italic">Illustration conceptuelle des cycles de marché</p></div>
+                    <div class="lg:col-span-4 glass-panel p-8 rounded-3xl border border-green-500/20 bg-gradient-to-b from-green-900/10 to-transparent relative overflow-hidden group"><div class="absolute -right-4 -top-4 text-9xl opacity-5 grayscale group-hover:grayscale-0 transition duration-500">⛏️</div><h3 class="text-2xl font-bold text-white mb-2">L'Opportunité Réelle</h3><div class="h-1 w-12 bg-green-500 mb-6"></div><p class="text-gray-400 text-sm mb-6 text-justify">Sous-investissement chronique dans les mines et l'énergie depuis 2014. La transition énergétique crée une demande inélastique pour le cuivre et l'industrie lourde.</p><div class="bg-black/40 p-4 rounded-xl border border-green-500/20"><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">Energy P/E</span><span class="text-green-400 font-bold">8.2x</span></div><div class="w-full bg-gray-800 h-1.5 rounded-full"><div class="bg-green-500 h-1.5 rounded-full w-[25%]"></div></div></div></div>
                 </div>
                 <h2 class="text-2xl font-bold text-white mb-6 pl-2 border-l-4 border-blue-500">L'implémentation Tactique</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-blue-500/50 transition"><h4 class="text-lg font-bold text-white mb-1">Air Liquide</h4><p class="text-xs text-gray-400">Le "Bond Proxy".</p></div>
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-gold/50 transition"><h4 class="text-lg font-bold text-white mb-1">Matériaux (Cuivre/Or)</h4><p class="text-xs text-gray-400">Offre déficitaire.</p></div>
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-red-500/50 transition"><h4 class="text-lg font-bold text-white mb-1">TotalEnergies</h4><p class="text-xs text-gray-400">Yield > 5.5%.</p></div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-blue-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-blue-900/20 flex items-center justify-center text-xl">🛡️</div><span class="px-2 py-1 bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase rounded border border-blue-500/20">Défensif</span></div><h4 class="text-lg font-bold text-white mb-1">Air Liquide</h4><p class="text-xs text-gray-400 mb-4">Le "Bond Proxy". Contrats indexés sur l'énergie. Protège le portefeuille de l'inflation.</p><div class="text-right text-xs font-mono text-blue-300">Target: Hold Forever</div></div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-gold/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-yellow-900/20 flex items-center justify-center text-xl">⚡</div><span class="px-2 py-1 bg-yellow-500/10 text-gold text-[10px] font-bold uppercase rounded border border-yellow-500/20">Offensif</span></div><h4 class="text-lg font-bold text-white mb-1">Matériaux (Cuivre/Or)</h4><p class="text-xs text-gray-400 mb-4">Il n'y a pas d'IA sans Data Center, ni de Data Center sans Cuivre. L'offre est déficitaire.</p><div class="text-right text-xs font-mono text-gold">Target: +15% CAGR</div></div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-red-500/50 transition duration-300 group"><div class="flex justify-between items-start mb-4"><div class="w-10 h-10 rounded-lg bg-red-900/20 flex items-center justify-center text-xl">🛢️</div><span class="px-2 py-1 bg-red-500/10 text-red-400 text-[10px] font-bold uppercase rounded border border-red-500/20">Yield</span></div><h4 class="text-lg font-bold text-white mb-1">TotalEnergies</h4><p class="text-xs text-gray-400 mb-4">Machine à Cash. Finance sa transition verte avec le pétrole. Valorisation ridicule.</p><div class="text-right text-xs font-mono text-red-300">Yield: >5.5%</div></div>
                 </div>
             </div>
 
@@ -169,19 +253,17 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-2 glass-panel rounded-2xl border border-white/5 overflow-hidden">
                         <table class="w-full text-left text-sm text-gray-400">
-                            <thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Actif</th><th class="px-6 py-4 text-right">Qté</th><th class="px-6 py-4 text-right">Prix</th><th class="px-6 py-4 text-right">Perf</th></tr></thead>
+                            <thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500">
+                                <tr>
+                                    <th class="px-6 py-4">Actif</th>
+                                    <th class="px-6 py-4 text-right">Qté</th> <th class="px-6 py-4 text-right">Prix</th>
+                                    <th class="px-6 py-4 text-right">Perf</th>
+                                </tr>
+                            </thead>
                             <tbody class="divide-y divide-white/5" id="tableBody"></tbody>
                         </table>
                     </div>
-                    <div class="glass-panel rounded-2xl p-6 border border-white/5 flex flex-col">
-                        <div class="mb-6">
-                            <h3 class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-widest">Macro Live</h3>
-                            <div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1 mb-1"><span>🇺🇸 Fed Rate</span><span class="text-white">5.50%</span></div>
-                            <div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1"><span>🇪🇺 ECB Rate</span><span class="text-white">4.00%</span></div>
-                        </div>
-                        <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">Allocation</h3>
-                        <div class="flex-1 relative min-h-[200px]"><canvas id="sectorChart"></canvas></div>
-                    </div>
+                    <div class="glass-panel rounded-2xl p-6 border border-white/5 flex flex-col"><h3 class="text-xs font-bold text-white uppercase mb-4">Allocation</h3><div class="flex-1 relative min-h-[200px]"><canvas id="sectorChart"></canvas></div></div>
                 </div>
             </div>
 
@@ -195,68 +277,130 @@
     
     <script>
         const PASSWORD_CONFIG = "admin"; 
-        let portfolio = [{ tick: "AI.PA", name: "Air Liquide", sec: "Chimie", q: 20, pru: 171.18 }, { tick: "SU.PA", name: "Schneider Electric", sec: "Industrie", q: 10, pru: 236.99 }, { tick: "TTE.PA", name: "TotalEnergies", sec: "Energie", q: 38, pru: 56.97 }, { tick: "AIR.PA", name: "Airbus", sec: "Aéro.", q: 5, pru: 212.46 }, { tick: "SGO.PA", name: "Saint-Gobain", sec: "Construct.", q: 7, pru: 88.15 }, { tick: "BRES.PA", name: "ETF Basic Res.", sec: "Matériaux", q: 6, pru: 104.84 }];
-        let watchlist = [{ tick: "CJ1.PA", name: "Amundi MSCI Japan", thesis: "Rebond Yen" }, { tick: "AEEM.PA", name: "Amundi Emerging", thesis: "Cycle Bas" }, { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre" }];
+
+        // ICI TU CHANGES TES QUANTITÉS (q)
+        let portfolio = [
+            { tick: "AI.PA",  name: "Air Liquide",        sec: "Chimie",     q: 20, pru: 171.18, div: 0.019, eps: 5.90, sps: 53.5 },
+            { tick: "SU.PA",  name: "Schneider Electric", sec: "Industrie",  q: 10, pru: 236.99, div: 0.015, eps: 7.50, sps: 63.0 },
+            { tick: "TTE.PA", name: "TotalEnergies",      sec: "Energie",    q: 38, pru: 56.97,  div: 0.052, eps: 8.00, sps: 70.0 },
+            { tick: "AIR.PA", name: "Airbus",             sec: "Aéro.",      q: 5,  pru: 212.46, div: 0.012, eps: 4.90, sps: 88.0 },
+            { tick: "SGO.PA", name: "Saint-Gobain",       sec: "Construct.", q: 7,  pru: 88.15,  div: 0.026, eps: 5.50, sps: 96.0 },
+            { tick: "BRES.PA",name: "ETF Basic Res.",     sec: "Matériaux",  q: 6,  pru: 104.84, div: 0.0,   eps: 0,    sps: 0    },
+        ];
+
+        let watchlist = [
+            { tick: "CJ1.PA", name: "Amundi MSCI Japan", thesis: "Rebond Yen", price: 0, prev: 0 },
+            { tick: "AEEM.PA", name: "Amundi Emerging", thesis: "Cycle Bas", price: 0, prev: 0 },
+            { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre", price: 0, prev: 0 }
+        ];
 
         function checkLogin() {
             const input = document.getElementById('passwordInput');
-            if (!input || input.value.trim() !== PASSWORD_CONFIG) { document.getElementById('loginError').classList.remove('hidden'); input.value = ''; return; }
-            document.getElementById('login-screen').style.display = 'none';
+            const errorMsg = document.getElementById('loginError');
+            const loginScreen = document.getElementById('login-screen');
             const bootOverlay = document.getElementById('boot-overlay');
-            bootOverlay.classList.remove('hidden'); bootOverlay.classList.add('active-flex');
-            const logsWrapper = document.getElementById('boot-logs-wrapper'); logsWrapper.style.display = 'block';
-            const logsContent = document.getElementById('boot-log-content'); logsContent.innerHTML = '';
-            
-            // --- GENERATION INTENSE DE LOGS SUR TOUT L'ECRAN ---
-            let count = 0;
-            const logInterval = setInterval(() => {
-                // On génère 3 lignes à la fois pour remplir les colonnes
-                for (let i = 0; i < 3; i++) {
-                    const line = document.createElement('div');
-                    const rndID = Math.floor(Math.random()*9999).toString(16).toUpperCase();
-                    const action = Math.random() > 0.5 ? "LOAD" : "CHECK";
-                    line.innerText = `[${Date.now().toString().slice(-6)}]: MEM_${rndID} :: PROTOCOL_${action} ... OK`;
-                    
-                    // Effets de couleur Matrix aléatoires
-                    if(Math.random() > 0.9) line.style.color = '#fff';
-                    if(Math.random() > 0.95) line.style.color = '#fbbf24'; // Or
-                    
-                    logsContent.appendChild(line);
-                }
-                // Pas de scroll automatique pour laisser remplir l'écran naturellement
-                count++;
-                if(count > 100) { // Environ 300 lignes générées
-                    clearInterval(logInterval);
-                    startFinalBoot();
-                }
-            }, 30); // Très rapide
+            const logsWrapper = document.getElementById('boot-logs-wrapper');
+            const logsContent = document.getElementById('boot-log-content');
+            const titleWrapper = document.getElementById('boot-title-wrapper');
+            const titleText = document.getElementById('boot-title-text');
 
-            function startFinalBoot() {
+            if (!input || input.value.trim() !== PASSWORD_CONFIG) {
+                if(errorMsg) errorMsg.classList.remove('hidden');
+                if(input) { input.value = ''; input.focus(); }
+                return;
+            }
+
+            if(loginScreen) loginScreen.style.display = 'none';
+            if(bootOverlay) {
+                bootOverlay.classList.remove('hidden');
+                bootOverlay.classList.add('active-flex');
+                if(logsWrapper) logsWrapper.style.display = 'block';
+                if(titleWrapper) titleWrapper.style.display = 'none';
+                if(logsContent) logsContent.innerHTML = '';
+
+                const logs = [ "INITIALIZING KERNEL V4.2...", "ESTABLISHING ENCRYPTED LINK...", "VERIFYING BIOMETRICS... [OK]", "FETCHING REAL-TIME ASSETS...", "LOADING 'CONVICTION' MODULES...", "> THÈSE: SUPER-CYCLE MATIÈRES 1ÈRE...", "COMPUTING RISK METRICS...", "SYSTEM READY." ];
+                let delay = 0;
+                logs.forEach((log) => {
+                    const speed = Math.random() * 200 + 100; delay += speed;
+                    setTimeout(() => {
+                        const line = document.createElement('div'); line.innerText = `> ${log}`;
+                        if(logsContent) { logsContent.appendChild(line); logsContent.scrollTop = logsContent.scrollHeight; }
+                    }, delay);
+                });
+
+                const phase2Start = delay + 800;
                 setTimeout(() => {
-                    logsWrapper.style.display = 'none';
-                    const titleWrapper = document.getElementById('boot-title-wrapper');
-                    titleWrapper.classList.remove('hidden'); titleWrapper.classList.add('flex'); // SHOW FLEX
-                    setTimeout(() => { document.getElementById('boot-title-text').classList.add('animate-douit-sequence'); }, 50);
-                }, 500);
+                    if(logsWrapper) logsWrapper.style.display = 'none';
+                    if(titleWrapper) titleWrapper.style.display = 'block';
+                    setTimeout(() => { if(titleText) titleText.classList.add('animate-douit-sequence'); }, 50);
+                }, phase2Start);
 
+                const phase3Start = phase2Start + 2900; 
                 setTimeout(() => {
                     bootOverlay.style.display = 'none'; bootOverlay.classList.remove('active-flex');
                     const app = document.getElementById('app-container');
                     if(app) { app.style.display = 'flex'; app.classList.add('reveal-app'); initApp(); toggleLegal(true); }
-                }, 3500);
+                }, phase3Start);
+            } else {
+                const app = document.getElementById('app-container'); app.style.display = 'flex'; initApp(); toggleLegal(true);
             }
         }
 
-        function toggleLegal(show) { const modal = document.getElementById('legal-modal'); if(show) modal.classList.remove('hidden'); else modal.classList.add('hidden'); }
-        function startNewsTicker() { const c = document.getElementById('news-ticker-content'); if (!c) return; const n = [{ t: "BREAKING: LA BCE MAINTIENT SES TAUX À 4.5%", y: "n" }, { t: "ALERT: LE CUIVRE TOUCHE UN PLUS HAUT HISTORIQUE", y: "u" }, { t: "MARKET: LE NASDAQ RECULE DE 1.2%", y: "d" }, { t: "ENERGY: TOTALENERGIES LANCE UN PROJET LNG", y: "u" }]; let h = ""; n.forEach(i => { const now=new Date();const m=Math.floor(Math.random()*59);const ts=`${now.getHours()}:${m<10?'0'+m:m}`; let cl="text-gray-400"; if(i.y==="u")cl="text-green-500 font-bold";if(i.y==="d")cl="text-red-500 font-bold"; h+=`<div class="ticker-item"><span class="text-gray-600 mr-2">[${ts}]</span><span class="${cl}">${i.t}</span></div>`; }); c.innerHTML = h; }
-        function switchTab(id) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); document.getElementById('btn-' + id).classList.add('active'); if(id==='simulation') calculateSim(); if(id==='watchlist') updateWatchlist(); if(id==='convictions') renderThesisChart(); }
+        function toggleLegal(show) {
+            const modal = document.getElementById('legal-modal');
+            if(show) modal.classList.remove('hidden'); else modal.classList.add('hidden');
+        }
+
+        function startNewsTicker() {
+            const tickerContainer = document.getElementById('news-ticker-content');
+            if (!tickerContainer) return;
+            const newsItems = [
+                { text: "BREAKING: LA BCE MAINTIENT SES TAUX À 4.5% - L'INFLATION RESTE LA PRIORITÉ", type: "neutral" },
+                { text: "ALERT: LE CUIVRE TOUCHE UN PLUS HAUT DE 52 SEMAINES SUR DÉFICIT D'OFFRE", type: "up" },
+                { text: "MARKET: LE NASDAQ RECULE DE 1.2% ALORS QUE LES RENDEMENTS OBLIGATAIRES MONTENT", type: "down" },
+                { text: "ENERGY: TOTALENERGIES LANCE UN NOUVEAU PROJET LNG AU QATAR", type: "up" }
+            ];
+            let htmlContent = "";
+            newsItems.forEach(item => {
+                const now = new Date(); const mins = Math.floor(Math.random() * 59);
+                const timeStr = `${now.getHours()}:${mins < 10 ? '0'+mins : mins}`;
+                let colorClass = "text-gray-400";
+                if (item.type === "up") colorClass = "text-green-500 font-bold";
+                if (item.type === "down") colorClass = "text-red-500 font-bold";
+                htmlContent += `<div class="ticker-item"><span class="text-gray-600 mr-2">[${timeStr}]</span><span class="${colorClass}">${item.text}</span></div>`;
+            });
+            tickerContainer.innerHTML = htmlContent;
+        }
+
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+            const tab = document.getElementById(id); if(tab) tab.classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.getElementById('btn-' + id); if(activeBtn) activeBtn.classList.add('active');
+            if(id === 'simulation') calculateSim();
+            if(id === 'watchlist') updateWatchlist();
+            if(id === 'convictions') renderThesisChart();
+        }
+
         function renderThesisChart() { const ctxEl=document.getElementById('thesisChart'); if(!ctxEl)return; const ctx=ctxEl.getContext('2d'); if(window.thesisChartInstance)window.thesisChartInstance.destroy(); const gradientReal=ctx.createLinearGradient(0,0,0,400); gradientReal.addColorStop(0,'rgba(16,185,129,0.2)'); gradientReal.addColorStop(1,'rgba(16,185,129,0)'); window.thesisChartInstance=new Chart(ctx,{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025 (Est.)'],datasets:[{label:'Tech Hyperscale',data:[100,135,105,145,175,160],borderColor:'#ef4444',borderDash:[5,5],borderWidth:2,tension:0.4,pointRadius:0},{label:'Real Assets',data:[100,115,140,130,145,200],borderColor:'#10b981',borderWidth:3,tension:0.4,pointRadius:4,backgroundColor:gradientReal,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',usePointStyle:true,font:{family:'Inter'}}}},scales:{x:{display:true,grid:{display:false,color:'#333'},ticks:{color:'#555'}},y:{display:false}}}}); }
-        async function fetchPriceRobust(t){ const p="https://corsproxy.io/?",u=`https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=5d&t=${Date.now()}`; try{const r=await fetch(p+encodeURIComponent(u));if(!r.ok)throw new Error;const j=await r.json(),res=j.chart.result[0];return{price:res.meta.regularMarketPrice,prev:res.meta.chartPreviousClose,quotes:res.indicators.quote[0].close,timestamps:res.timestamp};}catch(e){return null;}}
-        async function updatePortfolio(){ let tv=0; const tb=document.getElementById('tableBody'); if(!tb)return; tb.innerHTML=''; for(let s of portfolio){ const d=await fetchPriceRobust(s.tick); if(d){s.price=d.price;s.prev=d.prev;} const v=s.price*s.q; tv+=v; const p=((s.price-s.pru)/s.pru)*100; tb.innerHTML+=`<tr class="hover:bg-white/5 transition border-b border-white/5"><td class="px-6 py-4"><div class="text-white font-bold">${s.name}</div><div class="text-[10px] text-gray-500">${s.tick}</div></td><td class="px-6 py-4 text-right font-mono text-gray-400">${s.q}</td><td class="px-6 py-4 text-right font-mono text-white">${s.price.toFixed(2)} €</td><td class="px-6 py-4 text-right font-mono font-bold ${p>=0?'text-green-400':'text-red-400'}">${(p>0?'+':'')+p.toFixed(2)}%</td></tr>`; } document.getElementById('totalVal').innerText=Math.round(tv).toLocaleString()+" €"; renderSectorChart(); }
+        async function fetchPriceRobust(ticker){ const proxy="https://corsproxy.io/?"; const url=`https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=5d&t=${Date.now()}`; try{const response=await fetch(proxy+encodeURIComponent(url));if(!response.ok)throw new Error("HTTP Error");const json=await response.json();const res=json.chart.result[0];return{price:res.meta.regularMarketPrice,prev:res.meta.chartPreviousClose,meta:res.meta,quotes:res.indicators.quote[0].close,timestamps:res.timestamp};}catch(e){return null;}}
+        async function fetchFundamentalsQuote(ticker){ const proxy="https://corsproxy.io/?"; const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&t=${Date.now()}`; try{const response=await fetch(proxy+encodeURIComponent(url));const json=await response.json();return json.quoteResponse.result[0];}catch(e){return null;}}
+        
+        async function updatePortfolio(){ 
+            let totalVal=0; const tbody=document.getElementById('tableBody'); if(!tbody)return; tbody.innerHTML=''; 
+            for(let stock of portfolio){ 
+                const data=await fetchPriceRobust(stock.tick); if(data){stock.price=data.price;stock.prev=data.prev;} 
+                const valo=stock.price*stock.q; totalVal+=valo; const perf=((stock.price-stock.pru)/stock.pru)*100; 
+                // ICI J'AI AJOUTÉ LA COLONNE QTÉ
+                tbody.innerHTML+=`<tr class="hover:bg-white/5 transition border-b border-white/5"><td class="px-6 py-4"><div class="text-white font-bold">${stock.name}</div><div class="text-[10px] text-gray-500">${stock.tick}</div></td><td class="px-6 py-4 text-right font-mono text-gray-400">${stock.q}</td><td class="px-6 py-4 text-right font-mono text-white">${stock.price.toFixed(2)} €</td><td class="px-6 py-4 text-right font-mono font-bold ${perf>=0?'text-green-400':'text-red-400'}">${(perf>0?'+':'')+perf.toFixed(2)}%</td></tr>`; 
+            } 
+            const totalEl=document.getElementById('totalVal'); if(totalEl)totalEl.innerText=Math.round(totalVal).toLocaleString()+" €"; renderSectorChart(); 
+        }
+        
         function renderSectorChart(){ const ctxEl=document.getElementById('sectorChart'); if(!ctxEl)return; const ctx=ctxEl.getContext('2d'); if(window.mySectorChart)window.mySectorChart.destroy(); window.mySectorChart=new Chart(ctx,{type:'doughnut',data:{labels:portfolio.map(s=>s.sec),datasets:[{data:portfolio.map(s=>s.price*s.q),backgroundColor:['#3b82f6','#10b981','#ef4444','#f59e0b','#8b5cf6','#64748b'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',usePointStyle:true}}}}}); }
-        async function updateWatchlist(){ const tb=document.getElementById('watchlistBody'); if(!tb)return; tb.innerHTML=''; for(let i of watchlist){ const d=await fetchPriceRobust(i.tick); const p=d?d.price.toFixed(2):"..."; tb.innerHTML+=`<tr class="hover:bg-white/5 border-b border-white/5"><td class="px-6 py-4 font-bold text-white">${i.name} <span class="text-xs font-normal text-gray-500 block">${i.tick}</span></td><td class="px-6 py-4 text-xs text-blue-300 italic">${i.thesis}</td><td class="px-6 py-4 text-right font-mono text-white">${p}</td></tr>`; } }
-        let searchChartInstance=null; async function searchTicker(){ const t=document.getElementById('mainTickerInput').value.toUpperCase(); if(!t)return; document.getElementById('searchLoader').style.display='block'; document.getElementById('resultCard').classList.add('hidden'); const d=await fetchPriceRobust(t); document.getElementById('searchLoader').style.display='none'; if(d){ document.getElementById('resultCard').classList.remove('hidden'); document.getElementById('res-name').innerText=t; document.getElementById('res-symbol').innerText=t; document.getElementById('res-price').innerText=d.price.toFixed(2); const p=((d.price-d.prev)/d.prev)*100; document.getElementById('res-perf').innerText=(p>0?'+':'')+p.toFixed(2)+"%"; document.getElementById('res-perf').className=`text-lg font-bold ${p>=0?'text-green-400':'text-red-400'}`; const ctx=document.getElementById('searchChart').getContext('2d'); if(searchChartInstance)searchChartInstance.destroy(); searchChartInstance=new Chart(ctx,{type:'line',data:{labels:d.timestamps.map(t=>new Date(t*1000).getHours()+'h'),datasets:[{data:d.quotes,borderColor:p>=0?'#10b981':'#ef4444',backgroundColor:p>=0?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)',fill:true,pointRadius:0,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#333'}}}}}); } }
-        function calculateSim(){ const s=parseFloat(document.getElementById('sim-start').value),m=parseFloat(document.getElementById('sim-monthly').value); let l=[],d=[],c=s; for(let i=0;i<=20;i++){ l.push("An "+i); d.push(c); if(i<20){for(let j=0;j<12;j++){c+=m;c*=(1+0.08/12);}}} document.getElementById('sim-result').innerText=Math.round(d[d.length-1]).toLocaleString()+" €"; const ctx=document.getElementById('simChart').getContext('2d'); if(window.simChart)window.simChart.destroy(); window.simChart=new Chart(ctx,{type:'line',data:{labels:l,datasets:[{label:'Patrimoine',data:d,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.2)',fill:true}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:{color:'#333'}}},plugins:{legend:{display:false}}}}); }
+        async function updateWatchlist(){ const tbody=document.getElementById('watchlistBody'); if(!tbody)return; tbody.innerHTML=''; for(let item of watchlist){ const data=await fetchPriceRobust(item.tick); const price=data?data.price.toFixed(2):"..."; tbody.innerHTML+=`<tr class="hover:bg-white/5 border-b border-white/5"><td class="px-6 py-4 font-bold text-white">${item.name} <span class="text-xs font-normal text-gray-500 block">${item.tick}</span></td><td class="px-6 py-4 text-xs text-blue-300 italic">${item.thesis}</td><td class="px-6 py-4 text-right font-mono text-white">${price}</td></tr>`; } }
+        let searchChartInstance=null; async function searchTicker(){ const t=document.getElementById('mainTickerInput').value.toUpperCase(); if(!t)return; document.getElementById('searchLoader').style.display='block'; document.getElementById('resultCard').classList.add('hidden'); const data=await fetchPriceRobust(t); const fund=await fetchFundamentalsQuote(t); document.getElementById('searchLoader').style.display='none'; if(data){ document.getElementById('resultCard').classList.remove('hidden'); document.getElementById('res-name').innerText=t; document.getElementById('res-symbol').innerText=data.meta.symbol; document.getElementById('res-price').innerText=data.price.toFixed(2); const perf=((data.price-data.prev)/data.prev)*100; document.getElementById('res-perf').innerText=(perf>0?'+':'')+perf.toFixed(2)+"%"; document.getElementById('res-perf').className=`text-lg font-bold ${perf>=0?'text-green-400':'text-red-400'}`; if(fund){document.getElementById('res-pe').innerText=fund.trailingPE?fund.trailingPE.toFixed(1):"-"; document.getElementById('res-cap').innerText=fund.marketCap?(fund.marketCap/1000000000).toFixed(1)+"B":"-"; document.getElementById('res-vol').innerText=fund.regularMarketVolume?(fund.regularMarketVolume/1000000).toFixed(1)+"M":"-"; document.getElementById('res-rating').innerText=fund.averageAnalystRating?fund.averageAnalystRating.replace('-',' ').toUpperCase():"NEUTRE";} const ctx=document.getElementById('searchChart').getContext('2d'); if(searchChartInstance)searchChartInstance.destroy(); searchChartInstance=new Chart(ctx,{type:'line',data:{labels:data.timestamps.map(t=>new Date(t*1000).getHours()+'h'),datasets:[{data:data.quotes,borderColor:perf>=0?'#10b981':'#ef4444',backgroundColor:perf>=0?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)',fill:true,pointRadius:0,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#333'}}}}}); } }
+        function calculateSim(){ const start=parseFloat(document.getElementById('sim-start').value); const monthly=parseFloat(document.getElementById('sim-monthly').value); const years=20; const rate=0.08; let labels=[],data=[],capital=start; for(let i=0;i<=years;i++){ labels.push("An "+i); data.push(capital); if(i<years){for(let m=0;m<12;m++){capital+=monthly;capital*=(1+rate/12);}}} document.getElementById('sim-result').innerText=Math.round(data[data.length-1]).toLocaleString()+" €"; const ctx=document.getElementById('simChart').getContext('2d'); if(window.simChart)window.simChart.destroy(); window.simChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Patrimoine',data,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.2)',fill:true}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:{color:'#333'}}},plugins:{legend:{display:false}}}}); }
         function initApp(){ updatePortfolio(); startNewsTicker(); setInterval(updatePortfolio,60000); }
     </script>
 </body>
