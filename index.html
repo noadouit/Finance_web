@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | v1.9.0</title>
+    <title>DOUIT CAPITAL | v1.9.1</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -122,7 +122,7 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">Système v1.9.0</p>
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">Système v1.9.1</p>
             <div class="relative group">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
                 <input type="password" id="passwordInput" class="relative w-full bg-black border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 outline-none focus:border-blue-500 transition font-mono" placeholder="••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
@@ -338,7 +338,7 @@
                             <div>
                                 <label class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Scénario de Rendement</label>
                                 <select id="sim-scenario" class="w-full bg-black/50 p-3 mt-1 rounded-lg text-white border border-white/10 focus:border-blue-500 outline-none cursor-pointer">
-                                    <option value="0.03">Pessimiste / Livret A (3%)</option>
+                                    <option value="0.017">Pessimiste / Livret A (1,70%)</option>
                                     <option value="0.10" selected>Base Douit (10%)</option>
                                     <option value="0.22">Super-Cycle Cuivre (22%)</option>
                                 </select>
@@ -496,7 +496,7 @@
         function switchTab(id) { 
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); 
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); document.getElementById('btn-' + id).classList.add('active'); 
-            if(id==='simulation') calculateSim(); 
+            if(id==='simulation') setTimeout(calculateSim, 50); // FIX: Delay to ensure DOM is ready
             if(id==='watchlist') updateWatchlist(); 
             if(id==='convictions') switchThesis('bear');
         }
@@ -516,7 +516,7 @@
             const s = parseFloat(document.getElementById('sim-start').value);
             const m = parseFloat(document.getElementById('sim-monthly').value);
             const r_strat = parseFloat(document.getElementById('sim-scenario').value);
-            const r_safe = 0.03; // Livret A de base
+            const r_safe = 0.017; // FIX: Livret A 1.70%
             const years = parseInt(document.getElementById('sim-years').value);
             
             let l=[], d_strat=[], d_safe=[], c_strat=s, c_safe=s;
@@ -527,7 +527,6 @@
                 d_safe.push(c_safe);
                 
                 if(i < years){
-                    // Intérêts composés annuels + Apport mensuel
                     for(let j=0; j<12; j++){
                         c_strat += m; c_strat *= (1 + r_strat/12);
                         c_safe += m; c_safe *= (1 + r_safe/12);
@@ -535,7 +534,6 @@
                 }
             }
             
-            // Resultats affichage
             document.getElementById('sim-result').innerText = Math.round(d_strat[d_strat.length-1]).toLocaleString()+" €";
             
             const delta = d_strat[d_strat.length-1] - d_safe[d_safe.length-1];
@@ -552,7 +550,7 @@
                     labels: l,
                     datasets: [
                         { label: 'Stratégie Douit', data: d_strat, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, borderWidth: 3 },
-                        { label: 'Épargne Standard (3%)', data: d_safe, borderColor: '#6b7280', borderDash: [5,5], borderWidth: 2, fill: false }
+                        { label: 'Livret A (1.70%)', data: d_safe, borderColor: '#6b7280', borderDash: [5,5], borderWidth: 2, fill: false }
                     ]
                 },
                 options: {
