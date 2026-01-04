@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOUIT CAPITAL | v1.8.0</title>
+    <title>DOUIT CAPITAL | v1.9.0</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -30,17 +30,14 @@
         .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px); mask-image: radial-gradient(circle at center, black 40%, transparent 100%); }
         .glass-panel { background: rgba(15, 17, 21, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         
-        /* TEXTE OR (Animation sur le texte) */
         .gold-text-shimmer { background: linear-gradient(to right, #e4e4e7 0%, #fbbf24 50%, #e4e4e7 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: goldShimmer 3s linear infinite alternate; font-weight: 800; letter-spacing: -0.02em; }
         @keyframes goldShimmer { 0% { background-position: 0% center; } 100% { background-position: 100% center; } }
 
-        /* SCROLLBAR PERSO POUR LES TEXTES LONGS */
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
         .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
-        /* BOOT SCREEN */
         .boot-screen { position: fixed; inset: 0; z-index: 10000; background: #000; display: none; justify-content: center; align-items: center; }
         .boot-screen.active-flex { display: flex !important; }
         
@@ -66,7 +63,6 @@
         .reveal-app { animation: revealApp 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; }
         @keyframes revealApp { 0% { opacity: 0; transform: scale(0.98) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
         
-        /* NAVIGATION INTERNE THESE */
         .thesis-btn { padding: 12px 24px; border-radius: 10px; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s; opacity: 0.6; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); }
         .thesis-btn:hover { opacity: 1; border-color: rgba(255,255,255,0.3); }
         .thesis-btn.active { opacity: 1; transform: translateY(-2px); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
@@ -103,17 +99,17 @@
         <div class="legal-modal w-full max-w-lg glass-panel p-8 rounded-3xl border border-white/10 m-4 relative">
             <div class="text-center mb-6">
                 <div class="w-12 h-12 rounded-full bg-blue-900/20 text-blue-400 flex items-center justify-center mx-auto mb-4 text-2xl border border-blue-500/20">⚖️</div>
-                <h2 class="text-2xl font-black text-white uppercase tracking-tight">Disclaimer</h2>
-                <p class="text-[10px] text-gray-500 font-mono mt-1 uppercase">Mention Légale & Avertissement</p>
+                <h2 class="text-2xl font-black text-white uppercase tracking-tight">Avertissement</h2>
+                <p class="text-[10px] text-gray-500 font-mono mt-1 uppercase">Mention Légale</p>
             </div>
             
             <div class="text-xs text-gray-400 leading-relaxed space-y-4 text-justify mb-8 h-48 overflow-y-auto pr-2 custom-scroll">
                 <p><strong>© 2025 Douit Capital. Tous droits réservés.</strong></p>
-                <p>Cette interface propriétaire est strictement confidentielle et destinée à un usage interne ou éducatif uniquement.</p>
+                <p>Cette interface est strictement confidentielle et destinée à un usage interne.</p>
                 <p class="text-white font-bold bg-red-500/10 p-3 rounded border border-red-500/20">
-                    ⚠️ Les informations présentées ne constituent en aucun cas une offre de vente, une sollicitation d'achat ou un conseil en investissement financier.
+                    ⚠️ Les informations présentées ne constituent en aucun cas une offre de vente, une sollicitation d'achat ou un conseil financier.
                 </p>
-                <p>L'investissement sur les marchés financiers comporte des risques importants de perte en capital. Les performances passées ne préjugent pas des performances futures.</p>
+                <p>L'investissement sur les marchés financiers comporte des risques de perte en capital. Les performances passées ne préjugent pas des performances futures.</p>
             </div>
 
             <button onclick="toggleLegal(false)" class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-blue-900/20">
@@ -126,15 +122,15 @@
         <div class="absolute inset-0 bg-grid opacity-30"></div>
         <div class="login-box w-full max-w-sm p-10 glass-panel rounded-3xl relative z-10 text-center border border-white/5">
             <h1 class="text-3xl font-black text-white mb-1 tracking-tighter">DOUIT CAPITAL</h1>
-            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">System v1.8.0</p>
+            <p class="text-[10px] font-mono text-gray-500 mb-8 uppercase tracking-[0.2em]">Système v1.9.0</p>
             <div class="relative group">
                 <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
                 <input type="password" id="passwordInput" class="relative w-full bg-black border border-white/10 text-white text-center tracking-[0.5em] rounded-xl p-4 outline-none focus:border-blue-500 transition font-mono" placeholder="••••••" onkeypress="if(event.key === 'Enter') checkLogin()">
             </div>
             <button onclick="checkLogin()" class="mt-6 w-full py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition relative z-20 cursor-pointer">
-                Initialize
+                Initialiser
             </button>
-            <p id="loginError" class="text-red-500 text-xs mt-4 hidden font-mono">:: ACCESS DENIED ::</p>
+            <p id="loginError" class="text-red-500 text-xs mt-4 hidden font-mono">:: ACCÈS REFUSÉ ::</p>
         </div>
     </div>
 
@@ -149,7 +145,7 @@
             </div>
             <div class="flex space-x-1 bg-black/50 p-1.5 rounded-xl border border-white/5 backdrop-blur-md overflow-x-auto">
                 <button onclick="switchTab('home')" id="btn-home" class="nav-btn">Terminal</button>
-                <button onclick="switchTab('convictions')" id="btn-convictions" class="nav-btn">Thèse</button>
+                <button onclick="switchTab('convictions')" id="btn-convictions" class="nav-btn">Thèses</button>
                 <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn">Portefeuille</button>
                 <button onclick="switchTab('watchlist')" id="btn-watchlist" class="nav-btn">Radar</button>
                 <button onclick="switchTab('simulation')" id="btn-simulation" class="nav-btn">Projection</button>
@@ -158,16 +154,16 @@
 
         <main class="flex-1 w-full relative z-10 p-6">
             
-            <div id="home" class="tab-content active"><div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>Market Intelligence Active</div><h1 class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-8 tracking-tighter">Market Insight.</h1><div class="w-full max-w-xl relative group"><div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div><input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:outline-none focus:border-blue-500 transition placeholder-gray-700" placeholder="Rechercher (ex: AI.PA, NVDA)..." onkeypress="if(event.key === 'Enter') searchTicker()"></div><div id="searchLoader" class="loader mt-8"></div><div id="resultCard" class="hidden w-full max-w-4xl mt-8 glass-panel rounded-2xl p-6 text-left border border-white/10"><div class="flex justify-between items-start mb-6"><div><h2 id="res-name" class="text-3xl font-bold text-white">Name</h2><p id="res-symbol" class="text-blue-400 font-mono text-sm">TICKER</p></div><div class="text-right"><div id="res-price" class="text-4xl font-mono font-bold text-white">--</div><div id="res-perf" class="text-lg font-bold">--%</div></div></div><div class="h-[300px] w-full bg-black/20 rounded-xl relative"><canvas id="searchChart"></canvas></div><div class="grid grid-cols-4 gap-4 mt-6 text-center text-sm"><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">PER</div><div id="res-pe" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Cap.</div><div id="res-cap" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Vol.</div><div id="res-vol" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Avis</div><div id="res-rating" class="text-blue-400 font-bold">--</div></div></div></div></div></div>
+            <div id="home" class="tab-content active"><div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-900/10 text-blue-400 text-xs font-mono mb-6"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>Intelligence de Marché Active</div><h1 class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-600 mb-8 tracking-tighter">Vision Marché.</h1><div class="w-full max-w-xl relative group"><div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div><input type="text" id="mainTickerInput" class="relative w-full bg-black/80 border border-white/10 text-white text-xl px-6 py-5 rounded-xl focus:outline-none focus:border-blue-500 transition placeholder-gray-700" placeholder="Rechercher (ex: AI.PA, NVDA)..." onkeypress="if(event.key === 'Enter') searchTicker()"></div><div id="searchLoader" class="loader mt-8"></div><div id="resultCard" class="hidden w-full max-w-4xl mt-8 glass-panel rounded-2xl p-6 text-left border border-white/10"><div class="flex justify-between items-start mb-6"><div><h2 id="res-name" class="text-3xl font-bold text-white">Nom</h2><p id="res-symbol" class="text-blue-400 font-mono text-sm">TICKER</p></div><div class="text-right"><div id="res-price" class="text-4xl font-mono font-bold text-white">--</div><div id="res-perf" class="text-lg font-bold">--%</div></div></div><div class="h-[300px] w-full bg-black/20 rounded-xl relative"><canvas id="searchChart"></canvas></div><div class="grid grid-cols-4 gap-4 mt-6 text-center text-sm"><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">PER</div><div id="res-pe" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Cap.</div><div id="res-cap" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Vol.</div><div id="res-vol" class="text-white font-bold">--</div></div><div class="p-3 bg-white/5 rounded-lg border border-white/5"><div class="text-gray-500 text-[10px] uppercase">Avis</div><div id="res-rating" class="text-blue-400 font-bold">--</div></div></div></div></div></div>
 
             <div id="convictions" class="tab-content max-w-7xl mx-auto">
                 
                 <div class="flex justify-center gap-6 mb-12">
                     <button onclick="switchThesis('bear')" id="btn-thesis-bear" class="thesis-btn thesis-btn-bear active">
-                        📉 The Short<br><span class="text-[9px] text-gray-400 font-normal">Anti-Tech & Valuations</span>
+                        📉 Position Vendeuse<br><span class="text-[9px] text-gray-400 font-normal">Anti-Tech & Valorisations</span>
                     </button>
                     <button onclick="switchThesis('bull')" id="btn-thesis-bull" class="thesis-btn thesis-btn-bull">
-                        🐂 The Long<br><span class="text-[9px] text-gray-400 font-normal">Copper & Real Assets</span>
+                        🐂 Position Acheteuse<br><span class="text-[9px] text-gray-400 font-normal">Cuivre & Actifs Réels</span>
                     </button>
                 </div>
 
@@ -176,7 +172,7 @@
                         
                         <div class="lg:col-span-7 space-y-8">
                             <div class="glass-panel p-8 rounded-3xl border border-red-500/20 bg-gradient-to-br from-red-900/10 to-transparent">
-                                <span class="text-red-500 font-mono text-xs tracking-[0.3em] uppercase mb-2 block">Investment Memo : SHORT TECH</span>
+                                <span class="text-red-500 font-mono text-xs tracking-[0.3em] uppercase mb-2 block">Thèse d'Investissement : SHORT TECH</span>
                                 <h2 class="text-3xl font-black text-white mb-6">L'Illusion Schumpétérienne</h2>
                                 <div class="prose prose-invert prose-sm text-gray-400 leading-relaxed text-justify custom-scroll max-h-[400px] overflow-y-auto pr-4">
                                     <p class="text-white font-bold">Synthèse :</p>
@@ -185,7 +181,7 @@
                                     <p class="text-white font-bold mt-4">1. La Fin de la Croissance Schumpétérienne :</p>
                                     <p>L'innovation actuelle (Optimisation publicitaire, Chatbots) n'est plus une "Destruction Créatrice" génératrice de productivité massive pour l'économie réelle. Le gain marginal de PIB par dollar investi en Tech s'effondre. Pourtant, les multiples (PER > 40x) intègrent une croissance des bénéfices à deux chiffres pour les 10 prochaines années, ce qui est statistiquement improbable.</p>
 
-                                    <p class="text-white font-bold mt-4">2. Le Mur de l'Économie Circulaire (True Cost Accounting) :</p>
+                                    <p class="text-white font-bold mt-4">2. Le Mur de l'Économie Circulaire (Coût Réel) :</p>
                                     <p>Le modèle SaaS repose sur des marges brutes de 80% car il externalise ses coûts physiques (déchets électroniques, consommation d'eau et d'énergie des Data Centers). La régulation ESG à venir va internaliser ces coûts.</p>
                                     <p>Lorsque Microsoft ou Google devront payer le "vrai prix" du carbone et du recyclage de leurs serveurs (durée de vie < 4 ans), leurs marges convergeront vers celles de l'industrie lourde (15-20%). Le "Re-rating" boursier sera violent.</p>
 
@@ -197,16 +193,16 @@
 
                         <div class="lg:col-span-5 flex flex-col gap-6">
                             <div class="glass-panel p-6 rounded-3xl border border-white/5">
-                                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Valuation Gap (PSR)</h3>
+                                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Écart de Valorisation (PSR)</h3>
                                 <div class="h-[200px] w-full"><canvas id="techBubbleChart"></canvas></div>
                                 <div class="mt-4 grid grid-cols-2 gap-4">
                                     <div class="bg-red-500/10 p-3 rounded border border-red-500/20 text-center">
-                                        <div class="text-[10px] text-gray-400 uppercase">Cisco 2000 Peak</div>
-                                        <div class="text-white font-mono font-bold">38x Sales</div>
+                                        <div class="text-[10px] text-gray-400 uppercase">Cisco Pic 2000</div>
+                                        <div class="text-white font-mono font-bold">38x Ventes</div>
                                     </div>
                                     <div class="bg-red-500/10 p-3 rounded border border-red-500/20 text-center">
                                         <div class="text-[10px] text-gray-400 uppercase">Nvidia 2024</div>
-                                        <div class="text-red-400 font-mono font-bold">42x Sales</div>
+                                        <div class="text-red-400 font-mono font-bold">42x Ventes</div>
                                     </div>
                                 </div>
                             </div>
@@ -233,7 +229,7 @@
                         
                         <div class="lg:col-span-7 space-y-8">
                             <div class="glass-panel p-8 rounded-3xl border border-orange-500/20 bg-gradient-to-br from-orange-900/10 to-transparent">
-                                <span class="text-orange-500 font-mono text-xs tracking-[0.3em] uppercase mb-2 block">Investment Memo : LONG COPPER</span>
+                                <span class="text-orange-500 font-mono text-xs tracking-[0.3em] uppercase mb-2 block">Thèse d'Investissement : LONG CUIVRE</span>
                                 <h2 class="text-3xl font-black text-white mb-6">Le Choc d'Offre Ricardien</h2>
                                 <div class="prose prose-invert prose-sm text-gray-400 leading-relaxed text-justify custom-scroll max-h-[400px] overflow-y-auto pr-4">
                                     <p class="text-white font-bold">Synthèse :</p>
@@ -254,7 +250,7 @@
 
                         <div class="lg:col-span-5 flex flex-col gap-6">
                             <div class="glass-panel p-6 rounded-3xl border border-white/5">
-                                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Le Mur de l'Offre (Supply Cliff)</h3>
+                                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Falaise de l'Offre (Supply Cliff)</h3>
                                 <div class="h-[200px] w-full"><canvas id="copperSupplyChart"></canvas></div>
                                 <div class="mt-4 grid grid-cols-2 gap-4">
                                     <div class="bg-orange-500/10 p-3 rounded border border-orange-500/20 text-center">
@@ -299,9 +295,9 @@
                 <div class="flex justify-between items-end mb-8">
                     <h1 class="text-3xl font-bold text-white">Portefeuille Global</h1>
                     <div class="text-right">
-                        <div class="text-xs text-gray-500 uppercase">Total AUM (Model)</div>
+                        <div class="text-xs text-gray-500 uppercase">Total Sous Gestion (Modèle)</div>
                         <div class="text-4xl font-mono font-bold text-white" id="totalVal">-- €</div>
-                        <div class="inline-flex items-center gap-2 mt-1 px-2 py-0.5 rounded bg-blue-900/20 border border-blue-500/20 text-[9px] text-blue-400 font-mono"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>LIVE DEMO : DATA NORMALIZED</div>
+                        <div class="inline-flex items-center gap-2 mt-1 px-2 py-0.5 rounded bg-blue-900/20 border border-blue-500/20 text-[9px] text-blue-400 font-mono"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>DÉMO LIVE : DONNÉES NORMALISÉES</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -313,17 +309,78 @@
                     </div>
                     <div class="glass-panel rounded-2xl p-6 border border-white/5 flex flex-col">
                         <div class="mb-6">
-                            <h3 class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-widest">Macro Live</h3>
-                            <div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1 mb-1"><span>🇺🇸 Fed Rate</span><span class="text-white">5.50%</span></div>
-                            <div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1"><span>🇪🇺 ECB Rate</span><span class="text-white">4.00%</span></div>
+                            <h3 class="text-xs font-bold text-gray-500 uppercase mb-2 tracking-widest">Macro en Direct</h3>
+                            <div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1 mb-1"><span>🇺🇸 Taux Fed</span><span class="text-white">5.50%</span></div>
+                            <div class="flex justify-between text-sm text-gray-400 border-b border-white/5 pb-1"><span>🇪🇺 Taux BCE</span><span class="text-white">4.00%</span></div>
                         </div>
                         <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">Allocation</h3>
                         <div class="flex-1 relative min-h-[200px]"><canvas id="sectorChart"></canvas></div>
                     </div>
                 </div>
             </div>
-            <div id="watchlist" class="tab-content max-w-5xl mx-auto p-8"><h1 class="text-3xl font-bold text-white mb-6">Watchlist</h1><div class="glass-panel rounded-2xl border border-white/5 overflow-hidden"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Cible</th><th class="px-6 py-4">Thèse</th><th class="px-6 py-4 text-right">Prix</th></tr></thead><tbody class="divide-y divide-white/5" id="watchlistBody"></tbody></table></div></div>
-            <div id="simulation" class="tab-content max-w-4xl mx-auto p-8 text-center"><h1 class="text-3xl font-bold text-white mb-8">Projection</h1><div class="glass-panel p-6 rounded-2xl border border-white/5 mb-6 grid grid-cols-3 gap-4"><input type="number" id="sim-start" value="10000" class="bg-black/50 p-3 rounded-lg text-white border border-white/10" placeholder="Départ"><input type="number" id="sim-monthly" value="500" class="bg-black/50 p-3 rounded-lg text-white border border-white/10" placeholder="Mensuel"><button onclick="calculateSim()" class="bg-blue-600 text-white font-bold rounded-lg">Calculer</button></div><h2 class="text-5xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400 mb-6" id="sim-result">-- €</h2><div class="h-[300px] w-full"><canvas id="simChart"></canvas></div></div>
+            
+            <div id="watchlist" class="tab-content max-w-5xl mx-auto p-8"><h1 class="text-3xl font-bold text-white mb-6">Radar / Watchlist</h1><div class="glass-panel rounded-2xl border border-white/5 overflow-hidden"><table class="w-full text-left text-sm text-gray-400"><thead class="bg-white/5 uppercase text-[10px] font-bold text-gray-500"><tr><th class="px-6 py-4">Cible</th><th class="px-6 py-4">Thèse</th><th class="px-6 py-4 text-right">Prix</th></tr></thead><tbody class="divide-y divide-white/5" id="watchlistBody"></tbody></table></div></div>
+            
+            <div id="simulation" class="tab-content max-w-5xl mx-auto p-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-panel p-6 rounded-2xl border border-white/5">
+                        <h2 class="text-lg font-bold text-white mb-6 flex items-center gap-2">Paramètres <span class="text-gray-500 text-xs font-normal">(Simulation)</span></h2>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Capital Initial (€)</label>
+                                <input type="number" id="sim-start" value="10000" class="w-full bg-black/50 p-3 mt-1 rounded-lg text-white border border-white/10 focus:border-blue-500 outline-none font-mono">
+                            </div>
+                            <div>
+                                <label class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Apport Mensuel (€)</label>
+                                <input type="number" id="sim-monthly" value="500" class="w-full bg-black/50 p-3 mt-1 rounded-lg text-white border border-white/10 focus:border-blue-500 outline-none font-mono">
+                            </div>
+                            <div>
+                                <label class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Scénario de Rendement</label>
+                                <select id="sim-scenario" class="w-full bg-black/50 p-3 mt-1 rounded-lg text-white border border-white/10 focus:border-blue-500 outline-none cursor-pointer">
+                                    <option value="0.03">Pessimiste / Livret A (3%)</option>
+                                    <option value="0.10" selected>Base Douit (10%)</option>
+                                    <option value="0.22">Super-Cycle Cuivre (22%)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] uppercase text-gray-500 font-bold tracking-wider">Durée (Années)</label>
+                                <input type="range" id="sim-years" min="5" max="30" value="15" class="w-full mt-2 accent-blue-500" oninput="document.getElementById('sim-years-val').innerText = this.value + ' ans'">
+                                <div class="text-right text-xs text-blue-400 font-mono" id="sim-years-val">15 ans</div>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-white/5">
+                                <div class="flex items-center gap-2 text-[10px] text-gray-400">
+                                    <div class="w-3 h-3 rounded-full border border-orange-500/50 bg-orange-900/20 flex items-center justify-center text-orange-500">⚡</div>
+                                    <span>Réinvestissement 100% Dividendes (Mines)</span>
+                                </div>
+                            </div>
+
+                            <button onclick="calculateSim()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-blue-900/20 uppercase text-xs tracking-widest">
+                                Lancer la Simulation
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-span-2 flex flex-col gap-6">
+                        <div class="glass-panel p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+                            <div>
+                                <div class="text-xs text-gray-500 uppercase tracking-widest">Patrimoine Projeté</div>
+                                <div class="text-4xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-white mt-1" id="sim-result">-- €</div>
+                            </div>
+                            <div class="text-right hidden sm:block">
+                                <div class="text-xs text-gray-500 uppercase tracking-widest">Delta vs Épargne Classique</div>
+                                <div class="text-xl font-mono font-bold text-green-400 mt-1" id="sim-delta">+ -- €</div>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-6 rounded-2xl border border-white/5 flex-1 relative min-h-[300px]">
+                            <canvas id="simChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main>
 
         <div class="ticker-wrap"><div class="ticker-content" id="news-ticker-content"></div></div>
@@ -331,7 +388,7 @@
     
     <script>
         const PASSWORD_CONFIG = "admin"; 
-        // MODIFICATION: QUANTITES DIVISEES PAR 10 (Pour Demo/Recruteurs)
+        // PORTFOLIO RESTE DIVISE PAR 10 (DEMO MODE)
         let portfolio = [
             { tick: "AI.PA", name: "Air Liquide", sec: "Chimie", q: 2.0, pru: 171.18 }, 
             { tick: "SU.PA", name: "Schneider Electric", sec: "Industrie", q: 1.0, pru: 236.99 }, 
@@ -342,7 +399,7 @@
         ];
         let watchlist = [{ tick: "CJ1.PA", name: "Amundi MSCI Japan", thesis: "Rebond Yen" }, { tick: "AEEM.PA", name: "Amundi Emerging", thesis: "Cycle Bas" }, { tick: "FCX", name: "Freeport-McMoRan", thesis: "Cuivre" }];
 
-        // --- LOGIN & BOOT LENT & CENTRÉ ---
+        // --- LOGIN & BOOT ---
         function checkLogin() {
             const input = document.getElementById('passwordInput');
             if (!input || input.value.trim() !== PASSWORD_CONFIG) { document.getElementById('loginError').classList.remove('hidden'); input.value = ''; return; }
@@ -355,14 +412,14 @@
             logsWrapper.style.display = 'block'; logsContent.innerHTML = ''; 
 
             const logs = [ 
-                "INITIALIZING KERNEL V4.2...", 
-                "LOADING SECURITY PROTOCOLS...", 
-                "VERIFYING IDENTITY [ADMIN]...", 
-                "ESTABLISHING SECURE LINK...", 
-                "FETCHING MACRO DATA...", 
-                "LOADING 'CONVICTION' MODULES...", 
-                "> THÈSE: SUPER-CYCLE...", 
-                "SYSTEM READY." 
+                "INITIALISATION DU NOYAU V4.2...", 
+                "CHARGEMENT PROTOCOLES SÉCURITÉ...", 
+                "VÉRIFICATION IDENTITÉ [ADMIN]...", 
+                "CONNEXION LIEN SÉCURISÉ...", 
+                "RÉCUPÉRATION DONNÉES MACRO...", 
+                "CHARGEMENT MODULES 'CONVICTION'...", 
+                "> THÈSE: SUPER-CYCLE ACTIF...", 
+                "SYSTÈME PRÊT." 
             ];
             
             let delay = 0;
@@ -432,9 +489,9 @@
             });
         }
 
-        // --- STANDARD UTILS ---
+        // --- UTILS ---
         function toggleLegal(show) { const modal = document.getElementById('legal-modal'); if(show) modal.classList.remove('hidden'); else modal.classList.add('hidden'); }
-        function startNewsTicker() { const c = document.getElementById('news-ticker-content'); if (!c) return; const n = [{ t: "BREAKING: LA BCE MAINTIENT SES TAUX", y: "n" }, { t: "ALERT: LE CUIVRE TOUCHE UN PLUS HAUT HISTORIQUE", y: "u" }, { t: "MARKET: LE NASDAQ RECULE DE 1.2%", y: "d" }]; let h = ""; n.forEach(i => { const now=new Date();const m=Math.floor(Math.random()*59);const ts=`${now.getHours()}:${m<10?'0'+m:m}`; let cl="text-gray-400"; if(i.y==="u")cl="text-green-500 font-bold";if(i.y==="d")cl="text-red-500 font-bold"; h+=`<div class="ticker-item"><span class="text-gray-600 mr-2">[${ts}]</span><span class="${cl}">${i.t}</span></div>`; }); c.innerHTML = h; }
+        function startNewsTicker() { const c = document.getElementById('news-ticker-content'); if (!c) return; const n = [{ t: "BREAKING: LA BCE MAINTIENT SES TAUX", y: "n" }, { t: "ALERTE: LE CUIVRE TOUCHE UN PLUS HAUT HISTORIQUE", y: "u" }, { t: "MARCHÉ: LE NASDAQ RECULE DE 1.2%", y: "d" }]; let h = ""; n.forEach(i => { const now=new Date();const m=Math.floor(Math.random()*59);const ts=`${now.getHours()}:${m<10?'0'+m:m}`; let cl="text-gray-400"; if(i.y==="u")cl="text-green-500 font-bold";if(i.y==="d")cl="text-red-500 font-bold"; h+=`<div class="ticker-item"><span class="text-gray-600 mr-2">[${ts}]</span><span class="${cl}">${i.t}</span></div>`; }); c.innerHTML = h; }
         
         function switchTab(id) { 
             document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.getElementById(id).classList.add('active'); 
@@ -445,11 +502,71 @@
         }
 
         async function fetchPriceRobust(t){ const p="https://corsproxy.io/?",u=`https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=5d&t=${Date.now()}`; try{const r=await fetch(p+encodeURIComponent(u));if(!r.ok)throw new Error;const j=await r.json(),res=j.chart.result[0];return{price:res.meta.regularMarketPrice,prev:res.meta.chartPreviousClose,quotes:res.indicators.quote[0].close,timestamps:res.timestamp};}catch(e){return null;}}
+        
         async function updatePortfolio(){ let tv=0; const tb=document.getElementById('tableBody'); if(!tb)return; tb.innerHTML=''; for(let s of portfolio){ const d=await fetchPriceRobust(s.tick); if(d){s.price=d.price;s.prev=d.prev;} const v=s.price*s.q; tv+=v; const p=((s.price-s.pru)/s.pru)*100; tb.innerHTML+=`<tr class="hover:bg-white/5 transition border-b border-white/5"><td class="px-6 py-4"><div class="text-white font-bold">${s.name}</div><div class="text-[10px] text-gray-500">${s.tick}</div></td><td class="px-6 py-4 text-right font-mono text-gray-400">${s.q}</td><td class="px-6 py-4 text-right font-mono text-white">${s.price.toFixed(2)} €</td><td class="px-6 py-4 text-right font-mono font-bold ${p>=0?'text-green-400':'text-red-400'}">${(p>0?'+':'')+p.toFixed(2)}%</td></tr>`; } document.getElementById('totalVal').innerText=Math.round(tv).toLocaleString()+" €"; renderSectorChart(); }
+        
         function renderSectorChart(){ const ctxEl=document.getElementById('sectorChart'); if(!ctxEl)return; const ctx=ctxEl.getContext('2d'); if(window.mySectorChart)window.mySectorChart.destroy(); window.mySectorChart=new Chart(ctx,{type:'doughnut',data:{labels:portfolio.map(s=>s.sec),datasets:[{data:portfolio.map(s=>s.price*s.q),backgroundColor:['#3b82f6','#10b981','#ef4444','#f59e0b','#8b5cf6','#64748b'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{position:'bottom',labels:{color:'#9ca3af',usePointStyle:true}}}}}); }
+        
         async function updateWatchlist(){ const tb=document.getElementById('watchlistBody'); if(!tb)return; tb.innerHTML=''; for(let i of watchlist){ const d=await fetchPriceRobust(i.tick); const p=d?d.price.toFixed(2):"..."; tb.innerHTML+=`<tr class="hover:bg-white/5 border-b border-white/5"><td class="px-6 py-4 font-bold text-white">${i.name} <span class="text-xs font-normal text-gray-500 block">${i.tick}</span></td><td class="px-6 py-4 text-xs text-blue-300 italic">${i.thesis}</td><td class="px-6 py-4 text-right font-mono text-white">${p}</td></tr>`; } }
+        
         let searchChartInstance=null; async function searchTicker(){ const t=document.getElementById('mainTickerInput').value.toUpperCase(); if(!t)return; document.getElementById('searchLoader').style.display='block'; document.getElementById('resultCard').classList.add('hidden'); const d=await fetchPriceRobust(t); document.getElementById('searchLoader').style.display='none'; if(d){ document.getElementById('resultCard').classList.remove('hidden'); document.getElementById('res-name').innerText=t; document.getElementById('res-symbol').innerText=t; document.getElementById('res-price').innerText=d.price.toFixed(2); const p=((d.price-d.prev)/d.prev)*100; document.getElementById('res-perf').innerText=(p>0?'+':'')+p.toFixed(2)+"%"; document.getElementById('res-perf').className=`text-lg font-bold ${p>=0?'text-green-400':'text-red-400'}`; const ctx=document.getElementById('searchChart').getContext('2d'); if(searchChartInstance)searchChartInstance.destroy(); searchChartInstance=new Chart(ctx,{type:'line',data:{labels:d.timestamps.map(t=>new Date(t*1000).getHours()+'h'),datasets:[{data:d.quotes,borderColor:p>=0?'#10b981':'#ef4444',backgroundColor:p>=0?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)',fill:true,pointRadius:0,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#333'}}}}}); } }
-        function calculateSim(){ const s=parseFloat(document.getElementById('sim-start').value),m=parseFloat(document.getElementById('sim-monthly').value); let l=[],d=[],c=s; for(let i=0;i<=20;i++){ l.push("An "+i); d.push(c); if(i<20){for(let j=0;j<12;j++){c+=m;c*=(1+0.08/12);}}} document.getElementById('sim-result').innerText=Math.round(d[d.length-1]).toLocaleString()+" €"; const ctx=document.getElementById('simChart').getContext('2d'); if(window.simChart)window.simChart.destroy(); window.simChart=new Chart(ctx,{type:'line',data:{labels:l,datasets:[{label:'Patrimoine',data:d,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.2)',fill:true}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:{color:'#333'}}},plugins:{legend:{display:false}}}}); }
+        
+        // --- NOUVELLE LOGIQUE SIMULATION COMPARATIVE ---
+        function calculateSim(){ 
+            const s = parseFloat(document.getElementById('sim-start').value);
+            const m = parseFloat(document.getElementById('sim-monthly').value);
+            const r_strat = parseFloat(document.getElementById('sim-scenario').value);
+            const r_safe = 0.03; // Livret A de base
+            const years = parseInt(document.getElementById('sim-years').value);
+            
+            let l=[], d_strat=[], d_safe=[], c_strat=s, c_safe=s;
+            
+            for(let i=0; i<=years; i++){ 
+                l.push("Année "+i); 
+                d_strat.push(c_strat);
+                d_safe.push(c_safe);
+                
+                if(i < years){
+                    // Intérêts composés annuels + Apport mensuel
+                    for(let j=0; j<12; j++){
+                        c_strat += m; c_strat *= (1 + r_strat/12);
+                        c_safe += m; c_safe *= (1 + r_safe/12);
+                    }
+                }
+            }
+            
+            // Resultats affichage
+            document.getElementById('sim-result').innerText = Math.round(d_strat[d_strat.length-1]).toLocaleString()+" €";
+            
+            const delta = d_strat[d_strat.length-1] - d_safe[d_safe.length-1];
+            const deltaElem = document.getElementById('sim-delta');
+            deltaElem.innerText = (delta > 0 ? "+" : "") + Math.round(delta).toLocaleString()+" €";
+            deltaElem.className = delta >= 0 ? "text-xl font-mono font-bold text-green-400 mt-1" : "text-xl font-mono font-bold text-red-400 mt-1";
+
+            const ctx = document.getElementById('simChart').getContext('2d');
+            if(window.simChart) window.simChart.destroy();
+            
+            window.simChart = new Chart(ctx,{
+                type: 'line',
+                data: {
+                    labels: l,
+                    datasets: [
+                        { label: 'Stratégie Douit', data: d_strat, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, borderWidth: 3 },
+                        { label: 'Épargne Standard (3%)', data: d_safe, borderColor: '#6b7280', borderDash: [5,5], borderWidth: 2, fill: false }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { grid: { color: '#333' } } },
+                    plugins: { 
+                        legend: { labels: { color: '#9ca3af' } },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+        }
+
         function initApp(){ updatePortfolio(); startNewsTicker(); setInterval(updatePortfolio,60000); }
     </script>
 </body>
